@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusableInTouchMode="true">
+
+    <ProgressBar
+        android:id="@+id/sign_up_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:background="@android:color/holo_blue_light"
+                    android:scaleType="fitStart"/>
+
+                <!--<FrameLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_centerVertical="true">-->
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:padding="6dp"-->
+                        <!--android:src="@drawable/website_cover"/>-->
+
+                    <!--<ImageView-->
+                        <!--android:src="@drawable/frame"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content" />-->
+
+                <!--</FrameLayout>-->
+
+
+                <!--<com.makeramen.RoundedImageView-->
+                    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                    <!--android:layout_width="100dp"-->
+                    <!--android:layout_height="100dp"-->
+                    <!--android:src="@drawable/website_cover"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--app:corner_radius="15dip"-->
+                    <!--app:border_width="2dip"-->
+                    <!--app:border_color="@color/white"-->
+                    <!--app:mutate_background="true"-->
+                    <!--app:oval="false"/>-->
+
+                <!--<com.outbound.ui.util.CustomImageView-->
+                    <!--android:layout_width="75dp"-->
+                    <!--android:layout_height="75dp"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/website_cover"/>-->
+
+                <com.parse.ParseImageView
+                    android:id="@+id/speaker_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingBottom="1dp"
+                    android:background="@drawable/white_rounded_rectangle"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:paddingTop="1dp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/user_name_layout_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_gravity="center_vertical"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:hint="@string/sing_up_user_name_hint"
+                    android:layout_gravity="bottom"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_gravity="center"/>
+                <EditText
+                    android:id="@+id/email_sign_up_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:hint="@string/sing_up_user_email_hint"
+                    android:layout_gravity="bottom"
+                    android:inputType="textEmailAddress"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_gravity="center"/>
+                <EditText
+                    android:id="@+id/password_sign_up_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:hint="@string/sing_up_user_password_hint"
+                    android:layout_gravity="bottom"
+                    android:inputType="textPassword"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <ImageView
+                    android:id="@+id/imageSexIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_gravity="center"/>
+
+                    <CheckBox
+                    android:id="@+id/checkBoxMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sing_up_user_male"
+                    android:layout_toRightOf="@+id/imageSexIcon"
+                    android:layout_centerVertical="true"/>
+
+                    <CheckBox
+                    android:id="@+id/checkBoxFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sing_up_user_female"
+                    android:layout_toRightOf="@+id/checkBoxMale"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"/>
+
+
+                    <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:layout_toRightOf="@+id/imageSexIcon"
+                    android:layout_below="@+id/imageSexIcon"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/date_of_birth_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sing_up_date_of_birth"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/birth_date_image_sign_up" />
+
+                <ImageView
+                    android:id="@+id/birth_date_image_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_below="@+id/date_of_birth_text_view"
+                    />
+                
+                <Button
+                    android:id="@+id/birth_date_button_sign_up"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:layout_toRightOf="@+id/birth_date_image_sign_up"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/black"
+                    android:text="@string/sing_up_date_of_birth_hint"/>
+                />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/country_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sing_up_nationality"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/nationality_imageview_sign_up" />
+
+                <ImageView
+                    android:id="@+id/nationality_imageview_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_below="@+id/country_text_view"
+                    />
+
+                <Button
+                    android:id="@+id/country_button_sign_up"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:layout_toRightOf="@+id/nationality_imageview_sign_up"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/black"
+                    android:text="@string/sing_up_nationality_hint"/>
+                />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_gravity="center"/>
+                <EditText
+                    android:id="@+id/home_town_sign_up_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:hint="@string/sing_up_user_hown_town_hint"
+                    android:layout_gravity="bottom"
+                    />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/traveller_type_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sing_up_traveller_type"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@+id/traveller_type_imageview_sign_up" />
+
+                <ImageView
+                    android:id="@+id/traveller_type_imageview_sign_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_below="@+id/traveller_type_text_view"
+                    />
+
+                <Button
+                    android:id="@+id/traveller_type_spinner_sign_up"
+                    style="?android:attr/spinnerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:layout_toRightOf="@+id/traveller_type_imageview_sign_up"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/black"
+                    android:text="@string/sing_up_traveller_type_hint"/>
+                />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
+                    android:src="@drawable/ic_launcher"
+                    android:layout_gravity="center"/>
+                <EditText
+                    android:id="@+id/about_sign_up_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
+                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
+                    android:hint="@string/sing_up_about_you_hint"
+                    android:layout_gravity="bottom"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

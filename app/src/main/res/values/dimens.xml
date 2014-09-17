@@ -1,0 +1,30 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="edit_text_left_margin">16dp</dimen>
+
+
+    <dimen name="outbound_sign_up_with_email_padding_left">12dip</dimen>
+    <dimen name="outbound_sign_up_with_email_padding_right">12dip</dimen>
+    <dimen name="outbound_sign_up_drawable_padding_right">5dip</dimen>
+
+
+    <dimen name="outbound_sign_up_with_email_icon_padding_left">7dip</dimen>
+    <dimen name="outbound_sign_up_with_email_icon_padding_top">7dip</dimen>
+    <dimen name="outbound_sign_up_with_email_icon_padding_right">5dip</dimen>
+    <dimen name="outbound_sign_up_with_email_icon_padding_bottom">5dip</dimen>
+
+    <dimen name="outbound_sign_up_with_height_edit_text">55dip</dimen>
+
+    <dimen name="outbound_sign_up_with_email_title_padding_top">15dp</dimen>
+    <dimen name="outbound_sign_up_with_email_title_padding_bottom">5dp</dimen>
+    <dimen name="outbound_sign_up_with_email_title_padding_left">70dp</dimen>
+    <dimen name="outbound_sign_up_with_email_title_padding_right">15dp</dimen>
+
+    <!--Tab Bar -->
+    <dimen name="tab_bar_frame_height">70dp</dimen>
+
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Activity Names -->
+    <string name="app_name">Outbound</string>
+    <string name="welcome_activity_name">Welcome</string>
+    <string name="singup_with_mail_activity_name">Sign Up</string>
+    <string name="main_activity_name">Outbound</string>
+    <string name="title_activity_login_with_email">Log In</string>
+
+    <!-- Menu -->
+    <string name="action_settings">settings</string>
+
+    <!-- App Id and Keys -->
+    <string name="parse_app_id">xURQt44xaF5cavtJ5TAPo7YR6fNVoEaM5b6oiKzA</string>
+    <string name="parse_client_key">Jw9UZJK5cSV6czmtU4xBFMMysPUMIC5Vc3HDkfWC</string>
+    <string name="facebook_app_id">287894818068799</string>
+
+    <!-- Login Activity -->
+    <string name="login_text_or">or</string>
+    <string name="login_text_question_have_account">Already have\nan account?</string>
+    <string name="login_text_term_condition_privacy">By joinnig Outbound, you agree to the\n<b><u>Terms &amp; Condition</u></b> and <b><u>Privacy Policy</u></b></string>
+
+    <!-- Welcome Activity -->
+    <string name="session_invalid_error">Your current session is no longer valid. Please log in again.</string>
+    <string name="logn_generic_error">Something went wrong. Please retry.</string>
+
+    <!-- Sign Up -->
+    <string name="sign_up_title">Sign Up</string>
+    <string name="sign_up_back">Back</string>
+    <string name="sign_up_join">Join</string>
+    <string name="sing_up_user_name_hint">Username</string>
+    <string name="sing_up_user_email_hint">Email</string>
+    <string name="sing_up_user_password_hint">Password</string>
+    <string name="sing_up_user_male">Male</string>
+    <string name="sing_up_user_female">Female</string>
+    <string name="sing_up_date_of_birth">DATE OF BIRTH</string>
+    <string name="sing_up_date_of_birth_hint">dd/mm/yy</string>
+    <string name="sing_up_nationality">NATIONALITY</string>
+    <string name="sing_up_nationality_hint">Country</string>
+    <string name="sing_up_hometown_hint">Hometown (optional)</string>
+    <string name="sing_up_traveller_type">TRAVELLER TYPE</string>
+    <string name="sing_up_traveller_type_hint">Traveller Type</string>
+    <string name="sing_up_type_select_hint">Select</string>
+    <string name="sing_up_about_you_hint">About you, describe yourself…</string>
+    <string name="singup_join_via_sing_up_text">Join</string>
+    <string name="title_facebook_login">Facebook Login</string>
+    <string name="error_invalid_password">This Password is too short</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="sing_up_user_spinner_hint">dd/mm/yy</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Login With Email -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="forgotten_password"><u>Forgot Password?</u></string>
+    <string name="sing_up_country">Country</string>
+    <string name="sing_up_user_hown_town_hint">Hometown (optional)</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

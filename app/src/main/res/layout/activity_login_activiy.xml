@@ -1,0 +1,117 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_landing">
+
+
+    <ImageView
+        android:id="@+id/imageAppIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_outbound_logo"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageButton
+        android:id="@+id/imageFacebookLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40pt"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageAppIcon"
+        android:background="@drawable/btn_facebook_connect"
+        />
+
+    <ImageButton
+        android:id="@+id/imageSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10pt"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageFacebookLogin"
+        android:background="@drawable/btn_email_signup"
+        />
+
+
+    <TextView
+        android:id="@+id/textOr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageSignUp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13pt"
+        android:text="@string/login_text_or"
+        android:textColor="@color/white"
+        android:textSize="8pt"
+        android:background="#0044beff"
+        android:fontFamily="sans-serif-light"
+        />
+
+    <ImageView
+        android:id="@+id/imageLeftBar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white"
+        android:layout_below="@+id/imageSignUp"
+        android:layout_toLeftOf="@+id/textOr"
+        android:layout_marginTop="19pt"
+        android:layout_marginLeft="15pt"
+        android:layout_marginRight="5pt"/>
+
+    <ImageView
+        android:id="@+id/imageRightBar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white"
+        android:layout_below="@+id/imageSignUp"
+        android:layout_toRightOf="@+id/textOr"
+        android:layout_marginTop="19pt"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="15pt"/>
+
+    <TextView
+        android:id="@+id/textLine1"
+        android:inputType="textMultiLine"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login_text_question_have_account"
+        android:layout_alignTop="@+id/imageEmaiLogin"
+        android:layout_alignLeft="@+id/imageSignUp"
+        android:layout_alignStart="@+id/imageSignUp"
+        android:layout_toLeftOf="@+id/textOr"
+        android:textColor="@color/white"
+        android:textSize="8pt"
+        android:background="#0044beff"
+        android:fontFamily="sans-serif-light"/>
+
+    <ImageButton
+        android:id="@+id/imageEmaiLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_email_login"
+        android:layout_toRightOf="@+id/textOr"
+        android:layout_below="@+id/textOr"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:id="@+id/tos"
+        android:gravity="center_horizontal"
+        android:inputType="textMultiLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_text_term_condition_privacy"
+        android:layout_below="@+id/imageEmaiLogin"
+        android:layout_marginTop="15pt"
+        android:layout_alignRight="@+id/imageRightBar"
+        android:layout_alignEnd="@+id/imageRightBar"
+        android:layout_alignLeft="@+id/imageLeftBar"
+        android:layout_alignStart="@+id/imageLeftBar"
+        android:textColor="@color/white"
+        android:textSize="8pt"
+        android:background="#0044beff"
+        android:fontFamily="sans-serif-light"
+        />
+
+</RelativeLayout>
