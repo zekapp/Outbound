@@ -6,10 +6,14 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.outbound.R;
 import com.outbound.model.User;
@@ -30,6 +34,8 @@ public class SignUpWithEmail extends Activity{
     private EditText mPasswordView;
     private Button birthDateButton;
     private Button countrySelectionButton;
+    private RadioButton checkBoxMale;
+    private RadioButton checkBoxFemale;
 
     private ActionBar actionBar;
     @Override
@@ -37,23 +43,6 @@ public class SignUpWithEmail extends Activity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_sign_up_with_email);
-
-//        mEmailView = (EditText)findViewById(R.id.editTextUserEmail);
-//        userName = (EditText)findViewById(R.id.editTextUserName);
-//        mPasswordView = (EditText)findViewById(R.id.editTextUserPassword);
-//
-//
-//        ImageView signUpImg = (ImageView)findViewById(R.id.imageJoinViaSignUp);
-//
-//        signUpImg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ParseUser user = new ParseUser();
-//
-//                attempToSingUp();
-//            }
-//        });
-
 
         birthDateButton = (Button)findViewById(R.id.birth_date_button_sign_up);
         birthDateButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +60,15 @@ public class SignUpWithEmail extends Activity{
             }
         });
 
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(false); // disable the button
+            actionBar.setDisplayHomeAsUpEnabled(false); // remove the left caret
+            actionBar.setDisplayShowHomeEnabled(false); // remove the icon
+        }
     }
+
+
 
     private void showCountryPickerDialog(){
 
@@ -96,7 +93,6 @@ public class SignUpWithEmail extends Activity{
                 }, mYear, mMonth, mDay);
         dpd.show();
     }
-
 
     private void attempToSingUp() {
         // Reset errors.

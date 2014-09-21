@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--Font name-->
+    <string name="san_serif">sans-serif</string>
+    <string name="san_serif_light">sans-serif-light</string>
+    <string name="san_serif_condensed">sans-serif-condensed</string>
+    <string name="san_serif_thin">sans-serif-thin</string>
+
+
     <!-- Activity Names -->
     <string name="app_name">Outbound</string>
     <string name="welcome_activity_name">Welcome</string>
@@ -58,5 +65,12 @@
     <string name="sing_up_country">Country</string>
     <string name="sing_up_user_hown_town_hint">Hometown (optional)</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Profil Fragment-->
+    <string name="profile_fragment_title">Profile</string>
+    <string name="action_bar_noticebard_title">Noticeboard</string>
+    <string name="action_bar_events_title">Events Around Me</string>
+    <string name="action_bar_explore_trips_title">Explore Trips</string>
+    <string name="search_fragment_title">Search</string>
 
 </resources>

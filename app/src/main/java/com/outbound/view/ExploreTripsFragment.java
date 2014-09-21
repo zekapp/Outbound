@@ -1,9 +1,11 @@
 package com.outbound.view;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,5 +36,23 @@ public class ExploreTripsFragment extends BaseFragment {
     @Override
     protected void setUp(int baseActivityFrameLayoutId) {
         super.setUp(baseActivityFrameLayoutId);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.MATCH_PARENT,
+                Gravity.CENTER);
+
+        View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_explore_trips, null);
+        TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
+        title.setText(getResources().getString(R.string.action_bar_explore_trips_title));
+        ActionBar actionBar = activity.getActionBar();
+        if(actionBar!=null) {
+            actionBar.setCustomView(viewActionBar,params);
+        }
     }
 }

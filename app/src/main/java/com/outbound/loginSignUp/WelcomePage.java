@@ -23,9 +23,11 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
+import static com.outbound.util.LogUtils.*;
+
 
 public class WelcomePage extends Activity {
-
+    private static final String TAG = makeLogTag(WelcomePage.class);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,11 @@ public class WelcomePage extends Activity {
                 ParseFacebookUtils.logIn(WelcomePage.this, new LogInCallback() {
                     @Override
                     public void done(ParseUser user, ParseException e) {
+                        if(user == null){
+                            LOGD(TAG,"error: " + e.getMessage());
+                            return;
+                        }
+
                         if (user.isNew()) {
                             // set favorites as null, or mark it as empty somehow
                             makeMeRequest();
@@ -84,10 +91,7 @@ public class WelcomePage extends Activity {
                         public void onCompleted(GraphUser user,
                                                 Response response) {
                             if (user != null) {
-                                ParseUser.getCurrentUser().put("firstName",
-                                        user.getFirstName());
-                                ParseUser.getCurrentUser().saveInBackground();
-                                finishActivity();
+                                generateUser(user);
                             } else if (response.getError() != null) {
                                 if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY)
                                         || (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
@@ -106,6 +110,15 @@ public class WelcomePage extends Activity {
             );
             request.executeAsync();
         }
+    }
+
+    private void generateUser(GraphUser user) {
+        ParseUser.getCurrentUser().put("username",user.getName());
+        ParseUser.getCurrentUser().put("age",user.getBirthday());
+        ParseUser.getCurrentUser().put("facebookID",user.getId());
+
+        ParseUser.getCurrentUser().saveInBackground();
+        finishActivity();
     }
 
     @Override

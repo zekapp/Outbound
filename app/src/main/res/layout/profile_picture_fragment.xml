@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/pp_home_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_home"
+        android:drawablePadding="5dp"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:text="Melbourne, AUS"
+        android:layout_marginTop="20dp"
+        />
+
+    <com.parse.ParseImageView
+        android:id="@+id/pp_speaker_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:background="@drawable/white_rounded_rectangle"
+        android:src="@drawable/profile_empty_edit"
+        android:paddingTop="1dp"
+        android:clickable="true"
+        android:layout_gravity="center"
+        android:layout_below="@+id/pp_home_text"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/pp_current_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_current_location"
+        android:drawablePadding="10dp"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:text="Phuket, TH"
+        android:layout_marginTop="30dp"
+        />
+</LinearLayout>

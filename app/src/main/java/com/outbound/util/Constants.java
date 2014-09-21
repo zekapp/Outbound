@@ -16,4 +16,14 @@ public final class Constants  {
     public static final int PROFILE_TRAVEL_HISTORY_ITEM = 7;
     public static final int PROFILE_MY_EVENTS_ITEM = 8;
     public static final int ITEM_INVALID = -1;
+
+    public static class AppInitialStates{
+        public static final int LAUNCHER_FRAGMENT_ID = TAB_BAR_ITEM_PROFILE;
+    }
+    public static class Extra {
+        public static final String IS_LAUNCHER = "com.outbound.is_launcher";
+    }
+
+
 }
+

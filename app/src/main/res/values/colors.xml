@@ -3,11 +3,16 @@
     <!-- COLOURS -->
 
     <color name="theme_primary">#0072BC</color>
+    <color name="theme_primary_light">#00AEEF</color>
+    <color name="theme_primary_grey_bg">#f2f2f2</color>
 
     <color name="tab_bar_background">#ebebeb</color>
 
     <color name="tabbar_icon_tint">#808080</color>
     <color name="tabbar_icon_tint_selected">@color/theme_primary</color>
+
+    <color name="seperator_bar_blue">#ff005aa3</color>
+
 
     <color name="background_body">#2B2B2B</color>
     <color name="white">#FFFFFF</color>

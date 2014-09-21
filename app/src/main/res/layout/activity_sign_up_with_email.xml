@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    >
 
     <ProgressBar
         android:id="@+id/sign_up_progress"
@@ -28,8 +29,8 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:background="@android:color/holo_blue_light"
+                    android:layout_height="200dp"
+                    android:background="@drawable/bg_profile_cover"
                     android:scaleType="fitStart"/>
 
                 <!--<FrameLayout-->
@@ -76,14 +77,25 @@
                     <!--android:src="@drawable/website_cover"/>-->
 
                 <com.parse.ParseImageView
-                    android:id="@+id/speaker_photo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/user_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:paddingBottom="1dp"
                     android:background="@drawable/white_rounded_rectangle"
-                    android:layout_centerVertical="true"
+                    android:src="@drawable/profile_empty_edit"
                     android:layout_centerHorizontal="true"
-                    android:paddingTop="1dp"/>
+                    android:layout_marginTop="15pt"
+                    android:paddingTop="1dp"
+                    android:clickable="true"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/add_cover_image"
+                    android:padding="10pt"
+                    android:clickable="true"/>
 
             </RelativeLayout>
 
@@ -100,14 +112,16 @@
                     android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
-                    android:layout_gravity="center_vertical"/>
+                    android:src="@drawable/list_user"
+                    android:layout_gravity="center_vertical"
+                    />
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
                     android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
                     android:hint="@string/sing_up_user_name_hint"
-                    android:layout_gravity="bottom"/>
+                    android:layout_gravity="bottom"
+                    android:fontFamily="@string/san_serif" />
             </LinearLayout>
 
             <LinearLayout
@@ -122,7 +136,7 @@
                     android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/list_email"
                     android:layout_gravity="center"/>
                 <EditText
                     android:id="@+id/email_sign_up_edit_text"
@@ -131,7 +145,8 @@
                     android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
                     android:hint="@string/sing_up_user_email_hint"
                     android:layout_gravity="bottom"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@string/san_serif"/>
             </LinearLayout>
 
             <LinearLayout
@@ -146,7 +161,7 @@
                     android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/list_password"
                     android:layout_gravity="center"/>
                 <EditText
                     android:id="@+id/password_sign_up_edit_text"
@@ -155,7 +170,8 @@
                     android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
                     android:hint="@string/sing_up_user_password_hint"
                     android:layout_gravity="bottom"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:fontFamily="@string/san_serif"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -164,41 +180,54 @@
                 >
 
                 <ImageView
-                    android:id="@+id/imageSexIcon"
+                    android:id="@+id/imageGenderIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
                     android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
-                    android:layout_gravity="center"/>
-
-                    <CheckBox
-                    android:id="@+id/checkBoxMale"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sing_up_user_male"
-                    android:layout_toRightOf="@+id/imageSexIcon"
+                    android:src="@drawable/list_gender"
                     android:layout_centerVertical="true"/>
 
-                    <CheckBox
-                    android:id="@+id/checkBoxFemale"
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sing_up_user_female"
-                    android:layout_toRightOf="@+id/checkBoxMale"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"/>
+                    android:orientation="horizontal"
+                    android:layout_toRightOf="@+id/imageGenderIcon"
+                    android:layout_centerVertical="true">
+
+                    <RadioButton
+                        android:id="@+id/checkBoxMale"
+                        style="@android:style/Widget.CompoundButton.CheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sing_up_user_male"
+                        android:fontFamily="@string/san_serif"
+                        android:clickable="true"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/checkBoxFemale"
+                        style="@android:style/Widget.CompoundButton.CheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sing_up_user_female"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@string/san_serif"
+                        android:clickable="true"
+                        />
+                </RadioGroup>
 
 
-                    <ImageView
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
-                    android:layout_toRightOf="@+id/imageSexIcon"
-                    android:layout_below="@+id/imageSexIcon"/>
+                    android:background="@drawable/keyline_3"
+                    android:layout_below="@+id/imageGenderIcon"
+                    android:layout_marginTop="5pt"
+                    android:layout_marginLeft="20pt"
+                    android:layout_marginRight="8pt"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -209,10 +238,14 @@
                     android:id="@+id/date_of_birth_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sing_up_date_of_birth"
+                    android:hint="@string/sing_up_date_of_birth"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/birth_date_image_sign_up" />
+                    android:layout_toRightOf="@+id/birth_date_image_sign_up"
+                    android:layout_marginLeft="2pt"
+                    android:fontFamily="@string/san_serif_condensed"
+
+                    />
 
                 <ImageView
                     android:id="@+id/birth_date_image_sign_up"
@@ -220,9 +253,12 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/list_user"
                     android:layout_below="@+id/date_of_birth_text_view"
+                    android:layout_marginTop="5pt"
+                    android:layout_marginBottom="5pt"
                     />
                 
                 <Button
@@ -234,7 +270,8 @@
                     android:layout_toRightOf="@+id/birth_date_image_sign_up"
                     android:layout_alignParentBottom="true"
                     android:textColor="@color/black"
-                    android:text="@string/sing_up_date_of_birth_hint"/>
+                    android:text="@string/sing_up_date_of_birth_hint"
+                    android:fontFamily="@string/san_serif"/>
                 />
             </RelativeLayout>
 
@@ -246,10 +283,12 @@
                     android:id="@+id/country_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sing_up_nationality"
+                    android:hint="@string/sing_up_nationality"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/nationality_imageview_sign_up" />
+                    android:layout_toRightOf="@+id/nationality_imageview_sign_up"
+                    android:layout_marginLeft="2pt"
+                    android:fontFamily="@string/san_serif_condensed"/>
 
                 <ImageView
                     android:id="@+id/nationality_imageview_sign_up"
@@ -258,8 +297,11 @@
                     android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:src="@drawable/list_country"
                     android:layout_below="@+id/country_text_view"
+                    android:layout_marginTop="5pt"
+                    android:layout_marginBottom="5pt"
                     />
 
                 <Button
@@ -287,7 +329,7 @@
                     android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/list_hometown"
                     android:layout_gravity="center"/>
                 <EditText
                     android:id="@+id/home_town_sign_up_edit_text"
@@ -308,10 +350,12 @@
                     android:id="@+id/traveller_type_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sing_up_traveller_type"
+                    android:hint="@string/sing_up_traveller_type"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@+id/traveller_type_imageview_sign_up" />
+                    android:layout_toRightOf="@+id/traveller_type_imageview_sign_up"
+                    android:layout_marginLeft="2pt"
+                    android:fontFamily="@string/san_serif_condensed"/>
 
                 <ImageView
                     android:id="@+id/traveller_type_imageview_sign_up"
@@ -320,8 +364,11 @@
                     android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
+                    android:src="@drawable/list_user"
                     android:layout_below="@+id/traveller_type_text_view"
+                    android:layout_marginTop="5pt"
+                    android:layout_marginBottom="5pt"
                     />
 
                 <Button
@@ -333,14 +380,16 @@
                     android:layout_toRightOf="@+id/traveller_type_imageview_sign_up"
                     android:layout_alignParentBottom="true"
                     android:textColor="@color/black"
-                    android:text="@string/sing_up_traveller_type_hint"/>
+                    android:text="@string/sing_up_traveller_type_hint"
+/>
                 />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="30pt">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -349,7 +398,7 @@
                     android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
                     android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
                     android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/list_user"
                     android:layout_gravity="center"/>
                 <EditText
                     android:id="@+id/about_sign_up_edit_text"

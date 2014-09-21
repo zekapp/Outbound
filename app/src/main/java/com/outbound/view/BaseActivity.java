@@ -1,24 +1,29 @@
 package com.outbound.view;
 
-import android.app.Activity;
-import android.app.FragmentManager;
+
+import android.app.ActionBar;
+
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
 
 import com.outbound.R;
 
 import java.util.ArrayList;
 
 import static com.outbound.util.Constants.*;
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 3/09/2014.
  */
-public class BaseActivity extends Activity implements BaseFragment.BaseFragmentCallbacks{
+public class BaseActivity extends FragmentActivity implements BaseFragment.BaseFragmentCallbacks{
+    private static final String TAG = makeLogTag(BaseActivity.class);
 
     private FrameLayout mBaseFrameLayout;
 
@@ -26,18 +31,30 @@ public class BaseActivity extends Activity implements BaseFragment.BaseFragmentC
 
     private static int mCurrentFragmentItemId = 0;
 
-    private static final String FRAGMENT_SELECTED_
+    private static final String SELECTED_FRAGMENT_ITEM = "selected_fragment_position_in_array";
+    private ActionBar actionBar;
 
     private static class FragmentContainer{
         public BaseFragment mFragment;
+        public String mTag;
 
-        FragmentContainer(BaseFragment fragment){
+        FragmentContainer(BaseFragment fragment, String fragmentTag){
             mFragment = fragment;
+            mTag = fragmentTag;
 
             mFragment.setUp(R.id.base_layout);
 
         }
     }
+
+//    Indices must correspond to array {@link #Constants} items.
+    private final static FragmentContainer[] FRAGMENT = {
+            new FragmentContainer(new ProfileFragment(),        "Profile"),       //Profile
+            new FragmentContainer(new ExploreTripsFragment() ,  "ExploreTrips"),  //ExploreTrips
+            new FragmentContainer(new EventsFragment(),         "Events"),        //Events
+            new FragmentContainer(new SearchFragment(),         "Search"),        //Search
+            new FragmentContainer(new NoticeBoardFragment(),    "Noticeboard")    //Noticeboard
+    };
 
     // icons for tab bar items (indices must correspond to above array)
     private static final int[] TAB_BAR_ICON_RES_ID = new int[] {
@@ -57,32 +74,44 @@ public class BaseActivity extends Activity implements BaseFragment.BaseFragmentC
             R.drawable.tab_noticeboard_pressed,  // Noticeboard
     };
 
-    @Override
-    public void deployFragment(final  int itemId) {
-        FragmentManager fragmentManager = getFragmentManager();
-
-        fragmentManager.beginTransaction().replace(R.id.container, FRAGMENT[itemId].mFragment).commit();
-    }
-
-    //indices must correspond to array constant Fragment items.
-    private final static FragmentContainer[] FRAGMENT = {
-            new FragmentContainer(new ProfileFragment()),       //Profile
-            new FragmentContainer(new ExploreTripsFragment()),  //ExploreTrips
-            new FragmentContainer(new EventsFragment()),  //Events
-            new FragmentContainer(new SearchFragment()),  //Search
-            new FragmentContainer(new NoticeBoardFragment())   //Noticeboard
-    };
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null){
-//            mCurrentFragmentItemId = savedInstanceState.get()
+        actionBar = getActionBar();
+
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(false); // disable the button
+            actionBar.setDisplayHomeAsUpEnabled(false); // remove the left caret
+            actionBar.setDisplayShowHomeEnabled(false); // remove the icon
+
         }
+
+        mCurrentFragmentItemId = getIntent().getExtras().getBoolean(Extra.IS_LAUNCHER,false)?
+                AppInitialStates.LAUNCHER_FRAGMENT_ID:savedInstanceState != null?
+                savedInstanceState.getInt(SELECTED_FRAGMENT_ITEM):0;
+
         setContentView(R.layout.base_fragment_activity_layout);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_FRAGMENT_ITEM,mCurrentFragmentItemId);
+    }
+
+    @Override
+    public void deployFragment(final  int itemId) {
+        LOGD(TAG,"deployFragment " + FRAGMENT[itemId].mTag );
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransactiong = fragmentManager.beginTransaction().
+                replace(R.id.container, FRAGMENT[itemId].mFragment);
+        fragmentTransactiong.commit();
     }
 
     // list of tab bar items that were actually added to the navdrawer, in order
@@ -91,18 +120,11 @@ public class BaseActivity extends Activity implements BaseFragment.BaseFragmentC
     // views that correspond to each tab bar item, null if not yet created
     private View[] mTabBarItemViews = null;
 
-    private int getStartFragmentItem() {
-        return TAB_BAR_ITEM_PROFILE;
-    }
-
-
-
     /**
      * Sets up the tab bar as appropriate.
      */
     private void setupTabBar(){
-        // What tab bar item should be selected?
-        int selfItem = getStartFragmentItem();
+        int selfItem = mCurrentFragmentItemId;
 
         mBaseFrameLayout = (FrameLayout) findViewById(R.id.base_layout);
 
@@ -159,7 +181,7 @@ public class BaseActivity extends Activity implements BaseFragment.BaseFragmentC
     }
 
     private View makeTabBarItem(final int itemId, ViewGroup container) {
-        boolean selected = getStartFragmentItem() == itemId;
+        boolean selected = mCurrentFragmentItemId == itemId;
 
         View view = getLayoutInflater().inflate(R.layout.tab_bar_item, container, false);
 
@@ -212,14 +234,6 @@ public class BaseActivity extends Activity implements BaseFragment.BaseFragmentC
 
         }
     }
-
-
-//    private void formatTabBarItem(View view, int itemId, boolean selected) {
-//        ImageView iconView = (ImageView) view.findViewById(R.id.icon);
-//        iconView.setColorFilter(selected ?
-//                getResources().getColor(R.color.tabbar_icon_tint_selected) :
-//                getResources().getColor(R.color.tabbar_icon_tint));
-//    }
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {

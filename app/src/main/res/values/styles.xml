@@ -27,7 +27,7 @@
     <style name="ActionBar.Base" parent="FrameworkRoot.ActionBar">
         <item name="android:background">@drawable/actionbar_background</item>
         <item name="android:displayOptions">showCustom</item>
-        <item name="android:customNavigationLayout">@layout/custom_action_bar</item>
+        <item name="android:customNavigationLayout">@layout/custom_ab_title</item>
     </style>
 
     <style name="ActionBar.TitleText" parent="FrameworkRoot.ActionBar.TitleText">

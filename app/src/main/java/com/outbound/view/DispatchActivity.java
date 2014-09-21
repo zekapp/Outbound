@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.outbound.loginSignUp.WelcomePage;
+import com.outbound.util.Constants.*;
 import com.parse.ParseUser;
 
 import static com.outbound.util.LogUtils.*;
@@ -41,12 +42,19 @@ public class DispatchActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		// Check if there is current user info
-		if (ParseUser.getCurrentUser() != null) {
+		if (ParseUser.getCurrentUser() != null || true) {
 			// Start an intent for the logged in activity
 
-			LOGD(TAG, "onCreate, got user,  "
-					+ ParseUser.getCurrentUser().getUsername());
-			startActivity(new Intent(this, ProfileFragment.class));
+//			LOGD(TAG, "onCreate, got user,  "
+//					+ ParseUser.getCurrentUser().getUsername());
+//			startActivity(new Intent(this, BaseActivity.class));
+
+            // Start an intent for the dispatch activity
+            Intent intent = new Intent(this, BaseActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Extra.IS_LAUNCHER, true);
+            startActivity(intent);
 		} else {
 			// Start and intent for the logged out activity
 			LOGD(TAG, "onCreate, no user");
