@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/profile_user_info"/>
-    <include layout="@layout/profile_function_layout"/>
+    <include  layout="@layout/profile_user_info" />
+    <include  layout="@layout/profile_function_layout"/>
 
 </LinearLayout>

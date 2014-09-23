@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/outbound_list_view_item_height">
+
+    <com.parse.ParseImageView
+        android:id="@+id/pm_user_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_rounded_rectangle"
+        android:layout_gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
+        android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
+
+    <TextView
+        android:id="@+id/pm_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/pm_user_photo"
+        android:text="Name Surname"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
+        android:layout_marginTop="@dimen/outbound_list_view_item_text_top_margin"/>
+
+    <TextView
+        android:id="@+id/pm_message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:05 PM"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/outbound_list_view_item_text_top_margin"
+        android:layout_marginRight="@dimen/outbound_list_view_item_text_right_margin"
+        />
+
+     <TextView
+         android:id="@+id/pm_message"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:maxLines="2"
+         android:ellipsize="end"
+         android:layout_below="@+id/pm_user_name"
+         android:layout_toRightOf="@+id/pm_user_photo"
+         android:text="@string/test_message"
+         android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
+         android:layout_marginRight="@dimen/outbound_list_view_item_text_right_margin"
+         android:paddingTop="10dp"/>
+
+
+</RelativeLayout>

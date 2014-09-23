@@ -2,8 +2,9 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <LinearLayout
+        android:id="@+id/profile_user_info_id"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/profile_user_info_height"
         android:orientation="horizontal">
 
         <LinearLayout

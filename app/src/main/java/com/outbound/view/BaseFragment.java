@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.outbound.ui.util.SwipeRefreshLayout;
 
 import java.lang.reflect.Field;
 
@@ -46,7 +49,18 @@ public abstract class BaseFragment extends Fragment {
      */
     public interface BaseFragmentCallbacks{
         void deployFragment(final  int itemId);
+        
+        // registrer the view which is dissepear when list view scolling
+        void registerHideableHeaderView(View view);
 
+        // whic listview will be lissened
+        void enableActionBarAutoHide(final ListView listView);
+
+        // after unvisible of the up views swipelayout top location
+        void registerSwipeRefreshProgressBarAsTop(SwipeRefreshLayout swipeRefreshLayout, int progressBarTopWhenActionBarShown);
+
+        // similar action like back button
+        void backIconClicked();
     }
 
     /**

@@ -18,7 +18,7 @@
         />
 
     <com.parse.ParseImageView
-        android:id="@+id/pp_speaker_photo"
+        android:id="@+id/pp_user_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="1dp"

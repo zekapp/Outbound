@@ -5,6 +5,7 @@
     android:id="@+id/tabbar"
     android:orientation="vertical"
     android:layout_gravity="bottom"
+    android:layout_alignParentBottom="true"
     android:background="@color/tab_bar_background">
 
     <include layout="@layout/tab_bar_frame" />

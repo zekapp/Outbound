@@ -28,4 +28,25 @@
     <dimen name="tab_bar_frame_height">70dp</dimen>
     <dimen name="action_bar_title_size">20dp</dimen>
 
+    <!-- Action Bar auto-hide-on-scroll behavior parameters -->
+    <dimen name="action_bar_auto_hide_min_y">152dp</dimen>
+    <dimen name="action_bar_auto_hide_sensivity">48dp</dimen>
+
+
+    <dimen name="profile_pager_layout_height">200dp</dimen>
+    <dimen name="profile_user_info_height">40dp</dimen>
+    <dimen name="profile_function_layout_height">55dp</dimen>
+
+    <!--List View Item Margins-->
+    <dimen name="outbound_list_view_item_height">100dp</dimen>
+    <dimen name="outbound_list_view_item_height_ext">83dp</dimen>
+    <dimen name="outbound_list_view_item_text_left_margin">15dp</dimen>
+    <dimen name="outbound_list_view_item_picture_left_margin">5dp</dimen>
+    <dimen name="outbound_list_view_item_picture_top_margin">10dp</dimen>
+    <dimen name="outbound_list_view_item_text_top_margin">20dp</dimen>
+    <dimen name="outbound_list_view_item_text_right_margin">10dp</dimen>
+
+    <!-- body content -->
+    <dimen name="text_size_small">12sp</dimen>
+
 </resources>
