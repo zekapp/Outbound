@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mt_city_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="City, Country"
+        android:drawableLeft="@drawable/test_flag"
+        android:drawablePadding="7dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/mt_date"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:hint="20/9/2015 to 30/9/2015"
+            android:drawableLeft="@drawable/small_calander"
+            android:drawablePadding="7dp"
+            />
+        <TextView
+            android:id="@+id/my_attending_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/theme_primary_light"
+            android:text="5"
+            android:drawableLeft="@drawable/small_users"
+            android:drawablePadding="7dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>

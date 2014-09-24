@@ -1,4 +1,4 @@
-package com.outbound.ui.util;
+package com.outbound.ui.util.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

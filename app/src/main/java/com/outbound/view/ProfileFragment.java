@@ -2,16 +2,13 @@ package com.outbound.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,16 +19,15 @@ import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
 import com.outbound.R;
-import com.outbound.ui.util.BaseFragmentStatePagerAdapter;
-import com.outbound.ui.util.ProfileMessageListViewAdapter;
+import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
+import com.outbound.ui.util.adapters.ProfileMessageListViewAdapter;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.UIUtils;
 import com.outbound.ui.util.ZoomOutPageTransformer;
 import com.outbound.util.Constants;
 
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by zeki on 2/09/2014.
@@ -53,14 +49,25 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        setUpActionBar(activity);
+    }
 
+    private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_profile, null);
         TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
         title.setText(getResources().getString(R.string.profile_fragment_title));
+        ImageView setIcon = (ImageView)viewActionBar.findViewById(R.id.ab_setting_icon);
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
             actionBar.setCustomView(viewActionBar);
         }
+
+        setIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_ITEM);
+            }
+        });
     }
 
     @Override

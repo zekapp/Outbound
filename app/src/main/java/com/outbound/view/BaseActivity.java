@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.app.ActionBar;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.outbound.R;
@@ -64,6 +66,8 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
     private int mProgressBarTopWhenActionBarShown;
 
+    private LinearLayout mTabBar;
+
     private static class FragmentContainer{
         public BaseFragment mFragment;
         public String mTag;
@@ -78,16 +82,17 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
     }
 
 //    Indices must correspond to array {@link #Constants} items.
-    private final static FragmentContainer[] FRAGMENT = {
+    private final static FragmentContainer[] FRAGMENTS = {
             new FragmentContainer(new ProfileFragment(),        "Profile"),             //Profile
             new FragmentContainer(new ExploreTripsFragment() ,  "ExploreTrips"),        //ExploreTrips
             new FragmentContainer(new EventsFragment(),         "Events"),              //Events
             new FragmentContainer(new SearchFragment(),         "Search"),              //Search
             new FragmentContainer(new NoticeBoardFragment(),    "Noticeboard"),         //Noticeboard
             new FragmentContainer(new MyFriendsFragment(),      "MyFriendsFragment"),   //MyFriendsFragment
-            new FragmentContainer(new MyFriendsFragment(),        "MyTrips"),             //MyTrips
-            new FragmentContainer(new MyFriendsFragment(),"MyTravelHistory"),     //MyTravelHistory
-            new FragmentContainer(new MyFriendsFragment(),       "MyEvents")             //MyEvents
+            new FragmentContainer(new MyTripsFragment(),        "MyTripsFragment"),             //MyTripsFragment
+            new FragmentContainer(new MyTravelHistoryFragment(),"MyTravelHistoryFragment"),     //MyTravelHistoryFragment
+            new FragmentContainer(new MyEventsFragment(),       "MyEventsFragment"),             //MyEventsFragment
+            new FragmentContainer(new SettingsFragment(),       "SettingsFragment")             //SettingsFragment
     };
 
     // icons for tab bar items (indices must correspond to above array)
@@ -130,6 +135,8 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
         setContentView(R.layout.base_fragment_activity_layout);
 
         mThemedStatusBarColor = getResources().getColor(R.color.theme_primary_dark);
+
+        mTabBar = (LinearLayout)findViewById(R.id.tabbar);
     }
 
     @Override
@@ -140,12 +147,12 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
     @Override
     public void deployFragment(final  int itemId) {
-        LOGD(TAG,"deployFragment " + FRAGMENT[itemId].mTag );
+        LOGD(TAG,"deployFragment " + FRAGMENTS[itemId].mTag );
 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransactiong = fragmentManager.beginTransaction().
-                replace(R.id.container, FRAGMENT[itemId].mFragment);
+                replace(R.id.container, FRAGMENTS[itemId].mFragment);
         fragmentTransactiong.commit();
     }
 
@@ -192,6 +199,7 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
             }
         });
     }
+
     /**
      * Indicates that the main content has scrolled (for the purposes of showing/hiding
      * the action bar for the "action bar auto hide" effect). currentY and deltaY may be exact

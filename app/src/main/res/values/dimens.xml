@@ -4,7 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
 
-    <dimen name="edit_text_left_margin">16dp</dimen>
+    <dimen name="text_left_margin">16dp</dimen>
+    <dimen name="text_right_margin">16dp</dimen>
 
 
     <dimen name="outbound_sign_up_with_email_padding_left">12dip</dimen>
@@ -48,5 +49,7 @@
 
     <!-- body content -->
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="after_icon_margin">10dp</dimen>
+    <dimen name="icon_margin_left">10dp</dimen>
 
 </resources>

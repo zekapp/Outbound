@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="@dimen/outbound_list_view_item_height_ext">
+
+    <com.parse.ParseImageView
+        android:id="@+id/pm_user_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_rounded_rectangle"
+        android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
+        android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin">
+
+        <TextView
+            android:id="@+id/me_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Name"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            >
+
+            <TextView
+                android:id="@+id/me_date"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:hint="8/08/14"
+                android:drawableLeft="@drawable/small_calander"
+                android:drawablePadding="7dp"/>
+            <TextView
+                android:id="@+id/me_time"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:hint="7:00pm"
+                android:drawableLeft="@drawable/small_time"
+                android:drawablePadding="7dp"/>
+            <TextView
+                android:id="@+id/me_attending_count"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="18"
+                android:drawableLeft="@drawable/small_users"
+                android:drawablePadding="7dp"
+                android:textColor="@color/theme_primary_light"
+                android:layout_marginLeft="20dp"/>
+
+         </LinearLayout>
+
+     </LinearLayout>
+
+
+</LinearLayout>

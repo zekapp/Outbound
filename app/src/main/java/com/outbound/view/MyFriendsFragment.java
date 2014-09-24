@@ -15,12 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.outbound.R;
-import com.outbound.ui.util.BaseFragmentStatePagerAdapter;
-import com.outbound.ui.util.MyFriendsAdapter;
+import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
+import com.outbound.ui.util.adapters.MyFriendsAdapter;
 import com.outbound.ui.util.SlidingTabLayout;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 /**
  * Created by zeki on 23/09/2014.

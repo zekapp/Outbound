@@ -26,6 +26,9 @@
     <color name="tab_background">@color/theme_primary</color>
     <color name="tab_selected_strip">@color/theme_accent_1</color>
 
+
+    <color name="section_bar_background">#ebebeb</color>
+
     <color name="background_body">#2B2B2B</color>
     <color name="white">#FFFFFF</color>
     <color name="yellow">#FFFF00</color>

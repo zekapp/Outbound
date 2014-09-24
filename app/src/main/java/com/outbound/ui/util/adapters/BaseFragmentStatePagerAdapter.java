@@ -1,4 +1,4 @@
-package com.outbound.ui.util;
+package com.outbound.ui.util.adapters;
 
 import android.os.Bundle;
 import android.os.Parcelable;

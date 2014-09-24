@@ -74,5 +74,9 @@
     <string name="search_fragment_title">Search</string>
     <string name="test_message">Lorem ipsum dolor sit amet, nibh enim volutpat feugiat semper nostra est, amet pellentesque condimentum elementum purus. Viverra nascetur, blandit sapien quisque lectus, curabitur maecenas. Commodo nullam sit nullam mi erat aliquet. Donec metus nisl vehicula donec. Morbi libero nulla, felis sagittis felis in vehicula, suspendisse nunc lacinia sodales. Non ac egestas vehicula odio, nunc mattis ut neque quam nulla, non nulla vivamus iaculis augue ultrices iusto. Turpis dolor magna justo libero, semper lectus vehicula vel. Aliquam iaculis. Nec integer sapien dis purus, praesent eget hendrerit nec proin sollicitudin. Eget lacus ac velit justo in, pharetra leo massa ut lacus diam convallis, quam integer cras odio nec. Neque integer morbi. Nulla suspendisse commodo quis, justo pellentesque vivamus, pellentesque fusce risus erat scelerisque curabitur, quisque varius consectetuer.</string>
     <string name="my_friends_fragment_title">Friends</string>
+    <string name="my_trips_fragment_title">My Trips</string>
+    <string name="my_travel_history_fragment_title">Travel History</string>
+    <string name="my_events_fragment_title">My Events</string>
+    <string name="settings_fragment_title">Settings</string>
 
 </resources>
