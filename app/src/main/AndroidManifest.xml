@@ -43,7 +43,10 @@
             android:name=".view.BaseActivity"
              >
         </activity>
-
+        <activity
+            android:name=".view.MessageActivity"
+            >
+        </activity>
         <activity
             android:name=".loginSignUp.WelcomePage"
             android:label="@string/welcome_activity_name"

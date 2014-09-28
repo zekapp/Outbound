@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <com.parse.ParseImageView
+            android:id="@+id/ma_user_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_rounded_rectangle"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="17dp"
+            android:layout_alignParentLeft="true"/>
+
+        <ImageView
+            android:id="@+id/triangle_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:orientation="vertical"
+            android:src="@drawable/message_left_triange_gray"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/ma_user_photo">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/ma_message_text"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/test_message_short"
+            android:textColor="@color/white"
+            android:background="@drawable/message_rounded_rectangle_gray"
+            android:padding="20dp"
+            android:layout_toRightOf="@+id/triangle_layout"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/ma_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:hint="Name Surname"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/ma_message_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="12:30 pm"
+            android:gravity="end"
+            android:layout_weight="1"
+            android:layout_marginRight="15dp"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.outbound.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,10 +39,11 @@ public class ProfileFragment extends BaseFragment {
     private FrameLayout mFrameLayout;
     private PagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-    private SwipeRefreshLayout mSwipeRefreshLayoutNews;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView mMessageListView;
 
-    View dots[] = new View[2];
+    private View dots[] = new View[2];
+
     @Override
     protected void setUp(int baseActivityFrameLayoutId) {
         super.setUp(baseActivityFrameLayoutId);
@@ -79,57 +82,39 @@ public class ProfileFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.profile_fragment, container, false);
-
-//        String[] values = new String[] { "Profile 1", "Profile 2", "Profile 3",
-//                "Profile 4", "Profile 5", "Profile 6", "Profile 7", "Profile 8",
-//                "Profile 9", "Profile 10", "Profile 11", "Profile 12", "Profile 13", "Profile 14",
-//                "Profile 15", "Profile 16", "Profile 17", "Profile 18", "Profile 19", "Profile 20",
-//                "Profile 21", "Profile 22", "Profile 23" };
-//
-//        ArrayList<String> list = new ArrayList<String>();
-//        for (int i = 0; i < values.length; ++i) {
-//            list.add(values[i]);
-//        }
-//
-//        StableArrayAdapter adapter = new StableArrayAdapter(getActivity(),
-//                android.R.layout.simple_list_item_1, list);
         setUpProfileFunctionLayout(view);
+        setUpViewPager(view);
+        setUpSwipeRefreshLayout(view);
+        setUpMessageListView(view);
+        registerForHideableViews(view);
+        return view;
+    }
 
-        dots[0] = view.findViewById(R.id.profile_left_dot);
-        dots[1] = view.findViewById(R.id.profile_right_dot);
-
-        mViewPager = (ViewPager) view.findViewById(R.id.profile_pager);
-        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
-
-        mSwipeRefreshLayoutNews = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        if (mSwipeRefreshLayoutNews != null){
-            mSwipeRefreshLayoutNews.setColorScheme(
+    private void setUpSwipeRefreshLayout(View view) {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        if (mSwipeRefreshLayout != null){
+            mSwipeRefreshLayout.setColorScheme(
                     R.color.refresh_progress_1,
                     R.color.refresh_progress_2,
                     R.color.refresh_progress_3,
                     R.color.refresh_progress_4);
 
-            mSwipeRefreshLayoutNews.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     //get the latest message for this user.
                 }
             });
         }
+    }
 
-        mMessageListView = (ListView)view.findViewById(R.id.profile_message_list);
-
-
-        ArrayList<Object> testItem = new ArrayList<Object>();
-        for (int i=0;i<50;i++){
-            testItem.add(new Object());
-        }
-        ProfileMessageListViewAdapter adapter = new ProfileMessageListViewAdapter(getActivity(),testItem);
-        mMessageListView.setAdapter(adapter);
-
-
+    private void setUpViewPager(View view) {
+        dots[0] = view.findViewById(R.id.profile_left_dot);
+        dots[1] = view.findViewById(R.id.profile_right_dot);
+        mViewPager = (ViewPager) view.findViewById(R.id.profile_pager);
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
 
         ((ImageView)dots[mViewPager.getCurrentItem()]).setImageResource(R.drawable.circle_white_dot);
 
@@ -141,15 +126,35 @@ public class ProfileFragment extends BaseFragment {
                 ((ImageView)dots[(position+1)%2]).setImageResource(R.drawable.circle_clear_dot);
             }
         });
+    }
 
+    private void registerForHideableViews(View view) {
 //        mCallbacks.registerHideableHeaderView(view.findViewById(R.id.profile_pager_layout));
 //        mCallbacks.registerHideableHeaderView(view.findViewById(R.id.profile_user_info_id));
 //        mCallbacks.registerHideableHeaderView(view.findViewById(R.id.profile_function_layout_id));
 //        mCallbacks.registerHideableHeaderView(view.findViewById(R.id.layout_container_id));
 
-//        mCallbacks.registerSwipeRefreshProgressBarAsTop(mSwipeRefreshLayoutNews,getSwipewRefreshLayoutTopClearance());
+//        mCallbacks.registerSwipeRefreshProgressBarAsTop(mSwipeRefreshLayout,getSwipeRefreshLayoutTopClearance());
         mCallbacks.enableActionBarAutoHide(mMessageListView);
-        return view;
+    }
+
+    private void setUpMessageListView(View view) {
+        mMessageListView = (ListView)view.findViewById(R.id.profile_message_list);
+        ArrayList<Object> test = new ArrayList<Object>();
+        for (int i=0;i<50;i++){
+            test.add(new Object());
+        }
+        ProfileMessageListViewAdapter adapter = new ProfileMessageListViewAdapter(getActivity(),test);
+        mMessageListView.setAdapter(adapter);
+        mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object messageObject = parent.getAdapter().getItem(position);
+                Intent intent = new Intent(getActivity(), MessageActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void setUpProfileFunctionLayout(View view) {
@@ -183,7 +188,7 @@ public class ProfileFragment extends BaseFragment {
         });
     }
 
-    private int getSwipewRefreshLayoutTopClearance(){
+    private int getSwipeRefreshLayoutTopClearance(){
         int actionBarClearance = UIUtils.calculateActionBarSize(getActivity());
         int profileUserInfoClearance = getResources().getDimensionPixelSize(R.dimen.profile_user_info_height);
         int profileFunctionLayoutHeight = getResources().getDimensionPixelSize(R.dimen.profile_function_layout_height);

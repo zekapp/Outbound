@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <rotate
+            android:fromDegrees="-45"
+            android:pivotX="70%"
+            android:pivotY="-15%" >
+            <shape
+                android:shape="rectangle" >
+                <!--<stroke android:color="@android:color/transparent" android:width="10dp"/>-->
+                <solid
+                    android:color="@color/tabbar_icon_tint" />
+
+                <size
+                    android:width="10dp"
+                    android:height="10dp" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
