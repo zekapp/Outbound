@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="08/08/14 | 4pm"
+                android:drawableLeft="@drawable/list_time"
+                android:drawablePadding="7dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:background="@color/theme_primary_grey">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="San Fermin"
+                android:drawableLeft="@drawable/list_hometown"
+                android:drawablePadding="7dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="7dp"
+                android:gravity="center_vertical"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:hint="Pamplona - Navarra, Spain"
+                android:layout_marginLeft="40dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/test_message"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="15dp"
+                    />
+            </ScrollView>
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_join_event"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="vertical"
+            android:background="@color/theme_primary_grey">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="230 Outbounders attending"
+                android:drawableLeft="@drawable/list_user"
+                android:drawablePadding="7dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.outbound.ui.util.MultiSwipeRefreshLayout
+        android:id="@+id/gw_swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </GridView>
+    </com.outbound.ui.util.MultiSwipeRefreshLayout>
+
+
+</LinearLayout>
+
+
+<!--<com.sothree.slidinguppanel.SlidingUpPanelLayout-->
+<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:sothree="http://schemas.android.com/apk/res-auto"-->
+<!--android:id="@+id/sliding_layout"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:gravity="top"-->
+<!--sothree:panelHeight="8dp"-->
+<!--sothree:shadowHeight="4dp">-->
+<!--</com.sothree.slidinguppanel.SlidingUpPanelLayout>-->
+
+    <!--<com.sothree.slidinguppanel.SlidingUpPanelLayout-->
+        <!--xmlns:sothree="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/sliding_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="top"-->
+        <!--sothree:panelHeight="8dp"-->
+        <!--sothree:shadowHeight="4dp">-->
+
+        <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!-->-->
+
+        <!--</LinearLayout>-->
+
+
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center|top"-->
+            <!--android:text="Sliding Up Panel"-->
+            <!--android:textSize="16sp" />-->
+
+    <!--</com.sothree.slidinguppanel.SlidingUpPanelLayout>-->
+
+
+
+    <!--<com.outbound.ui.util.SlidingLayer-->
+        <!--xmlns:slidingLayer="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/slidingLayer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--slidingLayer:stickTo="top"-->
+        <!--slidingLayer:closeOnTapEnabled="true">-->
+
+        <!--<LinearLayout-->
+            <!--android:orientation="vertical" android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+
+
+        <!--</LinearLayout>-->
+
+    <!--</com.outbound.ui.util.SlidingLayer>-->
+
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="08/08/14 | 4pm"-->
+            <!--android:drawableLeft="@drawable/list_time"-->
+            <!--android:drawablePadding="7dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:gravity="center_vertical"/>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="@color/theme_primary_grey">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="San Fermin"-->
+            <!--android:drawableLeft="@drawable/list_hometown"-->
+            <!--android:drawablePadding="7dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="7dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:hint="Pamplona - Navarra, Spain"-->
+            <!--android:layout_marginLeft="40dp"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/test_message"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="15dp"-->
+                <!--android:layout_marginTop="10dp"/>-->
+        <!--</ScrollView>-->
+
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/btn_join_event"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="@color/theme_primary_grey">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="230 Outbounders attending"-->
+            <!--android:drawableLeft="@drawable/list_user"-->
+            <!--android:drawablePadding="7dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+    <!--<GridLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+    <!--</GridLayout>-->

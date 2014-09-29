@@ -45,8 +45,8 @@ public class ProfileFragment extends BaseFragment {
     private View dots[] = new View[2];
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId) {
-        super.setUp(baseActivityFrameLayoutId);
+    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
+        super.setUp(baseActivityFrameLayoutId,param1,param2);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ProfileFragment extends BaseFragment {
         setIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_ITEM);
+                mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_ITEM,null,null);
             }
         });
     }
@@ -162,28 +162,28 @@ public class ProfileFragment extends BaseFragment {
         relativeLayoutFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_ITEM);
+                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_ITEM,null,null);
             }
         });
         LinearLayout myTripsLayout = (LinearLayout)view.findViewById(R.id.pf_my_trips_layout);
         myTripsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_ITEM);
+                mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_ITEM,null,null);
             }
         });
         LinearLayout travellerHistory = (LinearLayout)view.findViewById(R.id.pf_traveller_history_layout);
         travellerHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_ITEM);
+                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_ITEM,null,null);
             }
         });
         LinearLayout events = (LinearLayout)view.findViewById(R.id.pf_my_events_layout);
         events.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_MY_EVENTS_ITEM);
+                mCallbacks.deployFragment(Constants.PROFILE_MY_EVENTS_ITEM,null,null);
             }
         });
     }

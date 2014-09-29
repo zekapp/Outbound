@@ -16,8 +16,8 @@ import com.outbound.R;
  */
 public class SettingsFragment extends BaseFragment {
     @Override
-    protected void setUp(int baseActivityFrameLayoutId) {
-        super.setUp(baseActivityFrameLayoutId);
+    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
+        super.setUp(baseActivityFrameLayoutId,param1,param2);
     }
     @Override
     public void onAttach(Activity activity) {

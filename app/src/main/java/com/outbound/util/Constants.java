@@ -16,6 +16,9 @@ public final class Constants  {
     public static final int PROFILE_TRAVEL_HISTORY_ITEM = 7;
     public static final int PROFILE_MY_EVENTS_ITEM = 8;
     public static final int PROFILE_SETTINGS_ITEM = 9;
+    public static final int EXPLORE_TRIPS_SEARCH_TRIP = 10;
+    public static final int EXPLORE_TRIPS_ADD_NEW_TRIPS = 11;
+    public static final int EVENT_DETAIL_FRAGMENT = 12;
     public static final int ITEM_INVALID = -1;
 
     public static class AppInitialStates{

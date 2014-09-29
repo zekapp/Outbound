@@ -14,16 +14,16 @@ import java.util.ArrayList;
 /**
  * Created by zeki on 24/09/2014.
  */
-public class MyEventsAdapter extends ArrayAdapter<Object> {
-    public MyEventsAdapter(FragmentActivity activity, ArrayList<Object> objectArrayList) {
-        super(activity, R.layout.my_events_list_item, objectArrayList);
+public class EventsAdapter extends ArrayAdapter<Object> {
+    public EventsAdapter(FragmentActivity activity, ArrayList<Object> objectArrayList) {
+        super(activity, R.layout.events_list_item, objectArrayList);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if(convertView == null)
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_events_list_item,parent,false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.events_list_item,parent,false);
 
         TextView eventName = (TextView)convertView.findViewById(R.id.me_title);
         TextView date = (TextView)convertView.findViewById(R.id.me_date);

@@ -82,4 +82,12 @@
     <string name="settings_fragment_title">Settings</string>
     <string name="message_activity_title">Name Surname</string>
 
+    <!--Explore Trips-->
+    <string name="explore_trips_information">Explore destinations to find fellow travellers and add your new trips below.</string>
+    <string name="explore_trips_search_fragment_title">Explore Trips</string>
+    <string name="explore_trips_search_information">Search locations or destinations to see what other Outbounders will be there.</string>
+    <string name="explore_trips_add_information">Where are you travelling to?\n\nAdd your trips so that it shows up on your profile and other users can message you if your trips are similar.</string>
+    <string name="explore_trips_add_fragment_title">Add Trip</string>
+    <string name="event_details_fragment_title">Event Name</string>
+
 </resources>

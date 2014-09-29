@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.outbound.R;
 import com.outbound.ui.util.SwipeRefreshLayout;
 
 import java.lang.reflect.Field;
@@ -32,6 +33,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -49,9 +51,10 @@ public abstract class BaseFragment extends Fragment {
      * Callbacks interface that the activity using this fragment must implement.
      */
     public interface BaseFragmentCallbacks{
-        void deployFragment(final  int itemId);
-        
-        // registrer the view which is dissepear when list view scolling
+        //
+        void deployFragment(final  int itemId, Object param1, Object param2);
+
+        // register the view which is disappear when list view scrolling
         void registerHideableHeaderView(View view);
 
         // whic listview will be lissened
@@ -68,7 +71,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @param baseActivityFrameLayoutId  The android:id containing this fragment's UI.
      */
-    protected void setUp(int baseActivityFrameLayoutId){
+    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2){
         mBaseActivityFrameLayoutId = baseActivityFrameLayoutId;
     }
 

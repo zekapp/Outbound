@@ -37,8 +37,8 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     private MyFriendsAdapter mMyFriendsPendingAdapter;
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId) {
-        super.setUp(baseActivityFrameLayoutId);
+    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
+        super.setUp(baseActivityFrameLayoutId,param1,param2);
     }
 
     @Override

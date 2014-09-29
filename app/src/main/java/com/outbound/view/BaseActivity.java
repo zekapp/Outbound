@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.app.ActionBar;
 
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -76,23 +75,26 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
             mFragment = fragment;
             mTag = fragmentTag;
 
-            mFragment.setUp(R.id.base_layout);
+            mFragment.setUp(R.id.base_layout ,null, null);
 
         }
     }
 
 //    Indices must correspond to array {@link #Constants} items.
     private final static FragmentContainer[] FRAGMENTS = {
-            new FragmentContainer(new ProfileFragment(),        "Profile"),             //Profile
-            new FragmentContainer(new ExploreTripsFragment() ,  "ExploreTrips"),        //ExploreTrips
-            new FragmentContainer(new EventsFragment(),         "Events"),              //Events
-            new FragmentContainer(new SearchFragment(),         "Search"),              //Search
-            new FragmentContainer(new NoticeBoardFragment(),    "Noticeboard"),         //Noticeboard
-            new FragmentContainer(new MyFriendsFragment(),      "MyFriendsFragment"),   //MyFriendsFragment
-            new FragmentContainer(new MyTripsFragment(),        "MyTripsFragment"),             //MyTripsFragment
-            new FragmentContainer(new MyTravelHistoryFragment(),"MyTravelHistoryFragment"),     //MyTravelHistoryFragment
-            new FragmentContainer(new MyEventsFragment(),       "MyEventsFragment"),             //MyEventsFragment
-            new FragmentContainer(new SettingsFragment(),       "SettingsFragment")             //SettingsFragment
+            new FragmentContainer(new ProfileFragment(),            "Profile"),             //Profile
+            new FragmentContainer(new ExploreTripsFragment() ,      "ExploreTrips"),        //ExploreTrips
+            new FragmentContainer(new EventsFragment(),             "Events"),              //Events
+            new FragmentContainer(new SearchFragment(),             "Search"),              //Search
+            new FragmentContainer(new NoticeBoardFragment(),        "Noticeboard"),         //Noticeboard
+            new FragmentContainer(new MyFriendsFragment(),          "MyFriendsFragment"),   //MyFriendsFragment
+            new FragmentContainer(new MyTripsFragment(),            "MyTripsFragment"),             //MyTripsFragment
+            new FragmentContainer(new MyTravelHistoryFragment(),    "MyTravelHistoryFragment"),     //MyTravelHistoryFragment
+            new FragmentContainer(new MyEventsFragment(),           "MyEventsFragment"),            //MyEventsFragment
+            new FragmentContainer(new SettingsFragment(),           "SettingsFragment"),            //SettingsFragment
+            new FragmentContainer(new ExploreTripsSearchFragment(), "ExploreTripsSearchFragment") , //ExploreTripsSearchFragment
+            new FragmentContainer(new ExploreTripsAddFragment(),    "ExploreTripsAddFragment"),     //ExploreTripsAddFragment
+            new FragmentContainer(new EventDetailsFragment(),       "EventDetailsFragment")         //EventDetailsFragment
     };
 
     // icons for tab bar items (indices must correspond to above array)
@@ -146,7 +148,7 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
     }
 
     @Override
-    public void deployFragment(final  int itemId) {
+    public void deployFragment(final  int itemId, Object param1, Object param2) {
         LOGD(TAG,"deployFragment " + FRAGMENTS[itemId].mTag );
 
 
@@ -395,7 +397,7 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
         setItemAsClicked(itemId);
 
-        deployFragment(itemId);
+        deployFragment(itemId,null,null);
 
     }
 
