@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:iosched="http://schemas.android.com/apk/res-auto"
+    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/profile_function_layout_id"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_function_layout_height"
+        android:orientation="horizontal"
+        android:background="@color/theme_primary">
+
+        <RelativeLayout
+            android:id="@+id/pf_friends_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?android:selectableItemBackground"
+            android:layout_weight="1"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friends"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/profile_friends_text" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:background="@color/seperator_bar_blue"/>
+
+        <LinearLayout
+            android:id="@+id/pf_traveller_history_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?android:selectableItemBackground"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:clickable="true"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Travel \n History"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:background="@color/seperator_bar_blue"/>
+
+
+        <LinearLayout
+            android:id="@+id/pf_my_events_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="?android:selectableItemBackground"
+            android:layout_weight="2"
+            android:clickable="true"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Friends"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:drawableRight="@drawable/action_add"
+                android:layout_marginTop="15dp"
+                android:drawablePadding="10dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</merge>
+
+
+

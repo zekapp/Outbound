@@ -1,5 +1,6 @@
 package com.outbound.ui.util.adapters;
 
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,8 @@ import java.util.ArrayList;
  * Created by zeki on 24/09/2014.
  */
 public class MyTripsAdapter extends ArrayAdapter<Object>{
-    public MyTripsAdapter(FragmentActivity activity, ArrayList<Object> objectArrayList) {
-        super(activity, R.layout.my_trips_list_item,objectArrayList);
+    public MyTripsAdapter(Context context, ArrayList<Object> objectArrayList) {
+        super(context, R.layout.my_trips_list_item,objectArrayList);
     }
 
     @Override

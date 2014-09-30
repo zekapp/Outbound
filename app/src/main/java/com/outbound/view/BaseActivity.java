@@ -82,19 +82,21 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
 //    Indices must correspond to array {@link #Constants} items.
     private final static FragmentContainer[] FRAGMENTS = {
-            new FragmentContainer(new ProfileFragment(),            "Profile"),             //Profile
-            new FragmentContainer(new ExploreTripsFragment() ,      "ExploreTrips"),        //ExploreTrips
-            new FragmentContainer(new EventsFragment(),             "Events"),              //Events
-            new FragmentContainer(new SearchFragment(),             "Search"),              //Search
-            new FragmentContainer(new NoticeBoardFragment(),        "Noticeboard"),         //Noticeboard
-            new FragmentContainer(new MyFriendsFragment(),          "MyFriendsFragment"),   //MyFriendsFragment
+            new FragmentContainer(new ProfileFragment(),            "Profile"),                     //Profile
+            new FragmentContainer(new ExploreTripsFragment() ,      "ExploreTrips"),                //ExploreTrips
+            new FragmentContainer(new EventsFragment(),             "Events"),                      //Events
+            new FragmentContainer(new SearchPeopleFragment(),       "SearchPeopleFragment"),        //SearchPeopleFragment
+            new FragmentContainer(new NoticeBoardFragment(),        "Noticeboard"),                 //Noticeboard
+            new FragmentContainer(new MyFriendsFragment(),          "MyFriendsFragment"),           //MyFriendsFragment
             new FragmentContainer(new MyTripsFragment(),            "MyTripsFragment"),             //MyTripsFragment
             new FragmentContainer(new MyTravelHistoryFragment(),    "MyTravelHistoryFragment"),     //MyTravelHistoryFragment
             new FragmentContainer(new MyEventsFragment(),           "MyEventsFragment"),            //MyEventsFragment
             new FragmentContainer(new SettingsFragment(),           "SettingsFragment"),            //SettingsFragment
             new FragmentContainer(new ExploreTripsSearchFragment(), "ExploreTripsSearchFragment") , //ExploreTripsSearchFragment
             new FragmentContainer(new ExploreTripsAddFragment(),    "ExploreTripsAddFragment"),     //ExploreTripsAddFragment
-            new FragmentContainer(new EventDetailsFragment(),       "EventDetailsFragment")         //EventDetailsFragment
+            new FragmentContainer(new EventDetailsFragment(),       "EventDetailsFragment"),        //EventDetailsFragment
+            new FragmentContainer(new SearchPeopleDetailFragment(), "SearchPeopleDetailFragment"),  //SearchPeopleDetailFragment
+            new FragmentContainer(new PeopleProfileFragment(), "PeopleProfileFragment")     //PeopleProfileFragment
     };
 
     // icons for tab bar items (indices must correspond to above array)
@@ -334,11 +336,11 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
         mTabBarItems.clear();
 
-        mTabBarItems.add(TAB_BAR_ITEM_PROFILE);
-        mTabBarItems.add(TAB_BAR_ITEM_EXPLORE_TRIPS);
-        mTabBarItems.add(TAB_BAR_ITEM_EVENTS);
-        mTabBarItems.add(TAB_BAR_ITEM_SEARCH);
-        mTabBarItems.add(TAB_BAR_ITEM_NOTICEBOARD);
+        mTabBarItems.add(TAB_BAR_ITEM_PROFILE_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_EXPLORE_TRIPS_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_EVENTS_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_SEARCH_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_NOTICEBOARD_ID);
 
         createTabBarItems();
 

@@ -6,29 +6,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.ui.util.adapters.SearchPeopleAdapter;
 import com.outbound.ui.util.HeaderGridView;
 import com.outbound.ui.util.SwipeRefreshLayout;
-import com.outbound.ui.util.adapters.EventDetailsAdapter;
-import com.parse.ParseImageView;
+import com.outbound.util.Constants;
 
 /**
- * Created by zeki on 29/09/2014.
+ * Created by zeki on 15/09/2014.
  */
-public class EventDetailsFragment extends BaseFragment {
+public class SearchPeopleFragment extends BaseFragment {
 
-    private Object mEventDetails;
+    private SearchPeopleAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private EventDetailsAdapter adapter;
-    @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId, param1, param2);
-
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -36,51 +30,55 @@ public class EventDetailsFragment extends BaseFragment {
         setUpActionBar(activity);
     }
     private void setUpActionBar(Activity activity) {
-        View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_event_details, null);
+        View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_search, null);
         TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        title.setText(getResources().getString(R.string.event_details_fragment_title));
-//        ParseImageView iconP = (ParseImageView)viewActionBar.findViewById(R.id.ab_icon_1);
-
-//        iconP.set
+        title.setText(getResources().getString(R.string.search_fragment_title));
+        ImageView iconSearch = (ImageView)viewActionBar.findViewById(R.id.ab_searchEvent_search_icon);
+        iconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallbacks.deployFragment(Constants.SEARCH_PEOPLE_DETAIL_FRAGMENT_ID, null, null);
+            }
+        });
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
             actionBar.setCustomView(viewActionBar);
         }
-
-        ImageView backIcon = (ImageView)viewActionBar.findViewById(R.id.ab_back_icon);
-        backIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallbacks.backIconClicked();
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View view = inflater.inflate(R.layout.event_details_fragment_layout, container, false);
-        final View header = inflater.inflate(R.layout.event_details_header,container,false);
+        final View view = inflater.inflate(R.layout.search_people_fragment_layout, container, false);
+        final View header = inflater.inflate(R.layout.search_people_grid_header,container,false);
 
         setUpGridView(view,header);
         setUpSwipeRefreshLayout(view);
-
         return view;
     }
 
     private void setUpGridView(View view, View header) {
-        adapter = new EventDetailsAdapter(getActivity());
+        adapter = new SearchPeopleAdapter(getActivity());
 
         for (int i = 0; i < 50; i++) {
             adapter.add(new Object());
         }
 
-        HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.ed_grid_view);
+        HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.sp_grid_view);
         userGridView.addHeaderView(header, null, false);
         userGridView.setAdapter(adapter);
+        userGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(mCallbacks != null)
+                {
+                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAGMENT_ID,null,null);
+                }
+            }
+        });
     }
     private void setUpSwipeRefreshLayout(View view) {
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.gw_swipe_refresh_layout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sp_swipe_refresh_layout);
         if (mSwipeRefreshLayout != null){
             mSwipeRefreshLayout.setColorScheme(
                     R.color.refresh_progress_1,
@@ -96,4 +94,5 @@ public class EventDetailsFragment extends BaseFragment {
             });
         }
     }
+
 }

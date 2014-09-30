@@ -73,6 +73,7 @@
     <string name="action_bar_explore_trips_title">Explore Trips</string>
     <string name="search_fragment_title">Search</string>
     <string name="test_message">Lorem ipsum dolor sit amet, nibh enim volutpat feugiat semper nostra est, amet pellentesque condimentum elementum purus. Viverra nascetur, blandit sapien quisque lectus, curabitur maecenas. Commodo nullam sit nullam mi erat aliquet. Donec metus nisl vehicula donec. Morbi libero nulla, felis sagittis felis in vehicula, suspendisse nunc lacinia sodales. Non ac egestas vehicula odio, nunc mattis ut neque quam nulla, non nulla vivamus iaculis augue ultrices iusto. Turpis dolor magna justo libero, semper lectus vehicula vel. Aliquam iaculis. Nec integer sapien dis purus, praesent eget hendrerit nec proin sollicitudin. Eget lacus ac velit justo in, pharetra leo massa ut lacus diam convallis, quam integer cras odio nec. Neque integer morbi. Nulla suspendisse commodo quis, justo pellentesque vivamus, pellentesque fusce risus erat scelerisque curabitur, quisque varius consectetuer.</string>
+    <string name="test_message_medium">Lorem ipsum dolor sit amet, nibh enim volutpat feugiat semper nostra est, amet pellentesque condimentum elementum purus. Viverra nascetur, blandit sapien quisque lectus, curabitur maecenas. Commodo nullam sit nullam mi erat aliquet. Donec metus nisl vehicula donec. Morbi libero nulla, felis sagittis felis in vehicula, suspendisse nunc lacinia sodales. </string>
     <string name="test_message_short">Lorem ipsum dolor sit amet, nibh enim volutpat feugiat semper nostra est, amet pellentesque condimentum elementum purus.</string>
     <string name="test_message_very_short">Lorem ipsum dolor sit amet.</string>
     <string name="my_friends_fragment_title">Friends</string>
@@ -89,5 +90,7 @@
     <string name="explore_trips_add_information">Where are you travelling to?\n\nAdd your trips so that it shows up on your profile and other users can message you if your trips are similar.</string>
     <string name="explore_trips_add_fragment_title">Add Trip</string>
     <string name="event_details_fragment_title">Event Name</string>
+    <string name="search_people_detail_fragment_title">Search</string>
+    <string name="outbounder_fragment_title" />
 
 </resources>

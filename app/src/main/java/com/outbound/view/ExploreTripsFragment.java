@@ -43,14 +43,14 @@ public class ExploreTripsFragment extends BaseFragment {
         exploreTrips.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(EXPLORE_TRIPS_SEARCH_TRIP,null,null);
+                mCallbacks.deployFragment(EXPLORE_TRIPS_SEARCH_TRIP_ID,null,null);
             }
         });
         ImageView addTrip = (ImageView)view.findViewById(R.id.et_add_new_trip);
         addTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(EXPLORE_TRIPS_ADD_NEW_TRIPS,null,null);
+                mCallbacks.deployFragment(EXPLORE_TRIPS_ADD_NEW_TRIPS_ID,null,null);
             }
         });
     }

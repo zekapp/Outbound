@@ -88,7 +88,7 @@ public class EventsFragment extends BaseFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAGMENT,null,null);
+                mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAGMENT_ID,null,null);
             }
         });
     }

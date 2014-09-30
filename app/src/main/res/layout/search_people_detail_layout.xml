@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="80dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_user"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <EditText
+                android:id="@+id/s_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Male"
+                android:layout_marginLeft="30dp"
+                />
+
+            <CheckBox
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Female"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="COUNTRY"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_country"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_country_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CITY"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_hometown"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_city_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="AGE RANGE"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_user"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_age_range_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="NATIONALITY"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_country"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_nationality_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="TRAVELLER TYPE"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_country"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_traveller_type_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="SEXUAL PREFERENCE"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_country"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_sexual_preference_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="NEXT TRAVEL LOCATION"
+            android:paddingLeft="47dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_country"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/s_next_travel_location_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Location"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>
+
