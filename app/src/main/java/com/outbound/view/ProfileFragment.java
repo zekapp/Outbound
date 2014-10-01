@@ -68,7 +68,7 @@ public class ProfileFragment extends BaseFragment {
         setIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_FRAG_ID,null,null);
             }
         });
     }
@@ -162,28 +162,28 @@ public class ProfileFragment extends BaseFragment {
         relativeLayoutFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_FRAG_ID,null,null);
             }
         });
         LinearLayout myTripsLayout = (LinearLayout)view.findViewById(R.id.pf_my_trips_layout);
         myTripsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_FRAG_ID,null,null);
             }
         });
         LinearLayout travellerHistory = (LinearLayout)view.findViewById(R.id.pf_traveller_history_layout);
         travellerHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_FRAG_ID,null,null);
             }
         });
         LinearLayout events = (LinearLayout)view.findViewById(R.id.pf_my_events_layout);
         events.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_MY_EVENTS_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_MY_EVENTS_FRAG_ID,null,null);
             }
         });
     }

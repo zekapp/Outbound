@@ -1,7 +1,6 @@
 package com.outbound.view;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -33,7 +32,7 @@ public class MyFriendsListSubFragment extends ListFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRoot = inflater.inflate(R.layout.fragment_my_friends, container, false);
+        mRoot = inflater.inflate(R.layout.my_friends_sub_fragment, container, false);
         if (mContentDescription != null) {
             mRoot.setContentDescription(mContentDescription);
         }

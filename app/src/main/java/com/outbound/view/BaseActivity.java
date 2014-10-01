@@ -89,14 +89,17 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
             new FragmentContainer(new NoticeBoardFragment(),        "Noticeboard"),                 //Noticeboard
             new FragmentContainer(new MyFriendsFragment(),          "MyFriendsFragment"),           //MyFriendsFragment
             new FragmentContainer(new MyTripsFragment(),            "MyTripsFragment"),             //MyTripsFragment
-            new FragmentContainer(new MyTravelHistoryFragment(),    "MyTravelHistoryFragment"),     //MyTravelHistoryFragment
+            new FragmentContainer(new TravelHistoryFragment(),      "TravelHistoryFragment"),       //TravelHistoryFragment
             new FragmentContainer(new MyEventsFragment(),           "MyEventsFragment"),            //MyEventsFragment
             new FragmentContainer(new SettingsFragment(),           "SettingsFragment"),            //SettingsFragment
             new FragmentContainer(new ExploreTripsSearchFragment(), "ExploreTripsSearchFragment") , //ExploreTripsSearchFragment
             new FragmentContainer(new ExploreTripsAddFragment(),    "ExploreTripsAddFragment"),     //ExploreTripsAddFragment
             new FragmentContainer(new EventDetailsFragment(),       "EventDetailsFragment"),        //EventDetailsFragment
             new FragmentContainer(new SearchPeopleDetailFragment(), "SearchPeopleDetailFragment"),  //SearchPeopleDetailFragment
-            new FragmentContainer(new PeopleProfileFragment(), "PeopleProfileFragment")     //PeopleProfileFragment
+            new FragmentContainer(new PeopleProfileFragment(),      "PeopleProfileFragment"),       //PeopleProfileFragment
+            new FragmentContainer(new PeopleProfileFriendFragment(),"PeopleProfileFriendFragment"), //PeopleProfileFriendFragment
+            new FragmentContainer(new NoticeBoardSearchMsgFrag(),   "NoticeBoardSearchMsgFrag" ),    //NoticeBoardSearchMsgFrag
+            new FragmentContainer(new NoticeBoardCreateMsgFrag(),   "NoticeBoardCreateMsgFrag" )    //NoticeBoardCreateMsgFrag
     };
 
     // icons for tab bar items (indices must correspond to above array)
@@ -336,11 +339,11 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
         mTabBarItems.clear();
 
-        mTabBarItems.add(TAB_BAR_ITEM_PROFILE_ID);
-        mTabBarItems.add(TAB_BAR_ITEM_EXPLORE_TRIPS_ID);
-        mTabBarItems.add(TAB_BAR_ITEM_EVENTS_ID);
-        mTabBarItems.add(TAB_BAR_ITEM_SEARCH_ID);
-        mTabBarItems.add(TAB_BAR_ITEM_NOTICEBOARD_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_PROFILE_FRAG_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_EXPLORE_TRIPS_FRAG_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_EVENTS_FRAG_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_SEARCH_FRAG_ID);
+        mTabBarItems.add(TAB_BAR_ITEM_NOTICEBOARD_FRAG_ID);
 
         createTabBarItems();
 

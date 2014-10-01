@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.outbound.R;
 import com.outbound.ui.util.HeaderGridView;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.EventDetailsAdapter;
+import com.outbound.util.Constants;
 import com.parse.ParseImageView;
 
 /**
@@ -78,6 +80,13 @@ public class EventDetailsFragment extends BaseFragment {
         HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.ed_grid_view);
         userGridView.addHeaderView(header, null, false);
         userGridView.setAdapter(adapter);
+        userGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,null,null);
+            }
+        });
     }
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.gw_swipe_refresh_layout);

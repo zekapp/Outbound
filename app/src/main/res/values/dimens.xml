@@ -41,6 +41,7 @@
     <!--List View Item Margins-->
     <dimen name="outbound_list_view_item_height">100dp</dimen>
     <dimen name="outbound_list_view_item_height_ext">83dp</dimen>
+    <dimen name="outbound_list_view_item_height_with_picture_and_message">153dp</dimen>
     <dimen name="outbound_list_view_item_height_without_picture">60dp</dimen>
     <dimen name="outbound_list_view_item_text_left_margin">15dp</dimen>
     <dimen name="outbound_list_view_item_picture_left_margin">5dp</dimen>

@@ -12,7 +12,6 @@ import com.outbound.R;
  * Created by zeki on 19/09/2014.
  */
 public class ProfilePictureFragment extends Fragment {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

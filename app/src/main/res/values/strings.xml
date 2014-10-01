@@ -92,5 +92,10 @@
     <string name="event_details_fragment_title">Event Name</string>
     <string name="search_people_detail_fragment_title">Search</string>
     <string name="outbounder_fragment_title" />
+    <string name="friend_request_title">Friend Request</string>
+    <string name="friend_request_body">Your friend request has been sent</string>
+    <string name="people_friend_fragment_title">Friends</string>
+    <string name="notice_board_fragment_search_message_title">Search Noticeboard</string>
+    <string name="notice_board_fragment_create_message_title">Create New Notice</string>
 
 </resources>

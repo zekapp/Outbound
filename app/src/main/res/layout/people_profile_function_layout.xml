@@ -63,7 +63,7 @@
 
 
         <LinearLayout
-            android:id="@+id/pf_my_events_layout"
+            android:id="@+id/pf_add_friend_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"

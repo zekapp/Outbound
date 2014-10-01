@@ -37,7 +37,7 @@ public class SearchPeopleFragment extends BaseFragment {
         iconSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.SEARCH_PEOPLE_DETAIL_FRAGMENT_ID, null, null);
+                mCallbacks.deployFragment(Constants.SEARCH_PEOPLE_DETAIL_FRAG_ID, null, null);
             }
         });
         ActionBar actionBar = activity.getActionBar();
@@ -72,7 +72,7 @@ public class SearchPeopleFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks != null)
                 {
-                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAGMENT_ID,null,null);
+                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,null,null);
                 }
             }
         });
