@@ -12,10 +12,9 @@ import android.widget.TextView;
 import com.outbound.R;
 
 /**
- * Created by zeki on 1/10/2014.
+ * Created by zeki on 2/10/2014.
  */
-public class NoticeBoardSearchMsgFrag extends BaseFragment {
-
+public class EventSearchFragment extends BaseFragment {
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
@@ -28,7 +27,7 @@ public class NoticeBoardSearchMsgFrag extends BaseFragment {
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
         TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        title.setText(getResources().getString(R.string.notice_board_fragment_search_message_title));
+        title.setText(getResources().getString(R.string.event_search_fragment_title));
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
         icon.setImageResource(R.drawable.action_find);
         ActionBar actionBar = activity.getActionBar();
@@ -43,12 +42,19 @@ public class NoticeBoardSearchMsgFrag extends BaseFragment {
                 mCallbacks.backIconClicked();
             }
         });
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //find action
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View view = inflater.inflate(R.layout.notice_board_search_message, container, false);
+        final View view = inflater.inflate(R.layout.event_search_fragment_layout, container, false);
 
 
         return view;

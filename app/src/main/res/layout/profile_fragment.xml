@@ -1,100 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.outbound.ui.util.MultiSwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/profile_pager_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_pager_layout_height">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/profile_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_profile_cover">
-        </android.support.v4.view.ViewPager>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal"
-            android:layout_marginTop="147dp"
-            android:gravity="center"
-            >
-            <ImageView
-                android:id="@+id/profile_left_dot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/circle_clear_dot"
-                android:padding="5dp"
-                />
-            <ImageView
-                android:id="@+id/profile_right_dot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/circle_clear_dot"
-                android:padding="5dp"
-                />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/profile_pager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200dp"-->
-        <!--android:background="@drawable/bg_profile_cover">-->
-    <!--</android.support.v4.view.ViewPager>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:layout_marginTop="147dp"-->
-        <!-->-->
-        <!--<ImageView-->
-            <!--android:id="@+id/profile_left_dot"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/circle_clear_dot"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:padding="5dp"-->
-            <!--/>-->
-        <!--<ImageView-->
-            <!--android:id="@+id/profile_right_dot"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/circle_clear_dot"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:padding="5dp"-->
-            <!--/>-->
-    <!--</LinearLayout>-->
-
-    <LinearLayout
-        android:id="@+id/layout_container_id"
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:id="@+id/profile_message_list"/>
 
-        <include layout="@layout/layout_container"/>
-    </LinearLayout>
+</com.outbound.ui.util.MultiSwipeRefreshLayout>
 
-    <com.outbound.ui.util.MultiSwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile_message_list"/>
-
-    </com.outbound.ui.util.MultiSwipeRefreshLayout>
-
-</LinearLayout>
 
 

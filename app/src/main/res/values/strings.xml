@@ -97,5 +97,8 @@
     <string name="people_friend_fragment_title">Friends</string>
     <string name="notice_board_fragment_search_message_title">Search Noticeboard</string>
     <string name="notice_board_fragment_create_message_title">Create New Notice</string>
+    <string name="event_search_fragment_title">Event Search</string>
+    <string name="notice_board_message_activity_title">NoticeBoard</string>
+    <string name="my_trips_detail_fragment_title">Outbounders Trip</string>
 
 </resources>

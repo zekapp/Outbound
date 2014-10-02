@@ -24,8 +24,8 @@ public class PeopleProfileFriendFragment extends BaseFragment {
     private PeopleFriendAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId,param1,param2);
+    protected void setUp(Object param1, Object param2) {
+        super.setUp(param1,param2);
     }
     @Override
     public void onAttach(Activity activity) {

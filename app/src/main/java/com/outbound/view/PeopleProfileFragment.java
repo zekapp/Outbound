@@ -48,8 +48,8 @@ public class PeopleProfileFragment extends BaseFragment {
     private LinearLayout addFriend;
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId,param1,param2);
+    protected void setUp(Object param1, Object param2) {
+        super.setUp(param1,param2);
     }
 
     @Override

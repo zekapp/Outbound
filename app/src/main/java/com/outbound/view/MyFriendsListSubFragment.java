@@ -7,6 +7,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.outbound.R;
 
@@ -22,6 +23,7 @@ public class MyFriendsListSubFragment extends ListFragment{
         public void onFragmentViewCreated(ListFragment fragment);
         public void onFragmentAttached(MyFriendsListSubFragment fragment);
         public void onFragmentDetached(MyFriendsListSubFragment fragment);
+        public void onListItemClicked(ListFragment fragment,ListView l, View v, int position, long id );
     }
 
     public void setUp(Fragment mCallerFragment){
@@ -53,7 +55,14 @@ public class MyFriendsListSubFragment extends ListFragment{
             mCallBackFragment.onFragmentViewCreated(this);
     }
 
-//    @Override
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        if(mCallBackFragment != null)
+            mCallBackFragment.onListItemClicked(this,l,v,position,id);
+    }
+
+    //    @Override
 //    public void onAttach(Activity activity) {
 //        super.onAttach(activity);
 //        mCallBackFragment.onFragmentAttached(this);

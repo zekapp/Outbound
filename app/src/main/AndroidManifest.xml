@@ -48,6 +48,10 @@
             >
         </activity>
         <activity
+            android:name=".view.NoticeBoardMessageActivity"
+            >
+        </activity>
+        <activity
             android:name=".loginSignUp.WelcomePage"
             android:label="@string/welcome_activity_name"
             android:theme="@style/Theme.Outbound.Welcome"

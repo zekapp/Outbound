@@ -67,12 +67,9 @@ public abstract class BaseFragment extends Fragment {
         void backIconClicked();
     }
 
-    /**
-     *
-     * @param baseActivityFrameLayoutId  The android:id containing this fragment's UI.
-     */
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2){
-        mBaseActivityFrameLayoutId = baseActivityFrameLayoutId;
+
+    protected void setUp( Object param1, Object param2){
+
     }
 
     @Override
@@ -89,5 +86,13 @@ public abstract class BaseFragment extends Fragment {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     *
+     * @param baseActivityFrameLayoutId  The android:id containing this fragment's UI.
+     */
+    protected void setUpBaseLayout(int baseActivityFrameLayoutId){
+        mBaseActivityFrameLayoutId = baseActivityFrameLayoutId;
     }
 }

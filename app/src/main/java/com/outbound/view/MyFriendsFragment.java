@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.MyFriendsAdapter;
 import com.outbound.ui.util.SlidingTabLayout;
+import com.outbound.util.Constants;
 
 import java.util.ArrayList;
 
@@ -37,8 +39,8 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     private MyFriendsAdapter mMyFriendsPendingAdapter;
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId,param1,param2);
+    protected void setUp(Object param1, Object param2) {
+        super.setUp(param1,param2);
     }
 
     @Override
@@ -137,6 +139,14 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     @Override
     public void onFragmentDetached(MyFriendsListSubFragment fragment) {
 
+    }
+
+    @Override
+    public void onListItemClicked(ListFragment fragment, ListView l, View v, int position, long id) {
+        int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
+
+        if(mCallbacks != null)
+            mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, null, null);
     }
 
     private class OurViewPagerAdapter extends BaseFragmentStatePagerAdapter {

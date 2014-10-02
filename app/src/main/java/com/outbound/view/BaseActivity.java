@@ -48,6 +48,10 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
     // when you scroll down a list, and reappear quickly when you scroll up).
     private ArrayList<View> mHideableHeaderViews = new ArrayList<View>();
 
+    // When new fragment created new fragment added end of array.
+    // track for array
+    private static ArrayList<FragmentContainer> fragViewer = new ArrayList<FragmentContainer>();
+
     private boolean mActionBarAutoHideEnabled = false;
     private int mActionBarAutoHideMinY = 0;
     private int mActionBarAutoHideSensivity = 0;
@@ -69,55 +73,93 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
     private static class FragmentContainer{
         public BaseFragment mFragment;
-        public String mTag;
+        private String mTag;
+        private int mFragId;
+        private Object mParam1;
+        private Object mParam2;
 
-        FragmentContainer(BaseFragment fragment, String fragmentTag){
+        FragmentContainer(BaseFragment fragment, Object param1, Object param2, String tag, int fragId){
+            mTag = tag;
             mFragment = fragment;
-            mTag = fragmentTag;
-
-            mFragment.setUp(R.id.base_layout ,null, null);
+            mFragment.setUpBaseLayout(R.id.base_layout);
+            mParam1 = param1;
+            mParam2 = param2;
+            mFragId = fragId;
+            mFragment.setUp(param1, param2);
 
         }
     }
 
-//    Indices must correspond to array {@link #Constants} items.
-    private final static FragmentContainer[] FRAGMENTS = {
-            new FragmentContainer(new ProfileFragment(),            "Profile"),                     //Profile
-            new FragmentContainer(new ExploreTripsFragment() ,      "ExploreTrips"),                //ExploreTrips
-            new FragmentContainer(new EventsFragment(),             "Events"),                      //Events
-            new FragmentContainer(new SearchPeopleFragment(),       "SearchPeopleFragment"),        //SearchPeopleFragment
-            new FragmentContainer(new NoticeBoardFragment(),        "Noticeboard"),                 //Noticeboard
-            new FragmentContainer(new MyFriendsFragment(),          "MyFriendsFragment"),           //MyFriendsFragment
-            new FragmentContainer(new MyTripsFragment(),            "MyTripsFragment"),             //MyTripsFragment
-            new FragmentContainer(new TravelHistoryFragment(),      "TravelHistoryFragment"),       //TravelHistoryFragment
-            new FragmentContainer(new MyEventsFragment(),           "MyEventsFragment"),            //MyEventsFragment
-            new FragmentContainer(new SettingsFragment(),           "SettingsFragment"),            //SettingsFragment
-            new FragmentContainer(new ExploreTripsSearchFragment(), "ExploreTripsSearchFragment") , //ExploreTripsSearchFragment
-            new FragmentContainer(new ExploreTripsAddFragment(),    "ExploreTripsAddFragment"),     //ExploreTripsAddFragment
-            new FragmentContainer(new EventDetailsFragment(),       "EventDetailsFragment"),        //EventDetailsFragment
-            new FragmentContainer(new SearchPeopleDetailFragment(), "SearchPeopleDetailFragment"),  //SearchPeopleDetailFragment
-            new FragmentContainer(new PeopleProfileFragment(),      "PeopleProfileFragment"),       //PeopleProfileFragment
-            new FragmentContainer(new PeopleProfileFriendFragment(),"PeopleProfileFriendFragment"), //PeopleProfileFriendFragment
-            new FragmentContainer(new NoticeBoardSearchMsgFrag(),   "NoticeBoardSearchMsgFrag" ),    //NoticeBoardSearchMsgFrag
-            new FragmentContainer(new NoticeBoardCreateMsgFrag(),   "NoticeBoardCreateMsgFrag" )    //NoticeBoardCreateMsgFrag
+    /*increment one this array for each fragment*/
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[20];
+
+    /*
+    *       Indices must correspond to array {@link #Constants} items.
+    * */
+    private final static BaseFragment[] BASE_FRAGMENTS = {
+            new ProfileFragment(),
+            new ExploreTripsFragment(),
+            new EventsFragment(),
+            new SearchPeopleFragment(),
+            new NoticeBoardFragment(),
+            new MyFriendsFragment(),
+            new MyTripsFragment(),
+            new TravelHistoryFragment(),
+            new MyEventsFragment(),
+            new SettingsFragment(),
+            new ExploreTripsSearchFragment(),
+            new ExploreTripsAddFragment(),
+            new EventDetailsFragment(),
+            new SearchPeopleDetailFragment(),
+            new PeopleProfileFragment(),
+            new PeopleProfileFriendFragment(),
+            new NoticeBoardSearchMsgFrag(),
+            new NoticeBoardCreateMsgFrag(),
+            new EventSearchFragment(),
+            new MyTripsDetailFragment()
     };
+
+//    /*
+//    *       Indices must correspond to array {@link #Constants} items.
+//    * */
+//    private final static FragmentContainer[] FRAGMENTS = {
+//            new FragmentContainer(new ProfileFragment(),            null, null, "ProfileFragment"),    //Profile
+//            new FragmentContainer(new ExploreTripsFragment() ,      null, null, "ExploreTrips"),    //ExploreTrips
+//            new FragmentContainer(new EventsFragment(),             null, null, "Events"),    //Events
+//            new FragmentContainer(new SearchPeopleFragment(),       null, null, "SearchPeopleFragment"),    //SearchPeopleFragment
+//            new FragmentContainer(new NoticeBoardFragment(),        null, null, "Noticeboard"),    //Noticeboard
+//            new FragmentContainer(new MyFriendsFragment(),          null, null, "MyFriendsFragment"),    //MyFriendsFragment
+//            new FragmentContainer(new MyTripsFragment(),            null, null, "MyTripsFragment"),    //MyTripsFragment
+//            new FragmentContainer(new TravelHistoryFragment(),      null, null, "TravelHistoryFragment"),    //TravelHistoryFragment
+//            new FragmentContainer(new MyEventsFragment(),           null, null, "MyEventsFragment"),    //MyEventsFragment
+//            new FragmentContainer(new SettingsFragment(),           null, null, "SettingsFragment"),    //SettingsFragment
+//            new FragmentContainer(new ExploreTripsSearchFragment(), null, null, "ExploreTripsSearchFragment"),    //ExploreTripsSearchFragment
+//            new FragmentContainer(new ExploreTripsAddFragment(),    null, null, "ExploreTripsAddFragment"),    //ExploreTripsAddFragment
+//            new FragmentContainer(new EventDetailsFragment(),       null, null, "EventDetailsFragment"),    //EventDetailsFragment
+//            new FragmentContainer(new SearchPeopleDetailFragment(), null, null, "SearchPeopleDetailFragment"),    //SearchPeopleDetailFragment
+//            new FragmentContainer(new PeopleProfileFragment(),      null, null, "PeopleProfileFragment"),    //PeopleProfileFragment
+//            new FragmentContainer(new PeopleProfileFriendFragment(),null, null, "PeopleProfileFriendFragment"),    //PeopleProfileFriendFragment
+//            new FragmentContainer(new NoticeBoardSearchMsgFrag(),   null, null, "NoticeBoardSearchMsgFrag"),    //NoticeBoardSearchMsgFrag
+//            new FragmentContainer(new NoticeBoardCreateMsgFrag(),   null, null, "NoticeBoardCreateMsgFrag"),    //NoticeBoardCreateMsgFrag
+//            new FragmentContainer(new EventSearchFragment(),        null, null, "EventSearchFragment")     //EventSearchFragment
+//    };
 
     // icons for tab bar items (indices must correspond to above array)
     private static final int[] TAB_BAR_ICON_RES_ID = new int[] {
-            R.drawable.tab_profile,  // Profile
-            R.drawable.tab_explore,  // Explore trips
-            R.drawable.tab_events,  // Events
-            R.drawable.tab_search,  // Search
-            R.drawable.tab_noticeboard,  // Noticeboard
+            R.drawable.tab_profile,     // Profile
+            R.drawable.tab_explore,     // Explore trips
+            R.drawable.tab_events,      // Events
+            R.drawable.tab_search,      // Search
+            R.drawable.tab_noticeboard, // Noticeboard
     };
 
     // icons for tab bar items (indices must correspond to above array)
     private static final int[] TAB_BAR_ICON_RES_ID_PRESSED = new int[] {
-            R.drawable.tab_profile_pressed,  // Profile
-            R.drawable.tab_explore_pressed,  // Explore trips
-            R.drawable.tab_events_pressed,  // Events
-            R.drawable.tab_search_pressed,  // Search
-            R.drawable.tab_noticeboard_pressed,  // Noticeboard
+            R.drawable.tab_profile_pressed,     // Profile
+            R.drawable.tab_explore_pressed,     // Explore trips
+            R.drawable.tab_events_pressed,      // Events
+            R.drawable.tab_search_pressed,      // Search
+            R.drawable.tab_noticeboard_pressed, // Noticeboard
     };
 
 
@@ -144,6 +186,10 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
         mThemedStatusBarColor = getResources().getColor(R.color.theme_primary_dark);
 
         mTabBar = (LinearLayout)findViewById(R.id.tabbar);
+
+        for (int i = 0; i < FRAGMENTS.length; i++) {
+            FRAGMENTS[i] = new FragmentContainer(BASE_FRAGMENTS[i], null, null, Integer.toString(i), i );
+        }
     }
 
     @Override
@@ -154,13 +200,38 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
 
     @Override
     public void deployFragment(final  int itemId, Object param1, Object param2) {
-        LOGD(TAG,"deployFragment " + FRAGMENTS[itemId].mTag );
+        LOGD(TAG,"deployFragment: " + FRAGMENTS[itemId].mTag );
 
+        addFragmentToOrderArray(itemId, param1, param2 );
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransactiong = fragmentManager.beginTransaction().
                 replace(R.id.container, FRAGMENTS[itemId].mFragment);
         fragmentTransactiong.commit();
+
+    }
+
+    private void addFragmentToOrderArray(int itemId, Object param1, Object param2) {
+
+        //if item is one of the main fragment
+        int fragmentSize = fragViewer.size();
+        if(itemId <= 4 && fragmentSize>0)
+        {
+            //delete all fragment in the array except profile
+            fragViewer.subList(1,fragmentSize).clear();
+
+
+        }
+
+        FRAGMENTS[itemId].mFragment.setUp(param1,param2);
+
+        if(fragViewer.isEmpty()){
+            fragViewer.add(FRAGMENTS[itemId]);
+        }else {
+            if(fragViewer.get(fragViewer.size() - 1).mFragId != itemId)
+                fragViewer.add(FRAGMENTS[itemId]);
+        }
+
     }
 
     @Override
@@ -174,8 +245,34 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
     }
 
     @Override
+    public void onBackPressed() {
+        LOGD(TAG,"fragViewer size: " + fragViewer.size() );
+        FragmentContainer displayFrag;
+        int fragViewerSize = fragViewer.size();
+        if(fragViewer.size() > 2){
+            fragViewer.remove(fragViewerSize-1);
+            displayFrag = fragViewer.get(fragViewerSize-2);
+            deployFragment(displayFrag.mFragId,displayFrag.mParam1,displayFrag.mParam2);
+        }else if (fragViewer.size() == 2)
+        {
+            fragViewer.remove(1);
+            onTabBarItemClicked(0);
+            displayFrag = fragViewer.get(0);
+            deployFragment(displayFrag.mFragId,displayFrag.mParam1,displayFrag.mParam2);
+
+        }else
+        {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
     public void backIconClicked() {
         //back
+        onBackPressed();
+//        FragmentContainer lastAddedFrag = fragViewer.get(fragViewer.size() - 2);
+
     }
 
     @Override

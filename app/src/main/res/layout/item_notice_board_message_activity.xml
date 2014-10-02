@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.parse.ParseImageView
+            android:id="@+id/nb_user_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_rounded_rectangle"
+            android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
+            android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
+            android:layout_marginTop="14dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/nb_name_of_creater"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name surname"
+                    android:layout_alignParentLeft="true"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:layout_toLeftOf="@+id/nb_post_count"
+                    android:textColor="@color/theme_accent_1"/>
+
+                <TextView
+                    android:id="@+id/nb_create_date"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:hint="7/20/13"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/nb_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="@string/test_message_short"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/theme_accent_1"
+            android:text="Report"
+            android:padding="7dp"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/theme_accent_1"
+            android:text="|"
+            android:padding="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/theme_accent_1"
+            android:text="Block"
+            android:padding="7dp"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"/>
+    </LinearLayout>
+
+</LinearLayout>

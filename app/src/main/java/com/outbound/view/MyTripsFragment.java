@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.outbound.R;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.MyTripsAdapter;
+import com.outbound.util.Constants;
 
 import java.util.ArrayList;
 
@@ -26,8 +28,8 @@ public class MyTripsFragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId,param1,param2);
+    protected void setUp(Object param1, Object param2) {
+        super.setUp(param1,param2);
     }
 
     @Override
@@ -53,6 +55,14 @@ public class MyTripsFragment extends BaseFragment {
                 mCallbacks.backIconClicked();
             }
         });
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.EXPLORE_TRIPS_ADD_NEW_TRIPS_FRAG_ID, null, null);
+            }
+        });
     }
 
     @Override
@@ -73,6 +83,13 @@ public class MyTripsFragment extends BaseFragment {
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(mCallbacks !=null)
+                    mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_DETAIL_FRAG_ID, null, null);
+            }
+        });
     }
 
     private void setUpSwipeRefreshLayout(View view) {

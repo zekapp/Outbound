@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,8 +29,8 @@ public class EventsFragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId,param1,param2);
+    protected void setUp( Object param1, Object param2) {
+        super.setUp(param1,param2);
     }
     @Override
     public void onAttach(Activity activity) {
@@ -41,6 +42,15 @@ public class EventsFragment extends BaseFragment {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_events, null);
         TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
         title.setText(getResources().getString(R.string.action_bar_events_title));
+        ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_events_search_icon);
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // deploy the event search fragment
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.EVENT_SEARCH_FRAGMENT_ID,null,null);
+            }
+        });
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
             actionBar.setCustomView(viewActionBar);

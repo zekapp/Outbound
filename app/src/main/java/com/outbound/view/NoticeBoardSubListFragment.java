@@ -1,11 +1,14 @@
 package com.outbound.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.outbound.R;
 import com.outbound.ui.util.SwipeRefreshLayout;
@@ -58,6 +61,7 @@ public class NoticeBoardSubListFragment extends ListFragment{
             mCallBackFragment.onFragmentViewCreated(this);
     }
 
+
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         if (mSwipeRefreshLayout != null){
@@ -77,5 +81,16 @@ public class NoticeBoardSubListFragment extends ListFragment{
                 }
             });
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        ListAdapter adapter = l.getAdapter();
+        Object obj = adapter.getItem(position);
+
+        Intent intent = new Intent(getActivity(), NoticeBoardMessageActivity.class);
+        startActivity(intent);
     }
 }

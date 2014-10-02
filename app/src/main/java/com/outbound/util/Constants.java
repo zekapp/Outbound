@@ -24,7 +24,10 @@ public final class Constants  {
     public static final int PEOPLE_PROFILE_FRIENDS_FRAG_ID = 15;
     public static final int NOTICE_BOARD_SEARCH_MESSAGE_FRAG_ID = 16;
     public static final int NOTICE_BOARD_CREATE_MESSAGE_FRAG_ID = 17;
+    public static final int EVENT_SEARCH_FRAGMENT_ID = 18;
+    public static final int PROFILE_MY_TRIP_DETAIL_FRAG_ID = 19;
     public static final int ITEM_INVALID = -1;
+
 
     public static class AppInitialStates{
         public static final int LAUNCHER_FRAGMENT_ID = TAB_BAR_ITEM_PROFILE_FRAG_ID;

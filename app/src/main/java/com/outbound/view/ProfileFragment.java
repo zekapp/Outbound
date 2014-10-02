@@ -40,13 +40,13 @@ public class ProfileFragment extends BaseFragment {
     private PagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ListView mMessageListView;
+    private ListView mListView;
 
     private View dots[] = new View[2];
 
     @Override
-    protected void setUp(int baseActivityFrameLayoutId, Object param1, Object param2) {
-        super.setUp(baseActivityFrameLayoutId,param1,param2);
+    protected void setUp(Object param1, Object param2) {
+        super.setUp(param1,param2);
     }
 
     @Override
@@ -68,7 +68,8 @@ public class ProfileFragment extends BaseFragment {
         setIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_FRAG_ID,null,null);
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_FRAG_ID,null,null);
             }
         });
     }
@@ -82,10 +83,13 @@ public class ProfileFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.profile_fragment, container, false);
+        final View header = inflater.inflate(R.layout.profile_header,null);
+
+        setUpListView(view, header);
         setUpProfileFunctionLayout(view);
         setUpViewPager(view);
         setUpSwipeRefreshLayout(view);
-        setUpMessageListView(view);
+
         registerForHideableViews(view);
         return view;
     }
@@ -135,18 +139,19 @@ public class ProfileFragment extends BaseFragment {
 //        mCallbacks.registerHideableHeaderView(view.findViewById(R.id.layout_container_id));
 
 //        mCallbacks.registerSwipeRefreshProgressBarAsTop(mSwipeRefreshLayout,getSwipeRefreshLayoutTopClearance());
-        mCallbacks.enableActionBarAutoHide(mMessageListView);
+        mCallbacks.enableActionBarAutoHide(mListView);
     }
 
-    private void setUpMessageListView(View view) {
-        mMessageListView = (ListView)view.findViewById(R.id.profile_message_list);
+    private void setUpListView(View view, View header) {
+        mListView = (ListView)view.findViewById(R.id.profile_message_list);
         ArrayList<Object> test = new ArrayList<Object>();
         for (int i=0;i<50;i++){
             test.add(new Object());
         }
         ProfileMessageListViewAdapter adapter = new ProfileMessageListViewAdapter(getActivity(),test);
-        mMessageListView.setAdapter(adapter);
-        mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.addHeaderView(header, null, false);
+        mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object messageObject = parent.getAdapter().getItem(position);
