@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="1dp"
         android:background="@drawable/white_rounded_rectangle"
-        android:src="@drawable/profile_empty_edit"
+        android:src="@drawable/profile_empty"
         android:paddingTop="1dp"
         android:clickable="true"
         android:layout_gravity="center"

@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/scrollView">
 
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/profile_pager_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_pager_layout_height"
-            android:background="@drawable/bg_profile_cover">
+            android:layout_height="wrap_content">
 
             <com.parse.ParseImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/white_rounded_rectangle"
+                android:id="@+id/s_photo_background"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_pager_layout_height"
                 android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_profile_cover"/>
+
+
+
+            <com.outbound.ui.util.RoundedImageView
+                android:id="@+id/s_photo"
+                android:layout_width="133dp"
+                android:layout_height="133dp"
+                android:layout_centerInParent="true"
+                android:cropToPadding="true"
                 android:layout_marginTop="15pt"
+                android:layout_centerHorizontal="true"
+                android:padding="10dip"
                 android:src="@drawable/profile_empty_edit"
-                />
+                android:scaleType="fitXY"
+                app:corner_radius="10dip"
+                app:border_width="3dip"
+                app:oval="false"
+                app:border_color="@color/white"/>
+
 
             <ImageView
+                android:id="@+id/s_change_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -32,7 +52,8 @@
                 android:src="@drawable/add_cover_image"
                 android:padding="10pt"
                 android:background="?android:selectableItemBackground"
-                android:clickable="true"/>
+                android:clickable="true"
+                />
 
         </RelativeLayout>
 

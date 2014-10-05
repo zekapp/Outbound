@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.outbound.R;
-import com.outbound.ui.util.HeaderGridView;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.ZoomOutPageTransformer;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
-import com.outbound.ui.util.adapters.MyTripsAdapter;
 import com.outbound.ui.util.adapters.PeopleEventAdapter;
 import com.outbound.util.Constants;
-
-import java.util.ArrayList;
 
 /**
  * Created by zeki on 30/09/2014.
@@ -101,7 +96,6 @@ public class PeopleProfileFragment extends BaseFragment {
         setUpProfileFunctionLayout(view);
         return view;
     }
-
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         if (mSwipeRefreshLayout != null){

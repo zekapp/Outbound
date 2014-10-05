@@ -22,10 +22,10 @@
         android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin">
 
         <TextView
-            android:id="@+id/mt_city_country"
+            android:id="@+id/mt_name_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="City, Country"
+            android:text="Name Surname"
             android:drawableLeft="@drawable/test_flag"
             android:drawablePadding="7dp"
             android:layout_marginTop="10dp"/>
@@ -33,7 +33,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView

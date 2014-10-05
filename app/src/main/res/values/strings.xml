@@ -100,5 +100,6 @@
     <string name="event_search_fragment_title">Event Search</string>
     <string name="notice_board_message_activity_title">NoticeBoard</string>
     <string name="my_trips_detail_fragment_title">Outbounders Trip</string>
+    <string name="event_create_fragment_title">Create Event</string>
 
 </resources>

@@ -65,6 +65,9 @@ public abstract class BaseFragment extends Fragment {
 
         // similar action like back button
         void backIconClicked();
+
+        //hide the tabbar
+        void hideTabbar();
     }
 
 

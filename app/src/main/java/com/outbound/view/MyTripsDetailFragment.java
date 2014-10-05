@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.MyTripsDetailAdapter;
 import com.outbound.util.Constants;
 
@@ -24,6 +25,9 @@ public class MyTripsDetailFragment extends BaseFragment {
 
     private MyTripsDetailAdapter mAdapter;
     private ListView mListView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView actionBarTitle;
+
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
@@ -35,10 +39,11 @@ public class MyTripsDetailFragment extends BaseFragment {
     }
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
-        TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        title.setText(getResources().getString(R.string.my_trips_detail_fragment_title));
+        actionBarTitle = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
+        actionBarTitle.setText(getResources().getString(R.string.my_trips_detail_fragment_title));
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
-        icon.setVisibility(View.GONE);
+        icon.setEnabled(false);
+
 
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
@@ -59,17 +64,26 @@ public class MyTripsDetailFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.my_trips_detail_fragment_layout, container, false);
+
+        setUpSwipeRefreshLayout(view);
         setUpMyTripDetailListView(view);
+        setActionBarTitle();
 
         return view;
     }
 
+    private void setActionBarTitle() {
+        // set the title
+    }
+
     private void setUpMyTripDetailListView(View v) {
+
+        mAdapter = new MyTripsDetailAdapter(getActivity());
         ArrayList<Object> test = new ArrayList<Object>();
         for (int i = 0; i < 50; i++) {
-            test.add(new Object());
+            mAdapter.add(new Object());
         }
-        mAdapter = new MyTripsDetailAdapter(getActivity());
+
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
@@ -80,5 +94,27 @@ public class MyTripsDetailFragment extends BaseFragment {
                     mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, null, null);
             }
         });
+    }
+
+    private void setUpSwipeRefreshLayout(View view) {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.lw_swipe_refresh_layout);
+        if (mSwipeRefreshLayout != null){
+            mSwipeRefreshLayout.setColorScheme(
+                    R.color.refresh_progress_1,
+                    R.color.refresh_progress_2,
+                    R.color.refresh_progress_3,
+                    R.color.refresh_progress_4);
+
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    //get the latest status of this outbounder
+                }
+            });
+        }
+
+        if (mSwipeRefreshLayout != null) {
+//            mSwipeRefreshLayout.setEnabled(false);
+        }
     }
 }

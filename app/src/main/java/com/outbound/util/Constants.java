@@ -26,7 +26,9 @@ public final class Constants  {
     public static final int NOTICE_BOARD_CREATE_MESSAGE_FRAG_ID = 17;
     public static final int EVENT_SEARCH_FRAGMENT_ID = 18;
     public static final int PROFILE_MY_TRIP_DETAIL_FRAG_ID = 19;
+    public static final int EVENT_CREATE_FRAGMENT_ID = 20;
     public static final int ITEM_INVALID = -1;
+
 
 
     public static class AppInitialStates{

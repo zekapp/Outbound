@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusableInTouchMode="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_event"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <EditText
+                android:id="@+id/ce_event_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:hint="Event name"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="COUNTRY"
+            android:paddingLeft="56dp"
+            android:layout_marginTop="10dp"
+
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_country"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/ec_country_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                android:paddingLeft="13dp"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CITY"
+            android:paddingLeft="56dp"
+            android:layout_marginTop="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_hometown"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <Button
+                style="?android:attr/spinnerStyle"
+                android:id="@+id/ec_city_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:text="Select"
+                android:paddingLeft="13dp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusableInTouchMode="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_hometown"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <EditText
+                android:id="@+id/ec_hometown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:inputType="textEmailAddress"
+                android:hint="Place"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:text="FROM"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="56dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/list_time"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/icon_margin_left"/>
+                <Button
+                    style="?android:attr/spinnerStyle"
+                    android:id="@+id/ec_start_date_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/text_left_margin"
+                    android:paddingLeft="13dp"
+                    android:hint="Select"
+                    android:layout_weight="2"
+                    />
+                <Button
+                    style="?android:attr/spinnerStyle"
+                    android:id="@+id/ec_start_time_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/text_left_margin"
+                    android:layout_marginRight="@dimen/text_right_margin"
+                    android:gravity="center"
+                    android:hint="Select"
+                    android:layout_weight="3"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:text="END"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="56dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/list_time"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/icon_margin_left"/>
+                <Button
+                    style="?android:attr/spinnerStyle"
+                    android:id="@+id/ec_end_date_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/text_left_margin"
+                    android:paddingLeft="13dp"
+                    android:hint="Select"
+                    android:layout_weight="2"
+                    />
+                <Button
+                    style="?android:attr/spinnerStyle"
+                    android:id="@+id/ec_end_time_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/text_left_margin"
+                    android:layout_marginRight="@dimen/text_right_margin"
+                    android:gravity="center"
+                    android:hint="Select"
+                    android:layout_weight="3"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/list_event"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/icon_margin_left"/>
+            <EditText
+                android:id="@+id/ce_event_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/text_left_margin"
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:hint="Description"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

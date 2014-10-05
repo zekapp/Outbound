@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.outbound.R;
+import com.outbound.ui.util.SoftKeyboardStateHelper;
 import com.outbound.ui.util.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import static com.outbound.util.LogUtils.*;
 /**
  * Created by zeki on 3/09/2014.
  */
-public class BaseActivity extends FragmentActivity implements BaseFragment.BaseFragmentCallbacks{
+public class BaseActivity extends FragmentActivity implements BaseFragment.BaseFragmentCallbacks {
     private static final String TAG = makeLogTag(BaseActivity.class);
 
     private FrameLayout mBaseFrameLayout;
@@ -91,7 +93,7 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[20];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[21];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -116,7 +118,8 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
             new NoticeBoardSearchMsgFrag(),
             new NoticeBoardCreateMsgFrag(),
             new EventSearchFragment(),
-            new MyTripsDetailFragment()
+            new MyTripsDetailFragment(),
+            new CreateEventFragment(),
     };
 
 //    /*
@@ -190,6 +193,22 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
         for (int i = 0; i < FRAGMENTS.length; i++) {
             FRAGMENTS[i] = new FragmentContainer(BASE_FRAGMENTS[i], null, null, Integer.toString(i), i );
         }
+
+//        final FrameLayout rootView = (FrameLayout)findViewById(R.id.base_layout);
+
+        final SoftKeyboardStateHelper softKeyboardStateHelper = new SoftKeyboardStateHelper(findViewById(R.id.base_layout));
+        softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
+            @Override
+            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+                hideTabbar();
+            }
+
+            @Override
+            public void onSoftKeyboardClosed() {
+                showTabbar();
+            }
+        });
+
     }
 
     @Override
@@ -271,7 +290,20 @@ public class BaseActivity extends FragmentActivity implements BaseFragment.BaseF
     public void backIconClicked() {
         //back
         onBackPressed();
-//        FragmentContainer lastAddedFrag = fragViewer.get(fragViewer.size() - 2);
+    }
+
+    @Override
+    public void hideTabbar() {
+        if(mTabBar != null) {
+            mTabBar.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void showTabbar() {
+        if(mTabBar != null){
+            mTabBar.setVisibility(View.VISIBLE);
+        }
 
     }
 

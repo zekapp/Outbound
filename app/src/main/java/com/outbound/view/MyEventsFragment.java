@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.outbound.R;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.EventsAdapter;
+import com.outbound.util.Constants;
 
 import java.util.ArrayList;
 
@@ -48,6 +50,14 @@ public class MyEventsFragment extends BaseFragment {
             actionBar.setCustomView(viewActionBar);
         }
 
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.EVENT_CREATE_FRAGMENT_ID, null, null);
+            }
+        });
         ImageView backIcon = (ImageView)viewActionBar.findViewById(R.id.ab_back_icon);
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,5 +102,12 @@ public class MyEventsFragment extends BaseFragment {
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(mCallbacks !=null)
+                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,null,null);
+            }
+        });
     }
 }
