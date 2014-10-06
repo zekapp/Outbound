@@ -164,7 +164,7 @@
                 android:layout_marginLeft="@dimen/icon_margin_left"/>
             <Button
                 style="?android:attr/spinnerStyle"
-                android:id="@+id/s_nationality_button"
+                android:id="@+id/sp_nationality_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

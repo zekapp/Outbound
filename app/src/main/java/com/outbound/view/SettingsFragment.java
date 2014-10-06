@@ -2,28 +2,28 @@ package com.outbound.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
+import com.outbound.ui.util.TravellerTypeDialog;
 import com.parse.ParseImageView;
+
+import java.util.ArrayList;
 
 /**
  * Created by zeki on 24/09/2014.
@@ -74,7 +74,70 @@ public class SettingsFragment extends BaseFragment {
 
         setUpPhoto(view);
         setBackgroundPic(view);
+        setUpNationality(view);
+        setUpTravellerType(view);
         return view;
+    }
+
+    private void setUpTravellerType(View view) {
+        Button btn = (Button)view.findViewById(R.id.s_travellerType_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTravellerDialo(v);
+            }
+        });
+    }
+
+    private void openTravellerDialo(View v) {
+//        TravellerTypeDialog ttd = new TravellerTypeDialog(getActivity());
+
+        String[] travellerTypeList = getActivity().getResources().getStringArray(R.array.traveller_type);
+        boolean bl[] = new boolean[travellerTypeList.length];
+        ArrayList<Integer> selList=new ArrayList();
+
+        final AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+        ad.setTitle("Select Traveller Type")
+            .setMultiChoiceItems(travellerTypeList, bl, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                }
+            }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+    }
+
+    private void setUpNationality(View view) {
+        Button nationalityButton = (Button)view.findViewById(R.id.s_nationality_button);
+
+        nationalityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCountryDialog(v);
+            }
+        });
+    }
+
+    private void openCountryDialog(final View v) {
+        CountryDialog cd = new CountryDialog(getActivity());
+        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+            @Override
+            public void onCountrySelected(String countryName, String countryCode) {
+                ((Button)v).setHint(countryName);
+            }
+        });
+        cd.show();
+
+
     }
 
     private void setBackgroundPic(View view) {
@@ -176,25 +239,25 @@ public class SettingsFragment extends BaseFragment {
 //    }
 
 
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
-                .getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        final float roundPx = pixels;
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return output;
-    }
+//    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+//        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+//                .getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(output);
+//
+//        final int color = 0xff424242;
+//        final Paint paint = new Paint();
+//        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+//        final RectF rectF = new RectF(rect);
+//        final float roundPx = pixels;
+//
+//        paint.setAntiAlias(true);
+//        canvas.drawARGB(0, 0, 0, 0);
+//        paint.setColor(color);
+//        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+//
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        canvas.drawBitmap(bitmap, rect, rect, paint);
+//
+//        return output;
+//    }
 }

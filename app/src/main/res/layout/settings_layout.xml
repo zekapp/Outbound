@@ -35,7 +35,7 @@
                 android:layout_marginTop="15pt"
                 android:layout_centerHorizontal="true"
                 android:padding="10dip"
-                android:src="@drawable/profile_empty_edit"
+                android:src="@drawable/profile_empty_edit_new"
                 android:scaleType="fitXY"
                 app:corner_radius="10dip"
                 app:border_width="3dip"
@@ -74,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
-                android:layout_marginRight="@dimen/text_right_margin"/>
+                android:layout_marginRight="@dimen/text_right_margin"
+                android:hint="UserName"/>
 
         </LinearLayout>
 
@@ -96,7 +97,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:hint="Email"/>
         </LinearLayout>
 
         <LinearLayout
@@ -117,7 +119,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
-                android:inputType="numberPassword"/>
+                android:inputType="numberPassword"
+                android:text="Password"/>
         </LinearLayout>
 
         <TextView
@@ -125,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="NATIONALITY"
-            android:paddingLeft="50dp"
+            android:paddingLeft="56dp"
             android:layout_marginTop="10dp"
             />
         <LinearLayout
@@ -147,6 +150,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
+                android:hint="Select"
+                android:paddingLeft="13dp"
                 />
         </LinearLayout>
         <LinearLayout
@@ -167,7 +172,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:hint="Hometown (optional)"/>
         </LinearLayout>
 
         <TextView
@@ -175,7 +181,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="TRAVELLER TYPE"
-            android:paddingLeft="50dp"
+            android:paddingLeft="56dp"
             android:layout_marginTop="10dp"
             />
         <LinearLayout
@@ -197,12 +203,14 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
+                android:hint="Select"
+                android:paddingLeft="13dp"
                 />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -218,14 +226,14 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
-                android:inputType="textEmailAddress"/>
+                android:hint="About you, describe yourself"/>
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="SEXUAL PREFERENCES"
-            android:paddingLeft="50dp"
+            android:paddingLeft="56dp"
             android:layout_marginTop="10dp"
             />
         <LinearLayout
@@ -247,6 +255,8 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
+                android:hint="Select"
+                android:paddingLeft="13dp"
                 />
         </LinearLayout>
 
