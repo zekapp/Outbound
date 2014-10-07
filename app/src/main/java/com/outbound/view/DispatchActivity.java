@@ -42,7 +42,7 @@ public class DispatchActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		// Check if there is current user info
-		if (ParseUser.getCurrentUser() != null || true) {
+		if (ParseUser.getCurrentUser() != null) {
 			// Start an intent for the logged in activity
 
 //			LOGD(TAG, "onCreate, got user,  "

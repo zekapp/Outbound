@@ -15,7 +15,7 @@
     <style name="Theme.Outbound.Welcome">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:background">@drawable/bg_landing</item>
+        <!--<item name="android:background">@drawable/bg_landing</item>-->
     </style>
 
     <style name="Theme.Outbound.NoActionBar">

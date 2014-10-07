@@ -186,7 +186,7 @@
             />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -205,6 +205,8 @@
                 android:layout_marginRight="@dimen/text_right_margin"
                 android:hint="Select"
                 android:paddingLeft="13dp"
+                android:ellipsize="end"
+                android:lines="1"
                 />
         </LinearLayout>
 

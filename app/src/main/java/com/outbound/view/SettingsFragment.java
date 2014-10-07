@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,6 +38,17 @@ public class SettingsFragment extends BaseFragment {
     private String filemanagerstring;
     private RoundedImageView mPhoto;
     private ParseImageView mBackgroundPhoto;
+
+    //Traveller Type
+    private String[] travellerTypeList;
+    private boolean[] trvTypeBooleanList;
+    private ArrayList<Integer> travSelList = new ArrayList<Integer>();
+
+    //Sexual Preferences
+    private String[] prefTypeList;
+    private boolean[] prefTypeBooleanList;
+    private ArrayList<Integer> prefSelList = new ArrayList<Integer>();
+
 
     @Override
     protected void setUp(Object param1, Object param2) {
@@ -76,36 +88,117 @@ public class SettingsFragment extends BaseFragment {
         setBackgroundPic(view);
         setUpNationality(view);
         setUpTravellerType(view);
+        setUpSexualPreferences(view);
+
         return view;
     }
 
-    private void setUpTravellerType(View view) {
-        Button btn = (Button)view.findViewById(R.id.s_travellerType_button);
+    private void setUpSexualPreferences(View view) {
+        prefTypeList = getActivity().getResources().getStringArray(R.array.sexual_preference_type);
+        prefTypeBooleanList = new boolean[prefTypeList.length];
+
+        Button btn = (Button)view.findViewById(R.id.s_sexual_preference_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTravellerDialo(v);
+                openSexualPrefDialog(v);
             }
         });
     }
 
-    private void openTravellerDialo(View v) {
-//        TravellerTypeDialog ttd = new TravellerTypeDialog(getActivity());
+    private void openSexualPrefDialog(final View v) {
+        final AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+        ad.setTitle("Select Sexual Preferences")
+                .setMultiChoiceItems(prefTypeList, prefTypeBooleanList, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if(isChecked)
+                        {
+                            // If user select a item then add it in selected items
+                            prefTypeBooleanList[which] = true;
+                            prefSelList.add(which);
+                        }
+                        else if (prefSelList.contains(which))
+                        {
+                            // if the item is already selected then remove it
+                            prefSelList.remove(Integer.valueOf(which));
+                            prefTypeBooleanList[which] = false;
+                        }
+                    }
+                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String msg="";
+                for (int i = 0; i < prefSelList.size(); i++) {
+                    if(i == prefSelList.size() - 1)
+                        msg=msg + prefTypeList[prefSelList.get(i)];
+                    else
+                        msg=msg + prefTypeList[prefSelList.get(i)] + ", ";
+                }
 
-        String[] travellerTypeList = getActivity().getResources().getStringArray(R.array.traveller_type);
-        boolean bl[] = new boolean[travellerTypeList.length];
-        ArrayList<Integer> selList=new ArrayList();
+                if(prefSelList.isEmpty())
+                   ((Button)v).setHint("Select");
+                else
+                    ((Button)v).setHint(msg);
 
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+    }
+
+    private void setUpTravellerType(View view) {
+        travellerTypeList = getActivity().getResources().getStringArray(R.array.traveller_type);
+        trvTypeBooleanList = new boolean[travellerTypeList.length];
+
+        Button btn = (Button)view.findViewById(R.id.s_travellerType_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTravellerDialog(v);
+            }
+        });
+    }
+
+    private void openTravellerDialog(final View v) {
         final AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
         ad.setTitle("Select Traveller Type")
-            .setMultiChoiceItems(travellerTypeList, bl, new DialogInterface.OnMultiChoiceClickListener() {
+            .setMultiChoiceItems(travellerTypeList, trvTypeBooleanList, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
+                    if(isChecked)
+                    {
+                        // If user select a item then add it in selected items
+                        trvTypeBooleanList[which] = true;
+                        travSelList.add(which);
+                    }
+                    else if (travSelList.contains(which))
+                    {
+                        // if the item is already selected then remove it
+                        travSelList.remove(Integer.valueOf(which));
+                        trvTypeBooleanList[which] = false;
+                    }
                 }
             }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String msg="";
+                for (int i = 0; i < travSelList.size(); i++) {
+
+                    if(i == travSelList.size() - 1)
+                        msg=msg + travellerTypeList[travSelList.get(i)];
+                    else
+                        msg=msg + travellerTypeList[travSelList.get(i)] + ", ";
+                }
+
+                if(travSelList.isEmpty())
+                    ((Button)v).setHint("Select");
+                else
+                    ((Button)v).setHint(msg);
+
 
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -169,6 +262,7 @@ public class SettingsFragment extends BaseFragment {
                 "Select Picture"), openPurpose);
     }
 
+    //Todo: check for large image
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == -1) {
@@ -182,8 +276,8 @@ public class SettingsFragment extends BaseFragment {
 ////                        Bitmap conv_bm = getRoundedRectBitmap(resized, 191);
 //                        Bitmap conv_bm = getRoundedCornerBitmap(resized, 40);
 //                        mPhoto.setImageBitmap(conv_bm);
-
-                        mPhoto.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                        mPhoto.setImageBitmap(scaledDownIfLarge(selectedImagePath));
+//                        mBackgroundPhoto.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                     }
                 }
 
@@ -193,13 +287,25 @@ public class SettingsFragment extends BaseFragment {
                 selectedImagePath = getPath(selectedImageUri);
                 if(selectedImagePath!=null){
                     if(mBackgroundPhoto != null){
-
-                        mBackgroundPhoto.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                        mBackgroundPhoto.setImageBitmap(scaledDownIfLarge(selectedImagePath));
+//                        mBackgroundPhoto.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
                     }
                 }
             }
         }
     }
+
+    private Bitmap scaledDownIfLarge(String selectedImagePath) {
+
+        Bitmap resized = BitmapFactory.decodeFile(selectedImagePath);
+
+        int nh = (int) ( resized.getHeight() * (512.0 / resized.getWidth()) );
+
+        Bitmap scaled = Bitmap.createScaledBitmap(resized, 512, nh, true);
+
+        return scaled;
+    }
+
     public String getPath(Uri uri) {
         String[] proj = { MediaStore.Images.Media.DATA };
         Cursor cursor = getActivity().getContentResolver().query(uri, proj, null, null, null);
