@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -27,11 +28,13 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
+                <com.parse.ParseImageView
+                    android:id="@+id/photo_background"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="@drawable/bg_profile_cover"
-                    android:scaleType="fitStart"/>
+                    android:layout_height="@dimen/profile_pager_layout_height"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_profile_cover"/>
 
                 <!--<FrameLayout-->
                     <!--android:layout_width="wrap_content"-->
@@ -76,19 +79,37 @@
                     <!--android:scaleType="centerCrop"-->
                     <!--android:src="@drawable/website_cover"/>-->
 
-                <com.parse.ParseImageView
-                    android:id="@+id/user_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="1dp"
-                    android:background="@drawable/white_rounded_rectangle"
-                    android:src="@drawable/profile_empty_edit"
-                    android:layout_centerHorizontal="true"
+                <!--<com.parse.ParseImageView-->
+                    <!--android:id="@+id/user_photo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="1dp"-->
+                    <!--android:background="@drawable/white_rounded_rectangle"-->
+                    <!--android:src="@drawable/profile_empty_edit"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_marginTop="15pt"-->
+                    <!--android:paddingTop="1dp"-->
+                    <!--android:clickable="true"/>-->
+
+
+                <com.outbound.ui.util.RoundedImageView
+                    android:id="@+id/photo"
+                    android:layout_width="133dp"
+                    android:layout_height="133dp"
+                    android:layout_centerInParent="true"
+                    android:cropToPadding="true"
                     android:layout_marginTop="15pt"
-                    android:paddingTop="1dp"
-                    android:clickable="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:padding="10dip"
+                    android:src="@drawable/profile_empty_edit_new"
+                    android:scaleType="fitXY"
+                    app:corner_radius="10dip"
+                    app:border_width="3dip"
+                    app:oval="false"
+                    app:border_color="@color/white"/>
 
                 <ImageView
+                    android:id="@+id/change_background"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -116,6 +137,7 @@
                     android:layout_gravity="center_vertical"
                     />
                 <EditText
+                    android:id="@+id/login_mail_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
                     android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
@@ -205,6 +227,7 @@
                         android:text="@string/sing_up_user_male"
                         android:fontFamily="@string/san_serif"
                         android:clickable="true"
+                        android:checked="true"
                         />
 
                     <RadioButton
@@ -313,7 +336,7 @@
                     android:layout_toRightOf="@+id/nationality_imageview_sign_up"
                     android:layout_alignParentBottom="true"
                     android:textColor="@color/black"
-                    android:text="@string/sing_up_nationality_hint"/>
+                    android:hint="@string/sing_up_nationality_hint"/>
                 />
             </RelativeLayout>
 
@@ -372,7 +395,7 @@
                     />
 
                 <Button
-                    android:id="@+id/traveller_type_spinner_sign_up"
+                    android:id="@+id/traveller_type_button"
                     style="?android:attr/spinnerStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -380,7 +403,7 @@
                     android:layout_toRightOf="@+id/traveller_type_imageview_sign_up"
                     android:layout_alignParentBottom="true"
                     android:textColor="@color/black"
-                    android:text="@string/sing_up_traveller_type_hint"
+                    android:hint="@string/sing_up_traveller_type_hint"
 />
                 />
             </RelativeLayout>

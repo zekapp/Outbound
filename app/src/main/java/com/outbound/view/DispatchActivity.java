@@ -50,6 +50,15 @@ public class DispatchActivity extends Activity {
 //			startActivity(new Intent(this, BaseActivity.class));
 
             // Start an intent for the dispatch activity
+
+
+            /*T
+            *
+            */
+            /*
+            * Todo: if user not set the email and age and profile picture direct him/her to the
+            * signUpVia email activity
+            * */
             Intent intent = new Intent(this, BaseActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
                     | Intent.FLAG_ACTIVITY_NEW_TASK);

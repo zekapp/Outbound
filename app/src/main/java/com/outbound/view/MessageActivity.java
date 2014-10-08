@@ -76,6 +76,7 @@ public class MessageActivity extends FragmentActivity{
         title.setText(getResources().getString(R.string.message_activity_title));
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
         icon.setImageResource(R.drawable.action_add_user);
+        icon.setAlpha(0);
 
         ImageView backIcon = (ImageView)viewActionBar.findViewById(R.id.ab_back_icon);
         backIcon.setOnClickListener(new View.OnClickListener() {

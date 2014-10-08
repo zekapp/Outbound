@@ -167,8 +167,7 @@ public class ProfileFragment extends BaseFragment {
         relativeLayoutFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_FRAG_ID,null,null);
-                int a = 12;
+                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_FRAG_ID,null,null)
             }
         });
         LinearLayout myTripsLayout = (LinearLayout)view.findViewById(R.id.pf_my_trips_layout);

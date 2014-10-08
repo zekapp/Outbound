@@ -101,5 +101,8 @@
     <string name="notice_board_message_activity_title">NoticeBoard</string>
     <string name="my_trips_detail_fragment_title">Outbounders Trip</string>
     <string name="event_create_fragment_title">Create Event</string>
+    <string name="login_via_email_title">Log In</string>
+    <string name="error_invalid_date">This field is invalid</string>
+    <string name="error_invalid_country">This field required</string>
 
 </resources>

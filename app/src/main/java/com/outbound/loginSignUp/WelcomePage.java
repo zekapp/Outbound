@@ -70,7 +70,6 @@ public class WelcomePage extends Activity {
         tos.setMovementMethod(LinkMovementMethod.getInstance());
 
         mBackground = (ParallaxImageView)findViewById(R.id.background);
-        mBackground.registerSensorManager();
 
         //Sign up with email
         ImageButton signUpEmail = (ImageButton) findViewById(R.id.imageSignUp);
@@ -104,7 +103,6 @@ public class WelcomePage extends Activity {
                             // set favorites as null, or mark it as empty somehow
                             makeMeRequest();
                         } else {
-                            mBackground.unregisterSensorManager();
                             finishActivity();
                         }
                     }
@@ -121,6 +119,19 @@ public class WelcomePage extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mBackground.registerSensorManager();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mBackground.unregisterSensorManager();
     }
 
     private void makeMeRequest() {
