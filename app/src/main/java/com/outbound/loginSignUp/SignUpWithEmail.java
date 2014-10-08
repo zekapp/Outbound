@@ -11,17 +11,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.outbound.R;
-import com.outbound.model.User;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.view.DispatchActivity;
@@ -46,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -441,8 +435,6 @@ public class SignUpWithEmail extends Activity{
         if(selectedImagePathProfile == null)
         {
             warnTheUser();
-            cancel = true;
-
             return;
         }
 
@@ -452,7 +444,7 @@ public class SignUpWithEmail extends Activity{
             // form field with an error.
             focusView.requestFocus();
         } else {
-//            ParseUser user = new User();
+//            ParseUser user = new PUser();
 //            ParseUser parseUser = ParseUser.getCurrentUser();
 
             try{
@@ -491,26 +483,41 @@ public class SignUpWithEmail extends Activity{
 
     private void setUpUserFields() {
 
-        ParseUser parseUser = ParseUser.getCurrentUser();
-
+//        ParseUser parseUser = ParseUser.getCurrentUser();
+        PUser parseUser = PUser.getCurrentUser();
         try{
-            parseUser.put("gender",maleBox.isChecked()?"Male":"Female");
-//            parseUser.put("age", new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(birthDateFormatted));
-//            parseUser.put("age", new Date());
+//            parseUser.put("gender",maleBox.isChecked()?"Male":"Female");
+////            parseUser.put("age", new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(birthDateFormatted));
+////            parseUser.put("age", new Date());
+//
+//            parseUser.put("age", birthCalender.getTime());
+//            parseUser.put("nationality",selectedCountry);
+//            if(homeTown.getText().toString() != null )
+//                parseUser.put("homeTown",homeTown.getText().toString());
+//            if(travellerTypeList.length > 0)
+//                parseUser.put("travelType", Arrays.asList(travellerTypeList));
+//            if(aboutUser.getText().toString() != null )
+//                parseUser.put("shortDescription",aboutUser.getText().toString());
+//
+//            ParseFile saveProfileFile= new ParseFile(
+//                    "profilePicture.jpg",compressAndConvertImageToByteFrom(
+//                    BitmapFactory.decodeFile(selectedImagePathProfile)));
+//            parseUser.put("profileImage",saveProfileFile);
 
-            parseUser.put("age", birthCalender.getTime());
-            parseUser.put("nationality",selectedCountry);
+            parseUser.setGender(maleBox.isChecked()?"Male":"Female");
+            parseUser.setDateOfBirth(birthCalender.getTime());
+            parseUser.setNationality(selectedCountry);
             if(homeTown.getText().toString() != null )
-                parseUser.put("homeTown",homeTown.getText().toString());
+                parseUser.setHometown(homeTown.getText().toString());
             if(travellerTypeList.length > 0)
-                parseUser.put("travelType", Arrays.asList(travellerTypeList));
+                parseUser.setTravelerType(travellerTypeList);
             if(aboutUser.getText().toString() != null )
-                parseUser.put("shortDescription",aboutUser.getText().toString());
+                parseUser.setShortDescription(aboutUser.getText().toString());
 
             ParseFile saveProfileFile= new ParseFile(
                     "profilePicture.jpg",compressAndConvertImageToByteFrom(
                     BitmapFactory.decodeFile(selectedImagePathProfile)));
-            parseUser.put("profileImage",saveProfileFile);
+            parseUser.setProfilePicture(saveProfileFile);
 
             ParseFile saveCoverFile = null;
             if(selectedImagePathCover != null)
@@ -523,8 +530,8 @@ public class SignUpWithEmail extends Activity{
                         BitmapFactory.decodeResource(getResources(),
                                 R.drawable.bg_profile_cover)));
 
-            parseUser.put("backGroundImage",saveCoverFile);
-
+//            parseUser.put("backGroundImage",saveCoverFile);
+            parseUser.setCoverPicture(saveCoverFile);
             parseUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {

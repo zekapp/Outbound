@@ -3,6 +3,7 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
@@ -21,20 +22,30 @@ import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
 import com.outbound.R;
+import com.outbound.model.PFriendRequest;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.ProfileMessageListViewAdapter;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.UIUtils;
 import com.outbound.ui.util.ZoomOutPageTransformer;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zeki on 2/09/2014.
  */
 public class ProfileFragment extends BaseFragment {
+
+    private TextView friendBadge;
 
     private FrameLayout mFrameLayout;
     private PagerAdapter mPagerAdapter;
@@ -42,6 +53,7 @@ public class ProfileFragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView mListView;
 
+    private PUser currentUser = PUser.getCurrentUser();
     private View dots[] = new View[2];
 
     @Override
@@ -85,6 +97,8 @@ public class ProfileFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.profile_fragment, container, false);
         final View header = inflater.inflate(R.layout.profile_header,null);
 
+        setUpHeaderUserInfo(header);
+        setUpheaderFunction(header);
         setUpListView(view, header);
         setUpProfileFunctionLayout(view);
         setUpViewPager(view);
@@ -92,6 +106,41 @@ public class ProfileFragment extends BaseFragment {
 
         registerForHideableViews(view);
         return view;
+    }
+
+    private void setUpheaderFunction(View v) {
+        friendBadge = (TextView)v.findViewById(R.id.friend_function_badge);
+
+        PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
+            @Override
+            public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
+                if(pFriendRequests != null){
+                    friendBadge.setVisibility(View.VISIBLE);
+                    friendBadge.setText(Integer.toString(pFriendRequests.size()));
+                }else
+                    friendBadge.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void setUpHeaderUserInfo(View v) {
+        ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
+        flag.setImageResource(getResources().
+                getIdentifier("drawable/" + currentUser.getCountryCode(),
+                        null, getActivity().getPackageName()));
+
+        TextView profileName = (TextView)v.findViewById(R.id.profile_name);
+        profileName.setText(currentUser.getUserName());
+
+        TextView age = (TextView)v.findViewById(R.id.profile_age);
+        age.setText(currentUser.getAge() > -1?Integer.toString(currentUser.getAge()):"-");
+
+        TextView gender = (TextView)v.findViewById(R.id.profile_gender);
+        gender.setText(currentUser.getGender());
+
+        TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
+        profile_home.setText(currentUser.getHometown());
+
     }
 
     private void setUpSwipeRefreshLayout(View view) {
@@ -167,7 +216,7 @@ public class ProfileFragment extends BaseFragment {
         relativeLayoutFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_FRAG_ID,null,null)
+                mCallbacks.deployFragment(Constants.PROFILE_FRIENDS_FRAG_ID,null,null);
             }
         });
         LinearLayout myTripsLayout = (LinearLayout)view.findViewById(R.id.pf_my_trips_layout);

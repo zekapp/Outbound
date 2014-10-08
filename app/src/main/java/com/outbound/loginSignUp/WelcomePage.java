@@ -25,6 +25,7 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.outbound.R;
+import com.outbound.model.PUser;
 import com.outbound.view.DispatchActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -169,21 +170,31 @@ public class WelcomePage extends Activity {
 
     private void generateUser(GraphUser facebookUser) {
 
-        ParseUser parseUser = ParseUser.getCurrentUser();
+        PUser parseUser = PUser.getCurrentUser();
+
+//        ParseUser parseUser = ParseUser.getCurrentUser();
         try {
             // Populate the JSON object
-            parseUser.put("facebookID", facebookUser.getId());
-            parseUser.put("username", facebookUser.getName());
+//            parseUser.put("facebookID", facebookUser.getId());
+//            parseUser.put("username", facebookUser.getName());
+//            if (facebookUser.getProperty("gender") != null)
+//                parseUser.put("gender", facebookUser.getProperty("gender"));
+//
+//            if (facebookUser.getBirthday() != null)
+//                parseUser.put("age", facebookUser.getBirthday());
+//
+//            String email = facebookUser.asMap().get("email").toString();
+//
+//            if(email != null)
+//                parseUser.put("email",email);
+
+            parseUser.setFacebookID(facebookUser.getId());
+            parseUser.setUsername(facebookUser.getName());
             if (facebookUser.getProperty("gender") != null)
-                parseUser.put("gender", facebookUser.getProperty("gender"));
-
-            if (facebookUser.getBirthday() != null)
-                parseUser.put("age", facebookUser.getBirthday());
-
+                parseUser.setGender((String)facebookUser.getProperty("gender"));
             String email = facebookUser.asMap().get("email").toString();
-
             if(email != null)
-                parseUser.put("email",email);
+                parseUser.setEmail(email);
 
             getProfilePicture(facebookUser);
             getCoverPicture(facebookUser);
@@ -208,10 +219,12 @@ public class WelcomePage extends Activity {
             Bitmap dp = BitmapFactory.decodeStream(finalCoverPhotoUrl.openConnection().getInputStream());
             LOGD(TAG, "cover image retrieved from facebook");
             // Save the cover profile info in a user property
-            ParseUser currentUser = ParseUser.getCurrentUser();
+//            ParseUser currentUser = ParseUser.getCurrentUser();
+            PUser currentUser = PUser.getCurrentUser();
             if(dp!=null){
                 ParseFile saveImageFile= new ParseFile("coverPicture.jpg",compressAndConvertImageToByteFrom(dp));
-                currentUser.put("backGroundImage",saveImageFile);
+//                currentUser.put("backGroundImage",saveImageFile);
+                currentUser.setCoverPicture(saveImageFile);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -285,10 +298,12 @@ public class WelcomePage extends Activity {
             }
             LOGD(TAG, "image retrieved from facebook");
             // Save the user profile info in a user property
-            ParseUser currentUser = ParseUser.getCurrentUser();
+//            PUser currentUser = ParseUser.getCurrentUser();
+            PUser currentUser = PUser.getCurrentUser();
             if(dp!=null){
                 ParseFile saveImageFile= new ParseFile("profilePicture.jpg",compressAndConvertImageToByteFrom(dp));
-                currentUser.put("profileImage",saveImageFile);
+//                currentUser.put("profileImage",saveImageFile);
+                currentUser.setProfilePicture(saveImageFile);
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block

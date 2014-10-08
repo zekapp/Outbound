@@ -401,9 +401,9 @@ public class SwipeRefreshLayout extends ViewGroup {
                     final float eventY = event.getY();
                     float yDiff = eventY - mDownEvent.getY();
                     if (yDiff > mTouchSlop) {
-                        // User velocity passed min velocity; trigger a refresh
+                        // PUser velocity passed min velocity; trigger a refresh
                         if (yDiff > mDistanceToTriggerSync) {
-                            // User movement passed distance; trigger a refresh
+                            // PUser movement passed distance; trigger a refresh
                             startRefresh();
                             handled = true;
                             break;

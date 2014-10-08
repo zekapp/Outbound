@@ -3,7 +3,8 @@ package com.outbound;
 import android.app.Application;
 import android.util.Log;
 
-import com.outbound.model.User;
+import com.outbound.model.PFriendRequest;
+import com.outbound.model.PUser;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -23,7 +24,8 @@ public class Outbound extends Application {
         super.onCreate();
 
         Parse.enableLocalDatastore(this);
-        ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(PUser.class);
+        ParseObject.registerSubclass(PFriendRequest.class);
 //        PushService.setDefaultPushCallback(this, DispatchActivity.class);
 
         // Required - Initialize the Parse SDK
