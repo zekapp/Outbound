@@ -104,5 +104,6 @@
     <string name="login_via_email_title">Log In</string>
     <string name="error_invalid_date">This field is invalid</string>
     <string name="error_invalid_country">This field required</string>
+    <string name="preferences_key_country">country_</string>
 
 </resources>

@@ -54,4 +54,12 @@
     <dimen name="after_icon_margin">10dp</dimen>
     <dimen name="icon_margin_left">10dp</dimen>
 
+
+    <!--Profile Picture-->
+    <dimen name="profile_picture_height">90dp</dimen>
+    <dimen name="profile_picture_width">90dp</dimen>
+    <dimen name="profile_picture_radius">10dip</dimen>
+    <dimen name="profile_picture_border_width">3dip</dimen>
+    <dimen name="profile_picture_top_margin">10dp</dimen>
+
 </resources>

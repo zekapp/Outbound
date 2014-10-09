@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import com.outbound.R;
 import com.outbound.model.PFriendRequest;
 import com.outbound.model.PUser;
+import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.ProfileMessageListViewAdapter;
 import com.outbound.ui.util.SwipeRefreshLayout;
@@ -33,6 +34,7 @@ import com.outbound.util.Constants;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseImageView;
 
 
 import java.util.ArrayList;
@@ -43,7 +45,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by zeki on 2/09/2014.
  */
-public class ProfileFragment extends BaseFragment {
+public class ProfileFragment extends BaseFragment implements ProfilePictureFragment.Listener, ProfileAboutFragment.Listener {
+
+    private static final String ARG_PROFILE_INDEX
+            = "com.outbound.ARG_PROFILE_INDEX";
+
 
     private TextView friendBadge;
 
@@ -110,37 +116,19 @@ public class ProfileFragment extends BaseFragment {
 
     private void setUpheaderFunction(View v) {
         friendBadge = (TextView)v.findViewById(R.id.friend_function_badge);
-
+        updateFriendBadge();
+    }
+    private void updateFriendBadge() {
         PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
-                if(pFriendRequests != null){
+                if(pFriendRequests.size() > 0){
                     friendBadge.setVisibility(View.VISIBLE);
                     friendBadge.setText(Integer.toString(pFriendRequests.size()));
                 }else
                     friendBadge.setVisibility(View.GONE);
             }
         });
-    }
-
-    private void setUpHeaderUserInfo(View v) {
-        ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
-        flag.setImageResource(getResources().
-                getIdentifier("drawable/" + currentUser.getCountryCode(),
-                        null, getActivity().getPackageName()));
-
-        TextView profileName = (TextView)v.findViewById(R.id.profile_name);
-        profileName.setText(currentUser.getUserName());
-
-        TextView age = (TextView)v.findViewById(R.id.profile_age);
-        age.setText(currentUser.getAge() > -1?Integer.toString(currentUser.getAge()):"-");
-
-        TextView gender = (TextView)v.findViewById(R.id.profile_gender);
-        gender.setText(currentUser.getGender());
-
-        TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
-        profile_home.setText(currentUser.getHometown());
-
     }
 
     private void setUpSwipeRefreshLayout(View view) {
@@ -254,6 +242,53 @@ public class ProfileFragment extends BaseFragment {
     public void friendsLayoutClicked(View view) {
     }
 
+
+    @Override
+    public void onPictureFragmentViewCreated(View v, Fragment fragment) {
+        RoundedImageView profilePhoto = (RoundedImageView)v.findViewById(R.id.pp_photo);
+        profilePhoto.setParseFile(currentUser.getProfilePicture());
+        profilePhoto.loadInBackground();
+
+        TextView homeText = (TextView)v.findViewById(R.id.pp_home_cityAndCountryCode_text);
+        homeText.setText
+                ((currentUser.getHometown())!=null?currentUser.getHometown():" "
+                +", "+
+                ((currentUser.getCountryCode())!=null?currentUser.getCountryCode():" "));
+
+        TextView currenLocText = (TextView)v.findViewById(R.id.pp_current_location_text);
+        currenLocText.setText("Phuket, Th (Test)");
+    }
+
+    @Override
+    public void onAboutFragmentViewCreated(View v, Fragment fragment) {
+        TextView aboutText = (TextView)v.findViewById(R.id.pa_about_text);
+        aboutText.setText(currentUser.getShortDescription()!=null?currentUser.getShortDescription():"...");
+    }
+
+    private void setUpHeaderUserInfo(View v) {
+        ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
+
+        if(currentUser.getCountryCode() != null)
+            flag.setImageResource(getResources().
+                    getIdentifier("drawable/" + currentUser.getCountryCode().toLowerCase(),
+                            null, getActivity().getPackageName()));
+
+        TextView profileName = (TextView)v.findViewById(R.id.profile_name);
+        profileName.setText(currentUser.getUserName());
+
+        TextView age = (TextView)v.findViewById(R.id.profile_age);
+        age.setText(currentUser.getAge() > -1?Integer.toString(currentUser.getAge()):"-");
+
+        TextView gender = (TextView)v.findViewById(R.id.profile_gender);
+        gender.setText(currentUser.getGender());
+
+        TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
+        profile_home.setText(currentUser.getNationality());
+
+        ParseImageView coverPicture = (ParseImageView)v.findViewById(R.id.pp_coverPicture);
+        coverPicture.setParseFile(currentUser.getCoverPicture());
+        coverPicture.loadInBackground();
+    }
     private class ScreenSlidePagerAdapter extends BaseFragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -261,7 +296,24 @@ public class ProfileFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
-            return position==0?new ProfilePictureFragment():new ProfileAboutFragment();
+            if(position == 0){
+                ProfilePictureFragment frag = new ProfilePictureFragment();
+                frag.setUp(ProfileFragment.this);
+//                Bundle args = new Bundle();
+//                args.putInt(ARG_PROFILE_INDEX, position);
+//                frag.setArguments(args);
+                return frag;
+            }else{
+                ProfileAboutFragment frag = new ProfileAboutFragment();
+                frag.setUp(ProfileFragment.this);
+//                Bundle args = new Bundle();
+//                args.putInt(ARG_PROFILE_INDEX, position);
+//                frag.setArguments(args);
+                return frag;
+            }
+
+
+//            return position==0?new ProfilePictureFragment():new ProfileAboutFragment();
         }
 
         @Override

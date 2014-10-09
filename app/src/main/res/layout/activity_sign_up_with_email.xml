@@ -92,21 +92,21 @@
                     <!--android:clickable="true"/>-->
 
 
-                <com.outbound.ui.util.RoundedImageView
+                e<com.outbound.ui.util.RoundedImageView
                     android:id="@+id/photo"
-                    android:layout_width="133dp"
-                    android:layout_height="133dp"
-                    android:layout_centerInParent="true"
-                    android:cropToPadding="true"
-                    android:layout_marginTop="15pt"
-                    android:layout_centerHorizontal="true"
-                    android:padding="10dip"
-                    android:src="@drawable/profile_empty_edit_new"
+                    android:layout_width="@dimen/profile_picture_width"
+                    android:layout_height="@dimen/profile_picture_width"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/profile_picture_top_margin"
                     android:scaleType="fitXY"
-                    app:corner_radius="10dip"
-                    app:border_width="3dip"
+                    app:corner_radius="@dimen/profile_picture_radius"
+                    app:border_width="@dimen/profile_picture_border_width"
                     app:oval="false"
-                    app:border_color="@color/white"/>
+                    app:border_color="@color/profile_picture_border_color"
+                    android:src="@drawable/profile_empty_edit"
+                    android:layout_centerInParent="true"
+
+                    />
 
                 <ImageView
                     android:id="@+id/change_background"

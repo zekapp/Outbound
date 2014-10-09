@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/pp_home_text"
+        android:id="@+id/pp_home_cityAndCountryCode_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/icon_home"
@@ -17,18 +19,30 @@
         android:layout_marginTop="20dp"
         />
 
-    <com.parse.ParseImageView
-        android:id="@+id/pp_user_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="1dp"
-        android:background="@drawable/white_rounded_rectangle"
-        android:src="@drawable/profile_empty"
-        android:paddingTop="1dp"
-        android:clickable="true"
+    <!--<com.parse.ParseImageView-->
+        <!--android:id="@+id/pp_user_photo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingBottom="1dp"-->
+        <!--android:background="@drawable/white_rounded_rectangle"-->
+        <!--android:src="@drawable/profile_empty"-->
+        <!--android:paddingTop="1dp"-->
+        <!--android:clickable="true"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--/>-->
+    <com.outbound.ui.util.RoundedImageView
+        android:id="@+id/pp_photo"
+        android:layout_width="@dimen/profile_picture_width"
+        android:layout_height="@dimen/profile_picture_width"
         android:layout_gravity="center"
-        android:layout_below="@+id/pp_home_text"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/profile_picture_top_margin"
+        android:scaleType="fitXY"
+        app:corner_radius="@dimen/profile_picture_radius"
+        app:border_width="@dimen/profile_picture_border_width"
+        app:oval="false"
+        app:border_color="@color/profile_picture_border_color"
+
         />
 
     <TextView

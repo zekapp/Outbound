@@ -9,11 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_pager_layout_height">
 
+        <com.parse.ParseImageView
+            android:id="@+id/pp_coverPicture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_profile_cover"
+            android:scaleType="fitXY"/>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/profile_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_profile_cover">
+            >
         </android.support.v4.view.ViewPager>
 
         <LinearLayout

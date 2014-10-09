@@ -28,7 +28,8 @@ import com.outbound.R;
 import com.outbound.model.PUser;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
-import com.outbound.view.DispatchActivity;
+import com.outbound.DispatchActivity;
+import com.outbound.util.CountryCodes;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
@@ -39,7 +40,6 @@ import com.parse.SignUpCallback;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -57,6 +57,9 @@ public class SignUpWithEmail extends Activity{
 
     private static final int SELECT_PROFILE_PICTURE = 1;
     private static final int SELECT_BACKGROUND_PICTURE = 2;
+
+    private boolean alreadySignUp = false;
+    private boolean profilePhotoAttached = false;
 
 
     GregorianCalendar birthCalender;
@@ -91,6 +94,7 @@ public class SignUpWithEmail extends Activity{
     private RoundedImageView mPhoto;
     private ParseImageView mBackgroundPhoto;
 
+    private PUser user ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +102,21 @@ public class SignUpWithEmail extends Activity{
 
         setContentView(R.layout.activity_sign_up_with_email);
 
+        if(PUser.getCurrentUser() == null) {
+            user = new PUser();
+            alreadySignUp = false;
+        }
+        else {
+            alreadySignUp = true;
+            user = PUser.getCurrentUser();
+        }
 
         setUpActionBar();
 
         setUpEditText();
 
         setUpAbout();
-        setUpPhoto();
+        setUpProfilePhoto();
         setBackgroundPic();
         setUpBirtDate();
         setUpCountrySelection();
@@ -124,7 +136,10 @@ public class SignUpWithEmail extends Activity{
 
     private void setUpEditText() {
         mUserName = (EditText)findViewById(R.id.login_mail_name);
+        mUserName.setText(user.getUserName() != null?user.getUserName():"");
         mEmailView = (EditText)findViewById(R.id.email_sign_up_edit_text);
+        mEmailView.setText(user.getEmail() != null?user.getEmail():"");
+
         mPasswordView = (EditText)findViewById(R.id.password_sign_up_edit_text);
     }
 
@@ -135,6 +150,7 @@ public class SignUpWithEmail extends Activity{
 
     private void setBackgroundPic() {
         mBackgroundPhoto = (ParseImageView) findViewById(R.id.photo_background);
+
         (findViewById(R.id.change_background)).
                 setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,9 +158,16 @@ public class SignUpWithEmail extends Activity{
                         openGallery(SELECT_BACKGROUND_PICTURE);
                     }
                 });
+
+        if(user.getCoverPicture() == null)
+            mBackgroundPhoto.setImageResource(R.drawable.bg_profile_cover);
+        else {
+            mBackgroundPhoto.setParseFile(user.getCoverPicture());
+            mBackgroundPhoto.loadInBackground();
+        }
     }
 
-    private void setUpPhoto() {
+    private void setUpProfilePhoto() {
         mPhoto = (RoundedImageView)findViewById(R.id.photo);
         mPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +175,15 @@ public class SignUpWithEmail extends Activity{
                 openGallery(SELECT_PROFILE_PICTURE);
             }
         });
+
+        if(user.getProfilePicture() == null) {
+            mPhoto.setImageResource(R.drawable.profile_empty_edit_new);
+            profilePhotoAttached = false;
+        }else{
+            mPhoto.setParseFile(user.getProfilePicture());
+            mPhoto.loadInBackground();
+            profilePhotoAttached = true;
+        }
     }
 
     private void openGallery(int openPurpose) {
@@ -178,6 +210,7 @@ public class SignUpWithEmail extends Activity{
 //                        mPhoto.setImageBitmap(conv_bm);
                         mPhoto.setImageBitmap(scaledDownIfLarge(selectedImagePathProfile));
 //                        mBackgroundPhoto.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                        profilePhotoAttached = true;
                     }
                 }
 
@@ -432,7 +465,7 @@ public class SignUpWithEmail extends Activity{
             cancel = true;
         }
 
-        if(selectedImagePathProfile == null)
+        if(!profilePhotoAttached)
         {
             warnTheUser();
             return;
@@ -507,6 +540,7 @@ public class SignUpWithEmail extends Activity{
             parseUser.setGender(maleBox.isChecked()?"Male":"Female");
             parseUser.setDateOfBirth(birthCalender.getTime());
             parseUser.setNationality(selectedCountry);
+            parseUser.setCountryCode(new CountryCodes().getCode(selectedCountry));
             if(homeTown.getText().toString() != null )
                 parseUser.setHometown(homeTown.getText().toString());
             if(travellerTypeList.length > 0)
@@ -514,24 +548,29 @@ public class SignUpWithEmail extends Activity{
             if(aboutUser.getText().toString() != null )
                 parseUser.setShortDescription(aboutUser.getText().toString());
 
-            ParseFile saveProfileFile= new ParseFile(
-                    "profilePicture.jpg",compressAndConvertImageToByteFrom(
-                    BitmapFactory.decodeFile(selectedImagePathProfile)));
-            parseUser.setProfilePicture(saveProfileFile);
+
+            if(selectedImagePathProfile != null){
+                ParseFile saveProfileFile= new ParseFile(
+                        "profilePicture.jpg",compressAndConvertImageToByteFrom(
+                        BitmapFactory.decodeFile(selectedImagePathProfile)));
+                parseUser.setProfilePicture(saveProfileFile);
+            }
 
             ParseFile saveCoverFile = null;
-            if(selectedImagePathCover != null)
+            if(selectedImagePathCover != null){
                 saveCoverFile = new ParseFile("coverPicture.jpg",
                         compressAndConvertImageToByteFrom(
                                 BitmapFactory.decodeFile(selectedImagePathCover)));
-            else
+                parseUser.setCoverPicture(saveCoverFile);
+            }
+            else if(!alreadySignUp){
                 saveCoverFile = new ParseFile("coverPicture.jpg"
                         ,compressAndConvertImageToByteFrom(
                         BitmapFactory.decodeResource(getResources(),
                                 R.drawable.bg_profile_cover)));
+                parseUser.setCoverPicture(saveCoverFile);
+            }
 
-//            parseUser.put("backGroundImage",saveCoverFile);
-            parseUser.setCoverPicture(saveCoverFile);
             parseUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -562,23 +601,43 @@ public class SignUpWithEmail extends Activity{
                 SignUpWithEmail.this, "", "Logging in...", true);
 
         Toast.makeText(getApplicationContext(), mUsername + " - " + mEmail, Toast.LENGTH_SHORT).show();
-        ParseUser user = new ParseUser();
+
         user.setUsername(mUsername);
         user.setPassword(mPassword);
         user.setEmail(mEmail);
 
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    setUpUserFields();
-                } else {
-                    // Sign up didn't succeed. Look at the ParseException
-                    // to figure out what went wrong
-                    dissmissProgress();
-                    signUpMsg("Account already taken.");
+        if(!alreadySignUp){
+            user.signUpInBackground(new SignUpCallback() {
+                public void done(ParseException e) {
+                    if (e == null) {
+                        setUpUserFields();
+                    } else {
+                        // Sign up didn't succeed. Look at the ParseException
+                        // to figure out what went wrong
+                        dissmissProgress();
+                        signUpMsg("Account already taken.");
+                        LOGD(TAG, "singUp-signUpInBackground: " + e.getMessage());
+                    }
                 }
-            }
-        });
+            });
+        }
+        else{
+            user.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        setUpUserFields();
+                    } else {
+                        // Sign up didn't succeed. Look at the ParseException
+                        // to figure out what went wrong
+                        dissmissProgress();
+                        LOGD(TAG, "singUp-saveInBackground: " + e.getMessage());
+                    }
+                }
+            });
+        }
+
+
     }
 
     private void dissmissProgress() {

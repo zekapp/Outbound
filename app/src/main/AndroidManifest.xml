@@ -29,7 +29,7 @@
         </receiver>
 
         <activity
-            android:name=".view.DispatchActivity"
+            android:name=".DispatchActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" >
             <intent-filter>

@@ -181,8 +181,4 @@ public class PUser extends ParseUser{
         else
             return -1;
     }
-
-    public int pendingFriendRequestCount() {
-        return 0;
-    }
 }

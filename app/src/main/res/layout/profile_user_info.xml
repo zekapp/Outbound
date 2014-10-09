@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/test_flag"
                 android:layout_gravity="center"
-                android:padding="10dp"/>
+                android:padding="7dp"/>
             <TextView
                 android:id="@+id/profile_name"
                 android:layout_width="wrap_content"

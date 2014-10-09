@@ -16,9 +16,7 @@ import android.widget.Toast;
 
 import com.outbound.R;
 import com.outbound.util.ConnectionDetector;
-import com.outbound.view.BaseActivity;
-import com.outbound.view.BaseFragment;
-import com.outbound.view.DispatchActivity;
+import com.outbound.DispatchActivity;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;

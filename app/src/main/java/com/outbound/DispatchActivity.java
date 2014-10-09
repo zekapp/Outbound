@@ -21,14 +21,18 @@
  *
  */
 
-package com.outbound.view;
+package com.outbound;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.outbound.loginSignUp.LoginWithEmail;
+import com.outbound.loginSignUp.SignUpWithEmail;
 import com.outbound.loginSignUp.WelcomePage;
+import com.outbound.model.PUser;
 import com.outbound.util.Constants.*;
+import com.outbound.view.BaseActivity;
 import com.parse.ParseUser;
 
 import static com.outbound.util.LogUtils.*;
@@ -51,19 +55,27 @@ public class DispatchActivity extends Activity {
 
             // Start an intent for the dispatch activity
 
-
-            /*T
-            *
-            */
             /*
             * Todo: if user not set the email and age and profile picture direct him/her to the
             * signUpVia email activity
             * */
-            Intent intent = new Intent(this, BaseActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Extra.IS_LAUNCHER, true);
-            startActivity(intent);
+
+            PUser parseUser = PUser.getCurrentUser();
+
+            if(parseUser.getEmail() == null || parseUser.getDateOfBirth() == null ||
+                    parseUser.getNationality() == null ){
+                Intent intent = new Intent(this, SignUpWithEmail.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else{
+                // if not log out
+                Intent intent = new Intent(this, BaseActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Extra.IS_LAUNCHER, true);
+                startActivity(intent);
+            }
 		} else {
 			// Start and intent for the logged out activity
 			LOGD(TAG, "onCreate, no user");

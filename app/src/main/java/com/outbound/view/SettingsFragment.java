@@ -16,9 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PUser;
+import com.outbound.ui.util.CityDialog;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.TravellerTypeDialog;
@@ -34,6 +37,8 @@ public class SettingsFragment extends BaseFragment {
     private static final int SELECT_PROFILE_PICTURE = 1;
     private static final int SELECT_BACKGROUND_PICTURE = 2;
 
+    private String selectedCountryCode;
+
     private String selectedImagePath;
     private String filemanagerstring;
     private RoundedImageView mPhoto;
@@ -48,6 +53,10 @@ public class SettingsFragment extends BaseFragment {
     private String[] prefTypeList;
     private boolean[] prefTypeBooleanList;
     private ArrayList<Integer> prefSelList = new ArrayList<Integer>();
+
+
+    //PUser
+    private PUser currentUser = PUser.getCurrentUser();
 
 
     @Override
@@ -87,12 +96,12 @@ public class SettingsFragment extends BaseFragment {
         setUpPhoto(view);
         setBackgroundPic(view);
         setUpNationality(view);
+        setUpHomeTown(view);
         setUpTravellerType(view);
         setUpSexualPreferences(view);
 
         return view;
     }
-
     private void setUpSexualPreferences(View view) {
         prefTypeList = getActivity().getResources().getStringArray(R.array.sexual_preference_type);
         prefTypeBooleanList = new boolean[prefTypeList.length];
@@ -211,7 +220,8 @@ public class SettingsFragment extends BaseFragment {
 
     private void setUpNationality(View view) {
         Button nationalityButton = (Button)view.findViewById(R.id.s_nationality_button);
-
+        selectedCountryCode = currentUser.getCountryCode();
+        nationalityButton.setHint(currentUser.getNationality());
         nationalityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,12 +230,35 @@ public class SettingsFragment extends BaseFragment {
         });
     }
 
+    private void setUpHomeTown(View view) {
+        (view.findViewById(R.id.s_hometown))
+        .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedCountryCode != null)
+                    openCityDialog(v);
+            }
+        });
+    }
+
+    private void openCityDialog(final View v) {
+        CityDialog cd = new CityDialog(getActivity(), selectedCountryCode);
+        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+            @Override
+            public void onCitySelected(String countryName, String countryCode, String cityName) {
+                ((Button)v).setHint(cityName);
+            }
+        });
+        cd.show();
+    }
+
     private void openCountryDialog(final View v) {
         CountryDialog cd = new CountryDialog(getActivity());
         cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);
+                selectedCountryCode = countryCode;
             }
         });
         cd.show();

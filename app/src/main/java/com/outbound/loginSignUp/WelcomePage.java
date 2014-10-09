@@ -7,9 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.method.LinkMovementMethod;
@@ -26,13 +23,12 @@ import com.facebook.model.GraphUser;
 import com.nvanbenschoten.motion.ParallaxImageView;
 import com.outbound.R;
 import com.outbound.model.PUser;
-import com.outbound.view.DispatchActivity;
+import com.outbound.DispatchActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -43,13 +39,10 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
 
@@ -283,7 +276,7 @@ public class WelcomePage extends Activity {
 
         URL img_value = null;
         try {
-            img_value = new URL("https://graph.facebook.com/"+facebookUser.getId()+"/picture?type=small");
+            img_value = new URL("https://graph.facebook.com/"+facebookUser.getId()+"/picture?type=large");
         } catch (MalformedURLException e){
             // TODO Auto-generated catch block
             e.printStackTrace();

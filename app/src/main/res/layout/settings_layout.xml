@@ -28,8 +28,8 @@
 
             <com.outbound.ui.util.RoundedImageView
                 android:id="@+id/s_photo"
-                android:layout_width="133dp"
-                android:layout_height="133dp"
+                android:layout_width="@dimen/profile_picture_width"
+                android:layout_height="@dimen/profile_picture_height"
                 android:layout_centerInParent="true"
                 android:cropToPadding="true"
                 android:layout_marginTop="15pt"
@@ -37,10 +37,10 @@
                 android:padding="10dip"
                 android:src="@drawable/profile_empty_edit_new"
                 android:scaleType="fitXY"
-                app:corner_radius="10dip"
-                app:border_width="3dip"
+                app:corner_radius="@dimen/profile_picture_radius"
+                app:border_width="@dimen/profile_picture_border_width"
                 app:oval="false"
-                app:border_color="@color/white"/>
+                app:border_color="@color/profile_picture_border_color"/>
 
 
             <ImageView
@@ -155,6 +155,7 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/s_hometown_selection"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal">
@@ -165,14 +166,15 @@
                 android:src="@drawable/list_hometown"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/icon_margin_left"/>
-            <EditText
+            <Button
+                style="?android:attr/spinnerStyle"
                 android:id="@+id/s_hometown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
-                android:inputType="textEmailAddress"
+                android:paddingLeft="13dp"
                 android:hint="Hometown (optional)"/>
         </LinearLayout>
 
