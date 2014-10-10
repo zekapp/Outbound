@@ -31,10 +31,8 @@
                 android:layout_width="@dimen/profile_picture_width"
                 android:layout_height="@dimen/profile_picture_height"
                 android:layout_centerInParent="true"
-                android:cropToPadding="true"
                 android:layout_marginTop="15pt"
                 android:layout_centerHorizontal="true"
-                android:padding="10dip"
                 android:src="@drawable/profile_empty_edit_new"
                 android:scaleType="fitXY"
                 app:corner_radius="@dimen/profile_picture_radius"
@@ -119,7 +117,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"
-                android:inputType="numberPassword"
+                android:inputType="textPassword"
                 android:text="Password"/>
         </LinearLayout>
 

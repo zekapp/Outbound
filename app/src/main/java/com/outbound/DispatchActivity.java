@@ -32,6 +32,7 @@ import com.outbound.loginSignUp.SignUpWithEmail;
 import com.outbound.loginSignUp.WelcomePage;
 import com.outbound.model.PUser;
 import com.outbound.util.Constants.*;
+import com.outbound.util.DBManager;
 import com.outbound.view.BaseActivity;
 import com.parse.ParseUser;
 
@@ -41,11 +42,19 @@ import static com.outbound.util.LogUtils.*;
 public class DispatchActivity extends Activity {
     private static final String TAG = makeLogTag(DispatchActivity.class);
 
+    private DBManager db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		// Check if there is current user info
+        db  = new DBManager(this);
+        if(db.isFirstInitialize()){
+            Intent intent = new Intent(this, WelcomePage.class);
+            startActivity(intent);
+            return;
+        }
+
 		if (ParseUser.getCurrentUser() != null) {
 			// Start an intent for the logged in activity
 

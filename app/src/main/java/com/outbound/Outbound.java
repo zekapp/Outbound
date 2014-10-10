@@ -35,6 +35,7 @@ public class Outbound extends Application {
         ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
 
         instance = this;
+
     }
     public static Outbound getInstance(){
         Log.i("getInstance", "called by");

@@ -24,6 +24,7 @@ import com.nvanbenschoten.motion.ParallaxImageView;
 import com.outbound.R;
 import com.outbound.model.PUser;
 import com.outbound.DispatchActivity;
+import com.outbound.util.DBManager;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -54,11 +55,14 @@ public class WelcomePage extends Activity {
     private static final String TAG = makeLogTag(WelcomePage.class);
     private Dialog progressDialog;
     private ParallaxImageView mBackground;
+    private DBManager db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_activiy);
+
+
 
         TextView tos = (TextView) findViewById(R.id.tos);
         tos.setMovementMethod(LinkMovementMethod.getInstance());
@@ -113,7 +117,30 @@ public class WelcomePage extends Activity {
                 startActivity(intent);
             }
         });
+
+        db = new DBManager(this);
+        if(db.isFirstInitialize())
+            initilizeDatabase();
     }
+
+    private void initilizeDatabase() {
+        LOGD(TAG,"initilizeDatabase: first init");
+        WelcomePage.this.progressDialog = ProgressDialog.show(
+                WelcomePage.this, "", "Database initializing...", true);
+        db.addGenerateDbForCityCountryListener(new DBManager.DbInitListener() {
+            @Override
+            public void onDbInit(boolean res) {
+                LOGD(TAG,"initilizeDatabase: res: " + res);
+                WelcomePage.this.progressDialog.dismiss();
+                if(res)
+                    db.setAsDbInitialized(false);
+                else
+                    finish();
+            }
+        });
+
+    }
+
 
     @Override
     protected void onResume() {

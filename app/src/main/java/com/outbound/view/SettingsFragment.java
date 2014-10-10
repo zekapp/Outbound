@@ -11,10 +11,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,18 +27,36 @@ import com.outbound.ui.util.CityDialog;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.TravellerTypeDialog;
+import com.outbound.util.CountryCodes;
+import com.outbound.util.LogUtils;
 import com.parse.ParseImageView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 24/09/2014.
  */
 public class SettingsFragment extends BaseFragment {
+    private static final String TAG = makeLogTag(SettingsFragment.class);
 
     private static final int SELECT_PROFILE_PICTURE = 1;
     private static final int SELECT_BACKGROUND_PICTURE = 2;
 
+    private EditText aboutUser;
+    private Button homeTown;
+    private String selectedCountry = null;
+
+    private Button countrySelectionButton;
+    private EditText mEmailView;
+    private EditText mUserName;
+    private EditText mPasswordView;
+
+    private boolean profilePhotoAttached = false;
+    private String selectedCity = null;
     private String selectedCountryCode;
 
     private String selectedImagePath;
@@ -56,7 +76,7 @@ public class SettingsFragment extends BaseFragment {
 
 
     //PUser
-    private PUser currentUser = PUser.getCurrentUser();
+    private PUser user = PUser.getCurrentUser();
 
 
     @Override
@@ -86,21 +106,170 @@ public class SettingsFragment extends BaseFragment {
                 mCallbacks.backIconClicked();
             }
         });
+
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attempToSingUp();
+            }
+        });
     }
+
+    private void attempToSingUp() {
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+        mUserName.setError(null);
+        countrySelectionButton.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        String username = mUserName.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        //check for name is filled
+        if(TextUtils.isEmpty(username)){
+            mUserName.setError(getString(R.string.error_field_required));
+            focusView = mUserName;
+            cancel = true;
+        }
+
+        if(selectedCountry == null){
+            countrySelectionButton.setError(getString(R.string.error_invalid_country));
+            focusView = countrySelectionButton;
+            cancel = true;
+        }
+
+        if(!profilePhotoAttached)
+        {
+            warnTheUser();
+            return;
+        }
+
+        if(cancel){
+            focusView.requestFocus();
+        }else{
+            try{
+                update(username,email,password);
+            }catch (Exception e){
+                LOGD(TAG, "attempToSingUp() : " + e.getMessage());
+            }
+        }
+
+    }
+
+    private void update(String name, String email, String password) {
+        user.setUserName(name);
+        user.setEmail(email);
+        if(password!=null)
+            user.setPassword(password);
+        user.setNationality(selectedCountry);
+        user.setCountryCode(new CountryCodes().getCode(selectedCountry));
+        if(homeTown.getText().toString() != null )
+            user.setHometown(homeTown.getText().toString());
+        if(travSelList.size() > 0)
+            user.setTravelerType(getTravTypeArray(travSelList));
+        if(aboutUser.getText().toString() != null )
+            user.setShortDescription(aboutUser.getText().toString());
+        if(prefSelList.size()>0)
+            user.setSexualPref(getSexTypeArray(prefSelList));
+    }
+
+    private String[] getSexTypeArray(ArrayList<Integer> prefSelList) {
+        String[] types = new String[prefSelList.size()];
+        int i= 0;
+        for(Integer item:prefSelList){
+            types[i] = prefTypeList[item];
+            i++;
+        }
+        return types;
+    }
+
+    private String[] getTravTypeArray(ArrayList<Integer> travList) {
+        String[] types = new String[travList.size()];
+        int i= 0;
+        for(Integer item:travList){
+            types[i] = travellerTypeList[item];
+            i++;
+        }
+        return types;
+    }
+
+    private void warnTheUser() {
+        final AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+        ad.setTitle("Missing Profile Picture")
+                .setMessage("Please select a profile picture")
+                .setPositiveButton("Ok, Let's do this", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        openGallery(SELECT_PROFILE_PICTURE);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
+    }
+
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+    private boolean isPasswordValid(String password) {
+        return password.length() > 4;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.settings_layout, container, false);
 
-        setUpPhoto(view);
+        setUpAbout(view);
+        setUpEditText(view);
+        setUpProfilePhoto(view);
         setBackgroundPic(view);
-        setUpNationality(view);
+        setUpCountrySelection(view);
         setUpHomeTown(view);
         setUpTravellerType(view);
         setUpSexualPreferences(view);
 
         return view;
+    }
+
+    private void setUpAbout(View v) {
+        aboutUser = (EditText)v.findViewById(R.id.s_about_yourself);
+    }
+
+    private void setUpEditText(View v) {
+        mUserName = (EditText)v.findViewById(R.id.s_user_name);
+        mUserName.setText(user.getUserName() != null?user.getUserName():"");
+        mEmailView = (EditText)v.findViewById(R.id.s_email);
+        mEmailView.setText(user.getEmail() != null?user.getEmail():"");
+
+        mPasswordView = (EditText)v.findViewById(R.id.s_password);
     }
     private void setUpSexualPreferences(View view) {
         prefTypeList = getActivity().getResources().getStringArray(R.array.sexual_preference_type);
@@ -170,6 +339,28 @@ public class SettingsFragment extends BaseFragment {
                 openTravellerDialog(v);
             }
         });
+
+        String msg = "";
+        List<String> travellerType = user.getTravelerType();
+        travSelList.clear();
+        if(travellerType!=null) {
+            for (int i=0; i<travellerTypeList.length;i++) {
+                if(travellerType.contains(travellerTypeList[i])){
+
+                    if(i == travellerType.size() - 1)
+                        msg=msg + travellerType.get(i);
+                    else
+                        msg=msg + travellerType.get(i) + ", ";
+
+                    trvTypeBooleanList[i] = true;
+                    travSelList.add(i);
+                }else
+                    trvTypeBooleanList[i] = false;
+
+            }
+
+            btn.setHint(msg.isEmpty()?"Select":msg);
+        }
     }
 
     private void openTravellerDialog(final View v) {
@@ -218,24 +409,47 @@ public class SettingsFragment extends BaseFragment {
         }).show();
     }
 
-    private void setUpNationality(View view) {
-        Button nationalityButton = (Button)view.findViewById(R.id.s_nationality_button);
-        selectedCountryCode = currentUser.getCountryCode();
-        nationalityButton.setHint(currentUser.getNationality());
-        nationalityButton.setOnClickListener(new View.OnClickListener() {
+    private void setUpCountrySelection(final View view) {
+        countrySelectionButton = (Button)view.findViewById(R.id.s_nationality_button);
+        selectedCountryCode = user.getCountryCode();
+        selectedCountry = new Locale("",selectedCountryCode).getCountry().trim();
+        countrySelectionButton.setHint(user.getNationality());
+        countrySelectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteSelectedCity(view);
                 openCountryDialog(v);
             }
         });
     }
 
+    private void deleteSelectedCity(View view) {
+        if(homeTown == null)
+            homeTown = (Button)view.findViewById(R.id.s_hometown);
+
+        homeTown.setHint("Select (optional)");
+
+        selectedCity = null;
+    }
+
     private void setUpHomeTown(View view) {
-        (view.findViewById(R.id.s_hometown))
-        .setOnClickListener(new View.OnClickListener() {
+        if(homeTown == null)
+            homeTown = (Button)view.findViewById(R.id.s_hometown);
+
+        selectedCity = user.getHometown();
+        if(selectedCity == null )
+            homeTown.setHint("Select (optional)");
+        else{
+            if(!selectedCity.isEmpty())
+                homeTown.setHint(selectedCity);
+            else
+                homeTown.setHint("Select (optional)");
+        }
+
+        homeTown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(selectedCountryCode != null)
+                if (selectedCountryCode != null)
                     openCityDialog(v);
             }
         });
@@ -275,9 +489,15 @@ public class SettingsFragment extends BaseFragment {
                         openGallery(SELECT_BACKGROUND_PICTURE);
                     }
                 });
+        if(user.getCoverPicture() == null)
+            mBackgroundPhoto.setImageResource(R.drawable.bg_profile_cover);
+        else {
+            mBackgroundPhoto.setParseFile(user.getCoverPicture());
+            mBackgroundPhoto.loadInBackground();
+        }
     }
 
-    private void setUpPhoto(View view) {
+    private void setUpProfilePhoto(View view) {
         mPhoto = (RoundedImageView) view.findViewById(R.id.s_photo);
         mPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,6 +505,15 @@ public class SettingsFragment extends BaseFragment {
                 openGallery(SELECT_PROFILE_PICTURE);
             }
         });
+
+        if(user.getProfilePicture() == null) {
+            mPhoto.setImageResource(R.drawable.profile_empty_edit_new);
+            profilePhotoAttached = false;
+        }else{
+            mPhoto.setParseFile(user.getProfilePicture());
+            mPhoto.loadInBackground();
+            profilePhotoAttached = true;
+        }
     }
 
     private void openGallery(int openPurpose){

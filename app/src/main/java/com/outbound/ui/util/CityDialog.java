@@ -1,8 +1,8 @@
 package com.outbound.ui.util;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -11,20 +11,13 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.outbound.R;
-import com.outbound.model.City;
 import com.outbound.ui.util.adapters.CityAdapter;
-import com.outbound.util.LogUtils;
+import com.outbound.util.DBManager;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import static com.outbound.util.LogUtils.*;
 
@@ -37,6 +30,7 @@ public class CityDialog extends Dialog{
     private CityAdapter mAdapter;
     private String countryCode;
     private SearchView search;
+    private Dialog progressDialog;
 
     public interface CityDialogListener {
         void onCitySelected(String countryName, String countryCode, String cityName);
@@ -59,7 +53,7 @@ public class CityDialog extends Dialog{
     }
 
     private void setUpSearch() {
-        search = (SearchView) findViewById(R.id.search_country);
+        search = (SearchView) findViewById(R.id.search_city);
         search.setIconifiedByDefault(false);
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -86,52 +80,66 @@ public class CityDialog extends Dialog{
         });
     }
 
-    private void setUpAdapter() {
-//        ArrayList<City> cityList = generateCityList();
-        ArrayList<City> cityList = generateCityListFrom(countryCode);
-        mAdapter = new CityAdapter(getContext(), cityList);
-    }
+    private void setUpAdapter(final ListView ltv) {
+        CityDialog.this.progressDialog = ProgressDialog.show(
+                getContext(), "", "Fetching Cities...", true);
 
-    private ArrayList<City> generateCityListFrom(String countryCode) {
-        return null;
-    }
-
-    private ArrayList<City> generateCityList() {
-        String next[] = {};
-        ArrayList<City> cityArrayList = new ArrayList<City>();
-        try{
-            AssetManager mng = getContext().getAssets();
-            InputStream is = mng.open("GeoLiteCityLocation.csv");
-            CSVReader reader = new CSVReader(new InputStreamReader(is));
-
-            for(;;){
-                next = reader.readNext();
-                if(next != null){
-                    if(next[0].compareTo(countryCode) == 0){
-                        City city = new City();
-                        city.setCityName(next[1]);
-                        cityArrayList.add(city);
-                    }
-                }
+        DBManager db = new DBManager(getContext());
+        db.addCityFetcherListener(countryCode, new DBManager.DbFetchingListener() {
+            @Override
+            public void onCitiesFetched(ArrayList<String> cities) {
+                mAdapter = new CityAdapter(getContext(), cities);
+                ltv.setAdapter(mAdapter);
+                dismissProgress();
             }
-        }catch(IOException ioe){
-            LOGD(TAG,"generateCityList: " + ioe.getMessage());
-        }
 
-        return cityArrayList;
+            @Override
+            public void onError(String e) {
+                dismissProgress();
+            }
+        });
     }
+
+    private void dismissProgress() {
+        CityDialog.this.progressDialog.dismiss();
+    }
+
+//    private ArrayList<City> generateCityList() {
+//        String next[] = {};
+//        ArrayList<City> cityArrayList = new ArrayList<City>();
+//        try{
+//            AssetManager mng = getContext().getAssets();
+//            InputStream is = mng.open("GeoLiteCityLocation.csv");
+//            CSVReader reader = new CSVReader(new InputStreamReader(is));
+//
+//            for(;;){
+//                next = reader.readNext();
+//                if(next != null){
+//                    if(next[0].compareTo(countryCode) == 0){
+//                        City city = new City();
+//                        city.setCityName(next[1]);
+//                        cityArrayList.add(city);
+//                    }
+//                }else
+//                    break;
+//            }
+//        }catch(IOException ioe){
+//            LOGD(TAG,"generateCityList: " + ioe.getMessage());
+//        }
+//
+//        return cityArrayList;
+//    }
 
     private void setUpListView() {
         ListView ltv = (ListView)findViewById(R.id.list_view_city);
-        setUpAdapter();
-        ltv.setAdapter(mAdapter);
+        setUpAdapter(ltv);
         ltv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 for (CityDialogListener listener : listeners) {
                     if (listener != null) {
-                        City city = (City)parent.getAdapter().getItem(position);
-                        listener.onCitySelected(new Locale("",countryCode).getDisplayName(), countryCode, city.getCityName());
+                        String city = (String)parent.getAdapter().getItem(position);
+                        listener.onCitySelected(new Locale("",countryCode).getDisplayName(), countryCode, city);
                         dismiss();
                     }
                 }

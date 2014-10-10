@@ -90,6 +90,8 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                     mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_FRAG_ID,null,null);
             }
         });
+
+
     }
 
     @Override

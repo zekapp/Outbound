@@ -105,5 +105,6 @@
     <string name="error_invalid_date">This field is invalid</string>
     <string name="error_invalid_country">This field required</string>
     <string name="preferences_key_country">country_</string>
+    <string name="preferences_key_is_first_init">is_first_init</string>
 
 </resources>

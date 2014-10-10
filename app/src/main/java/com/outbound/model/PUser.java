@@ -89,16 +89,16 @@ public class PUser extends ParseUser{
     public String getSexualPref(){
         return getString("sexualPreference");
     }
-    public void setSexualPref(String sex){
-        put("sexualPreference", sex);
+    public void setSexualPref(String[] sex){
+        put("sexualPreference", Arrays.asList(sex));
     }
 
     //TravelerType
     public List<String> getTravelerType(){
         return getList("travelType");
     }
-    public void setTravelerType(String[] sex){
-        put("travelType", Arrays.asList(sex));
+    public void setTravelerType(String[] type){
+        put("travelType", Arrays.asList(type));
     }
 
     //CurrentLocation

@@ -319,9 +319,14 @@ public class SignUpWithEmail extends Activity{
         countrySelectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteSelectedCity();
                 showCountryPickerDialog(v);
             }
         });
+    }
+
+    private void deleteSelectedCity() {
+
     }
 
     private void setUpBirtDate() {
@@ -461,7 +466,7 @@ public class SignUpWithEmail extends Activity{
 
         if(selectedCountry == null){
             countrySelectionButton.setError(getString(R.string.error_invalid_country));
-            focusView = birthDateButton;
+            focusView = countrySelectionButton;
             cancel = true;
         }
 
@@ -486,7 +491,8 @@ public class SignUpWithEmail extends Activity{
 //                parseUser.put("username", username);
 //                parseUser.put("email",email);
 
-                singUp(username.toLowerCase(Locale.getDefault()),email,password);
+//                singUp(username.toLowerCase(Locale.getDefault()),email,password);
+                singUp(username,email,password);
             }
             catch (Exception e){
                 LOGD(TAG, "attempToSingUp: " + e.getMessage());
@@ -543,8 +549,8 @@ public class SignUpWithEmail extends Activity{
             parseUser.setCountryCode(new CountryCodes().getCode(selectedCountry));
             if(homeTown.getText().toString() != null )
                 parseUser.setHometown(homeTown.getText().toString());
-            if(travellerTypeList.length > 0)
-                parseUser.setTravelerType(travellerTypeList);
+            if(travSelList.size() > 0)
+                parseUser.setTravelerType(getTravTypeArray(travSelList));
             if(aboutUser.getText().toString() != null )
                 parseUser.setShortDescription(aboutUser.getText().toString());
 
@@ -593,6 +599,16 @@ public class SignUpWithEmail extends Activity{
             LOGD(TAG," setUpUserFields: " + e.getMessage());
         }
 
+    }
+
+    private String[] getTravTypeArray(ArrayList<Integer> travList) {
+        String[] types = new String[travList.size()];
+        int i= 0;
+        for(Integer item:travList){
+            types[i] = travellerTypeList[item];
+            i++;
+        }
+        return types;
     }
 
     private void singUp(final String mUsername, String mEmail, String mPassword) {
