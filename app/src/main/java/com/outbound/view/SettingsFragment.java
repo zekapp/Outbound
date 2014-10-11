@@ -3,6 +3,8 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.outbound.R;
@@ -27,9 +30,14 @@ import com.outbound.ui.util.CityDialog;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.TravellerTypeDialog;
+import com.outbound.util.ConnectionDetector;
+import com.outbound.util.Constants;
 import com.outbound.util.CountryCodes;
 import com.outbound.util.LogUtils;
+import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +53,10 @@ public class SettingsFragment extends BaseFragment {
 
     private static final int SELECT_PROFILE_PICTURE = 1;
     private static final int SELECT_BACKGROUND_PICTURE = 2;
+
+    private RadioButton viewedByAll;
+    private RadioButton viewedByMale;
+    private RadioButton viewedByFemale;
 
     private EditText aboutUser;
     private Button homeTown;
@@ -79,6 +91,14 @@ public class SettingsFragment extends BaseFragment {
     private PUser user = PUser.getCurrentUser();
 
 
+    ConnectionDetector cd;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cd = new ConnectionDetector(getActivity());
+    }
+
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
@@ -110,12 +130,21 @@ public class SettingsFragment extends BaseFragment {
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attempToSingUp();
+                attempToUpdate();
+
             }
         });
     }
 
-    private void attempToSingUp() {
+    private void attempToUpdate() {
+        if(cd.isConnectingToInternet())
+            updateUser();
+        else
+            showAlertDialog("No Internet Connection",
+                    "You don't have internet connection.", false);
+    }
+
+    private void updateUser() {
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -180,20 +209,55 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void update(String name, String email, String password) {
+
+        startProgress("User Profile Updating...");
+
         user.setUserName(name);
         user.setEmail(email);
         if(password!=null)
             user.setPassword(password);
         user.setNationality(selectedCountry);
-        user.setCountryCode(new CountryCodes().getCode(selectedCountry));
-        if(homeTown.getText().toString() != null )
-            user.setHometown(homeTown.getText().toString());
+        user.setCountryCode(new CountryCodes().getCode(selectedCountry).trim());
+        if(selectedCity != null )
+            user.setHometown(selectedCity);
         if(travSelList.size() > 0)
             user.setTravelerType(getTravTypeArray(travSelList));
         if(aboutUser.getText().toString() != null )
             user.setShortDescription(aboutUser.getText().toString());
         if(prefSelList.size()>0)
             user.setSexualPref(getSexTypeArray(prefSelList));
+        user.setViewedBy(viewedByAll.isChecked()?
+                "All":viewedByMale.isChecked()?"Male":"Female");
+
+        //public location
+        //blocked Users
+        //deactivate account
+        //About Us
+        //Terms and conditions
+        //Privacy Policy
+        //Logout
+
+        user.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                finishProgress();
+
+                if(e == null)
+                    updateSuccessful();
+                else
+                    updateFailed(e.getMessage());
+            }
+        });
+
+    }
+
+    private void updateFailed(String msg) {
+        showToastMessage(msg);
+    }
+
+    private void updateSuccessful() {
+        if(mCallbacks != null)
+            mCallbacks.deployFragment(Constants.TAB_BAR_ITEM_PROFILE_FRAG_ID, null, null);
     }
 
     private String[] getSexTypeArray(ArrayList<Integer> prefSelList) {
@@ -255,8 +319,27 @@ public class SettingsFragment extends BaseFragment {
         setUpHomeTown(view);
         setUpTravellerType(view);
         setUpSexualPreferences(view);
+        setUpViewedBy(view);
+        logout(view);
 
         return view;
+    }
+
+    private void logout(View view) {
+        view.findViewById(R.id.s_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PUser.logOut();
+                if(mCallbacks != null)
+                    mCallbacks.logOut();
+            }
+        });
+    }
+
+    private void setUpViewedBy(View view) {
+        viewedByAll =(RadioButton)view.findViewById(R.id.s_viewed_all);
+        viewedByMale =(RadioButton)view.findViewById(R.id.s_viewed_male);
+        viewedByFemale =(RadioButton)view.findViewById(R.id.s_viewed_female);
     }
 
     private void setUpAbout(View v) {
@@ -343,17 +426,19 @@ public class SettingsFragment extends BaseFragment {
         String msg = "";
         List<String> travellerType = user.getTravelerType();
         travSelList.clear();
+        int bufCount = travellerType.size();
         if(travellerType!=null) {
             for (int i=0; i<travellerTypeList.length;i++) {
                 if(travellerType.contains(travellerTypeList[i])){
 
-                    if(i == travellerType.size() - 1)
-                        msg=msg + travellerType.get(i);
+                    if(bufCount == 1)
+                        msg=msg + travellerTypeList[i];
                     else
-                        msg=msg + travellerType.get(i) + ", ";
+                        msg=msg + travellerTypeList[i] + ", ";
 
                     trvTypeBooleanList[i] = true;
                     travSelList.add(i);
+                    bufCount--;
                 }else
                     trvTypeBooleanList[i] = false;
 
@@ -412,7 +497,7 @@ public class SettingsFragment extends BaseFragment {
     private void setUpCountrySelection(final View view) {
         countrySelectionButton = (Button)view.findViewById(R.id.s_nationality_button);
         selectedCountryCode = user.getCountryCode();
-        selectedCountry = new Locale("",selectedCountryCode).getCountry().trim();
+        selectedCountry = getCountryName();
         countrySelectionButton.setHint(user.getNationality());
         countrySelectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -421,6 +506,12 @@ public class SettingsFragment extends BaseFragment {
                 openCountryDialog(v);
             }
         });
+    }
+
+    private String getCountryName() {
+        Locale loc = new Locale("",selectedCountryCode);
+        return loc.getDisplayCountry().trim();
+
     }
 
     private void deleteSelectedCity(View view) {
@@ -461,6 +552,7 @@ public class SettingsFragment extends BaseFragment {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setHint(cityName);
+                selectedCity = cityName;
             }
         });
         cd.show();
@@ -473,6 +565,7 @@ public class SettingsFragment extends BaseFragment {
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);
                 selectedCountryCode = countryCode;
+                selectedCountry = countryName;
             }
         });
         cd.show();
@@ -540,6 +633,7 @@ public class SettingsFragment extends BaseFragment {
 //                        mPhoto.setImageBitmap(conv_bm);
                         mPhoto.setImageBitmap(scaledDownIfLarge(selectedImagePath));
 //                        mBackgroundPhoto.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                        profilePhotoAttached = true;
                     }
                 }
 

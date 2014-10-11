@@ -106,5 +106,8 @@
     <string name="error_invalid_country">This field required</string>
     <string name="preferences_key_country">country_</string>
     <string name="preferences_key_is_first_init">is_first_init</string>
+    <string name="unknown_activity_request_code">Received an unknown activity request code %1$d in onActivityResult.</string>
+    <string name="play_services_available"><![CDATA[play_services_available\">Google Play services is available]]></string>
+    <string name="no_geocoder_available">Cannot get address. No geocoder available.</string>
 
 </resources>

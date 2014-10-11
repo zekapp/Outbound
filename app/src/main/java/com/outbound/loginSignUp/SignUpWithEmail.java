@@ -546,7 +546,7 @@ public class SignUpWithEmail extends Activity{
             parseUser.setGender(maleBox.isChecked()?"Male":"Female");
             parseUser.setDateOfBirth(birthCalender.getTime());
             parseUser.setNationality(selectedCountry);
-            parseUser.setCountryCode(new CountryCodes().getCode(selectedCountry));
+            parseUser.setCountryCode(new CountryCodes().getCode(selectedCountry).trim());
             if(homeTown.getText().toString() != null )
                 parseUser.setHometown(homeTown.getText().toString());
             if(travSelList.size() > 0)

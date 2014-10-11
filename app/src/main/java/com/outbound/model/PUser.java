@@ -79,10 +79,10 @@ public class PUser extends ParseUser{
 
     //Hometown
     public String getHometown(){
-        return getString("hometown");
+        return getString("homeTown");
     }
-    public void setHometown(String nationality){
-        put("hometown", nationality);
+    public void setHometown(String hometown){
+        put("homeTown", hometown);
     }
 
     //SexualPref
@@ -151,10 +151,10 @@ public class PUser extends ParseUser{
 
     //ViewedBy
     public String getViewedBy(){
-        return getString("viewerBy");
+        return getString("viewedBy");
     }
     public void setViewedBy(String viewedBy){
-        put("viewerBy", viewedBy);
+        put("viewedBy", viewedBy);
     }
 
     //CurrentCity

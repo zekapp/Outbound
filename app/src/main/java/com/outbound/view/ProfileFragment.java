@@ -3,8 +3,10 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Address;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -31,6 +33,7 @@ import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.UIUtils;
 import com.outbound.ui.util.ZoomOutPageTransformer;
 import com.outbound.util.Constants;
+import com.outbound.util.FindAddressCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -42,10 +45,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.outbound.util.LogUtils.*;
+
 /**
  * Created by zeki on 2/09/2014.
  */
 public class ProfileFragment extends BaseFragment implements ProfilePictureFragment.Listener, ProfileAboutFragment.Listener {
+    private static final String TAG = makeLogTag(BaseFragment.class);
 
     private static final String ARG_PROFILE_INDEX
             = "com.outbound.ARG_PROFILE_INDEX";
@@ -61,6 +67,9 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
     private PUser currentUser = PUser.getCurrentUser();
     private View dots[] = new View[2];
+
+    private Runnable action;
+    private TextView currenLocText;
 
     @Override
     protected void setUp(Object param1, Object param2) {
@@ -90,8 +99,6 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                     mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_FRAG_ID,null,null);
             }
         });
-
-
     }
 
     @Override
@@ -113,8 +120,24 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         setUpSwipeRefreshLayout(view);
 
         registerForHideableViews(view);
+
+//        setUpTimer();
         return view;
     }
+
+//    private void setUpTimer() {
+//        new CountDownTimer(30000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+//
+//            }
+//
+//            public void onFinish() {
+//                LOGD(TAG, "timer ticked");
+//            }
+//        }.start();
+//
+//    }
 
     private void setUpheaderFunction(View v) {
         friendBadge = (TextView)v.findViewById(R.id.friend_function_badge);
@@ -124,11 +147,19 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
-                if(pFriendRequests.size() > 0){
-                    friendBadge.setVisibility(View.VISIBLE);
-                    friendBadge.setText(Integer.toString(pFriendRequests.size()));
+                if(e == null){
+                    if(pFriendRequests.size() > 0){
+                        LOGD(TAG,"updateFriendBadge friendReuestSize: " + pFriendRequests.size());
+                        friendBadge.setVisibility(View.VISIBLE);
+                        friendBadge.setText(Integer.toString(pFriendRequests.size()));
+                    }else
+                        friendBadge.setVisibility(View.GONE);
                 }else
-                    friendBadge.setVisibility(View.GONE);
+                {
+                    showToastMessage(e.getMessage());
+                    LOGD(TAG,"updateFriendBadge friendReuestSize: " + e.getMessage());
+                }
+
             }
         });
     }
@@ -245,6 +276,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     }
 
 
+
     @Override
     public void onPictureFragmentViewCreated(View v, Fragment fragment) {
         RoundedImageView profilePhoto = (RoundedImageView)v.findViewById(R.id.pp_photo);
@@ -252,13 +284,51 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         profilePhoto.loadInBackground();
 
         TextView homeText = (TextView)v.findViewById(R.id.pp_home_cityAndCountryCode_text);
-        homeText.setText
-                ((currentUser.getHometown())!=null?currentUser.getHometown():" "
-                +", "+
-                ((currentUser.getCountryCode())!=null?currentUser.getCountryCode():" "));
+        String homeTown = currentUser.getHometown();
+        String countryCode = currentUser.getCountryCode();
 
-        TextView currenLocText = (TextView)v.findViewById(R.id.pp_current_location_text);
-        currenLocText.setText("Phuket, Th (Test)");
+        if(homeTown != null && countryCode != null )
+            homeText.setText(homeTown+", "+countryCode);
+
+
+        currenLocText = (TextView)v.findViewById(R.id.pp_current_location_text);
+
+        action = new Runnable() {
+            @Override
+            public void run() {
+                getAddress(new FindAddressCallback<Address>(this) {
+                    @Override
+                    public void done(String countryName, String cityName, String countryCode ,Exception e) {
+                        if(e == null)
+                            currenLocText.setText(cityName + ", " + countryCode);
+
+                        currenLocText.postDelayed(this.action,10000);
+                    }
+                });
+            }
+        };
+
+        currenLocText.post(action);
+
+//        currenLocText.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                LOGD(TAG,"currentLoc ased");
+//                getAddress(new FindAddressCallback<Address>() {
+//                    @Override
+//                    public void done(String countryName, String cityName, String countryCode) {
+//                        currenLocText.setText(cityName + ", " + countryCode);
+//                    }
+//                });
+//                currenLocText.postDelayed(this,10000);
+//            }
+//        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        currenLocText.removeCallbacks(action);
     }
 
     @Override

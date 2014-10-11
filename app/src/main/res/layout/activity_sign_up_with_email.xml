@@ -103,7 +103,6 @@
                     app:border_width="@dimen/profile_picture_border_width"
                     app:oval="false"
                     app:border_color="@color/profile_picture_border_color"
-                    android:src="@drawable/profile_empty_edit"
                     android:layout_centerInParent="true"
 
                     />
@@ -228,6 +227,7 @@
                         android:fontFamily="@string/san_serif"
                         android:clickable="true"
                         android:checked="true"
+                        android:layout_weight="1"
                         />
 
                     <RadioButton
@@ -239,6 +239,7 @@
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@string/san_serif"
                         android:clickable="true"
+                        android:layout_weight="1"
                         />
                 </RadioGroup>
 

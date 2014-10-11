@@ -33,7 +33,6 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="15pt"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/profile_empty_edit_new"
                 android:scaleType="fitXY"
                 app:corner_radius="@dimen/profile_picture_radius"
                 app:border_width="@dimen/profile_picture_border_width"
@@ -277,25 +276,41 @@
                 />
         </LinearLayout>
 
-        <LinearLayout
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-
-            <CheckBox
+            <RadioButton
+                android:id="@+id/s_viewed_all"
+                style="@android:style/Widget.CompoundButton.CheckBox"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Male"
+                android:text="All"
                 android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:checked="true"
                 />
 
-            <CheckBox
+            <RadioButton
+                android:id="@+id/s_viewed_male"
+                style="@android:style/Widget.CompoundButton.CheckBox"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Female"/>
+                android:text="Male"
+                android:layout_weight="1"/>
 
-        </LinearLayout>
+            <RadioButton
+                android:id="@+id/s_viewed_female"
+                style="@android:style/Widget.CompoundButton.CheckBox"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Female"
+                android:layout_weight="1"/>
+        </RadioGroup>
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -431,6 +446,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/s_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
