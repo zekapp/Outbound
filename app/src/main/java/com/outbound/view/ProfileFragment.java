@@ -26,6 +26,7 @@ import android.support.v4.app.Fragment;
 import com.outbound.R;
 import com.outbound.model.PFriendRequest;
 import com.outbound.model.PUser;
+import com.outbound.ui.util.ParallaxParseImageView;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.ProfileMessageListViewAdapter;
@@ -325,18 +326,27 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 //        });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        currenLocText.removeCallbacks(action);
-    }
 
     @Override
     public void onAboutFragmentViewCreated(View v, Fragment fragment) {
         TextView aboutText = (TextView)v.findViewById(R.id.pa_about_text);
-        aboutText.setText(currentUser.getShortDescription()!=null?currentUser.getShortDescription():"...");
+        aboutText.setText(currentUser.getShortDescription() != null ? currentUser.getShortDescription() : "...");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        coverPicture.registerSensorManager();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        currenLocText.removeCallbacks(action);
+        coverPicture.unregisterSensorManager();
+    }
+
+    private ParallaxParseImageView coverPicture;
     private void setUpHeaderUserInfo(View v) {
         ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
 
@@ -357,9 +367,10 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
         profile_home.setText(currentUser.getNationality());
 
-        ParseImageView coverPicture = (ParseImageView)v.findViewById(R.id.pp_coverPicture);
+        coverPicture = (ParallaxParseImageView)v.findViewById(R.id.pp_coverPicture);
         coverPicture.setParseFile(currentUser.getCoverPicture());
         coverPicture.loadInBackground();
+
     }
     private class ScreenSlidePagerAdapter extends BaseFragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {

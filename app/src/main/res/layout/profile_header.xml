@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:parallax="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,12 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_pager_layout_height">
 
-        <com.parse.ParseImageView
+        <!--<com.parse.ParseImageView-->
+            <!--android:id="@+id/pp_coverPicture"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/bg_profile_cover"-->
+            <!--android:scaleType="fitXY"/>-->
+
+        <com.outbound.ui.util.ParallaxParseImageView
             android:id="@+id/pp_coverPicture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/bg_profile_cover"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            parallax:tiltSensitivity="0.5"
+            parallax:scaledIntensity="true"
+            parallax:forwardTiltOffset="0.5"
+            parallax:intensity="1.05"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/profile_pager"
