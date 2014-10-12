@@ -1,0 +1,125 @@
+package com.outbound.model;
+
+import android.location.Location;
+
+import com.parse.FindCallback;
+import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by zeki on 12/10/2014.
+ */
+@ParseClassName("Events")
+public class PEvent extends ParseObject{
+    private final static String eventName = "eventName";
+    private final static String description = "description";
+    private final static String createdBy = "createdBy";
+    private final static String outBoundersGoing = "outBoundersGoing";
+    private final static String startDate = "startDate";
+    private final static String endDate = "endDate";
+    private final static String country = "country";
+    private final static String city = "city";
+    private final static String place = "place";
+    private final static String eventLocationPoint = "eventLocationPoint";
+
+
+    public String getEventName() {
+        return getString(eventName);
+    }
+
+    public void setEventName(String name) {
+        put(eventName, name);
+    }
+
+    public String getDescription() {
+        return getString(description);
+    }
+
+    public void setDescription(String des) {
+        put(description, des);
+    }
+
+    public PUser getCreatedBy() {
+        return (PUser)get(createdBy);
+    }
+
+    public void setCreatedBy(PUser user) {
+        put(createdBy, user);
+    }
+
+    public List<PUser> getOutboundersGoing() {
+        return getList(outBoundersGoing);
+    }
+
+    public void setOutboundersGoing(List<PUser> going) {
+        put(outBoundersGoing, Arrays.asList(going));
+    }
+
+    public Date getStartDate() {
+        return getDate(startDate);
+    }
+
+    public void setStartDate(Date date) {
+        put(startDate,date);
+    }
+
+    public Date getEndDate() {
+        return getDate(endDate);
+    }
+
+    public void setEndDate(Date date) {
+        put(endDate,date);
+    }
+
+    public String getCountry() {
+        return getString(country);
+    }
+
+    public void setCountry(String cntry) {
+        put(country, cntry);
+    }
+
+    public String getCity() {
+        return getString(city);
+    }
+
+    public void setCity(String cty) {
+        put(city, cty);
+    }
+
+    public String getPlace() {
+        return getString(place);
+    }
+
+    public void setPlace(String plc) {
+        put(place, plc);
+    }
+
+    public ParseGeoPoint getLocation() {
+        return getParseGeoPoint(eventLocationPoint);
+    }
+
+    public void setLocation(ParseGeoPoint loc) {
+        put(eventLocationPoint, loc);
+    }
+
+    public static void findEventsAraoundCurrentUser
+            (PUser currentUser, double proximity, final FindCallback<PEvent> callback) {
+        ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
+        query.whereWithinRadians(eventLocationPoint,currentUser.getCurrentLocation(),proximity);
+        query.findInBackground(new FindCallback<PEvent>() {
+            @Override
+            public void done(List<PEvent> pEvents, ParseException e) {
+                callback.done(pEvents,e);
+            }
+        });
+    }
+}

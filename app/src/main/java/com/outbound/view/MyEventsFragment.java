@@ -98,7 +98,7 @@ public class MyEventsFragment extends BaseFragment {
         for (int i = 0; i < 50; i++) {
             test.add(new Object());
         }
-        mAdapter = new EventsAdapter(getActivity(), test);
+        mAdapter = new EventsAdapter(getActivity());
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);

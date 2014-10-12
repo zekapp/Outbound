@@ -12,12 +12,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PEvent;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.EventsAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 /**
  * Created by zeki on 15/09/2014.
@@ -27,6 +32,7 @@ public class EventsFragment extends BaseFragment {
     private EventsAdapter mAdapter;
     private ListView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private PUser currentUser = PUser.getCurrentUser();
 
     @Override
     protected void setUp( Object param1, Object param2) {
@@ -86,11 +92,21 @@ public class EventsFragment extends BaseFragment {
     }
 
     private void setUpEventsAroundMeListView(View v) {
-        ArrayList<Object> test = new ArrayList<Object>();
-        for (int i = 0; i < 50; i++) {
-            test.add(new Object());
-        }
-        mAdapter = new EventsAdapter(getActivity(), test);
+//        ArrayList<Object> test = new ArrayList<Object>();
+//        for (int i = 0; i < 50; i++) {
+//            test.add(new Object());
+//        }
+        mAdapter = new EventsAdapter(getActivity());
+        PEvent.findEventsAraoundCurrentUser(currentUser,
+                Constants.Distance.EVENT_AROUND_PROXIMITY_IN_MILE, new FindCallback<PEvent>() {
+                    @Override
+                    public void done(List<PEvent> pEvents, ParseException e) {
+                        for(PEvent event : pEvents){
+                            mAdapter.add(event);
+                        }
+                        updateView();
+                    }
+                });
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
@@ -102,5 +118,10 @@ public class EventsFragment extends BaseFragment {
                     mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,null,null);
             }
         });
+    }
+
+    private void updateView() {
+        if(mAdapter != null)
+            mAdapter.notifyDataSetChanged();
     }
 }

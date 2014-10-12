@@ -16,12 +16,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PFriendRequest;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.MyFriendsAdapter;
 import com.outbound.ui.util.SlidingTabLayout;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zeki on 23/09/2014.
@@ -37,6 +42,14 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
 
     private MyFriendsAdapter mMyFriendsAdapter;
     private MyFriendsAdapter mMyFriendsPendingAdapter;
+
+    private PUser currentUser;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        currentUser = PUser.getCurrentUser();
+    }
 
     @Override
     protected void setUp(Object param1, Object param2) {
@@ -83,15 +96,44 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
 
     private void setUpFriendListAdapter() {
         //Test date
-        ArrayList<Object> arrayList = new ArrayList<Object>();
+//        ArrayList<Object> arrayList = new ArrayList<Object>();
+//
+//        for (int i = 0; i < 50; i++) {
+//            arrayList.add(new Object());
+//        }
 
-        for (int i = 0; i < 50; i++) {
-            arrayList.add(new Object());
+        mMyFriendsAdapter = new MyFriendsAdapter(getActivity(), false);
+        PFriendRequest.findAcceptedCurrentUserRequest(currentUser, new FindCallback<PUser>() {
+            @Override
+            public void done(List<PUser> pUsers, ParseException e) {
+                if(mMyFriendsAdapter!=null){
+                    for (PUser user : pUsers){
+                        mMyFriendsAdapter.add(user);
+                        updateView(mMyFriendsAdapter);
+                    }
+                }
+            }
+        });
+
+        mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true);
+        PFriendRequest.findPendingCurrentUserRequest(currentUser, new FindCallback<PUser>() {
+            @Override
+            public void done(List<PUser> pUsers, ParseException e) {
+                if(mMyFriendsPendingAdapter!=null){
+                    for (PUser user : pUsers){
+                        mMyFriendsPendingAdapter.add(user);
+                        updateView(mMyFriendsPendingAdapter);
+                    }
+                }
+            }
+        });
+    }
+
+    private void updateView(MyFriendsAdapter adapter) {
+        // Update the adapter view
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
         }
-
-        mMyFriendsAdapter = new MyFriendsAdapter(getActivity(), arrayList, false);
-
-        mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), arrayList, true);
     }
 
     private void setUpViewPager(View view) {

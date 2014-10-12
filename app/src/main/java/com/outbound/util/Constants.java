@@ -37,6 +37,9 @@ public final class Constants  {
     public static class Extra {
         public static final String IS_LAUNCHER = "com.outbound.is_launcher";
     }
+    public static class Distance{
+        public static final double EVENT_AROUND_PROXIMITY_IN_MILE = 124.274238; // 200 km
+    }
 
 
 }

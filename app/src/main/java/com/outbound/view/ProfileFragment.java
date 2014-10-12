@@ -69,7 +69,8 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     private PUser currentUser = PUser.getCurrentUser();
     private View dots[] = new View[2];
 
-    private Runnable action;
+    private Runnable currentLocationAction;
+    private Runnable frinedBadgeAction;
     private TextView currenLocText;
 
     @Override
@@ -142,28 +143,55 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
     private void setUpheaderFunction(View v) {
         friendBadge = (TextView)v.findViewById(R.id.friend_function_badge);
-        updateFriendBadge();
-    }
-    private void updateFriendBadge() {
-        PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
-            @Override
-            public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
-                if(e == null){
-                    if(pFriendRequests.size() > 0){
-                        LOGD(TAG,"updateFriendBadge friendReuestSize: " + pFriendRequests.size());
-                        friendBadge.setVisibility(View.VISIBLE);
-                        friendBadge.setText(Integer.toString(pFriendRequests.size()));
-                    }else
-                        friendBadge.setVisibility(View.GONE);
-                }else
-                {
-                    showToastMessage(e.getMessage());
-                    LOGD(TAG,"updateFriendBadge friendReuestSize: " + e.getMessage());
-                }
 
+        frinedBadgeAction = new Runnable() {
+            @Override
+            public void run() {
+                PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
+                    @Override
+                    public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
+                        if(e == null){
+                            if(pFriendRequests.size() > 0){
+                                LOGD(TAG,"updateFriendBadge friendReuestSize: " + pFriendRequests.size());
+                                friendBadge.setVisibility(View.VISIBLE);
+                                friendBadge.setText(Integer.toString(pFriendRequests.size()));
+                            }else
+                                friendBadge.setVisibility(View.GONE);
+                        }else
+                        {
+                            showToastMessage(e.getMessage());
+                            LOGD(TAG,"updateFriendBadge friendRequestSize: " + e.getMessage());
+                        }
+
+                    }
+                });
+                friendBadge.postDelayed(this,60000);
             }
-        });
+        };
+
+        friendBadge.post(frinedBadgeAction);
+//        updateFriendBadge();
     }
+//    private void updateFriendBadge() {
+//        PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
+//            @Override
+//            public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
+//                if(e == null){
+//                    if(pFriendRequests.size() > 0){
+//                        LOGD(TAG,"updateFriendBadge friendReuestSize: " + pFriendRequests.size());
+//                        friendBadge.setVisibility(View.VISIBLE);
+//                        friendBadge.setText(Integer.toString(pFriendRequests.size()));
+//                    }else
+//                        friendBadge.setVisibility(View.GONE);
+//                }else
+//                {
+//                    showToastMessage(e.getMessage());
+//                    LOGD(TAG,"updateFriendBadge friendReuestSize: " + e.getMessage());
+//                }
+//
+//            }
+//        });
+//    }
 
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -294,7 +322,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
         currenLocText = (TextView)v.findViewById(R.id.pp_current_location_text);
 
-        action = new Runnable() {
+        currentLocationAction = new Runnable() {
             @Override
             public void run() {
                 getAddress(new FindAddressCallback<Address>(this) {
@@ -309,7 +337,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
             }
         };
 
-        currenLocText.post(action);
+        currenLocText.post(currentLocationAction);
 
 //        currenLocText.post(new Runnable() {
 //            @Override
@@ -342,8 +370,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     @Override
     public void onPause() {
         super.onPause();
-        currenLocText.removeCallbacks(action);
+        currenLocText.removeCallbacks(currentLocationAction);
+        friendBadge.removeCallbacks(frinedBadgeAction);
+
         coverPicture.unregisterSensorManager();
+
     }
 
     private ParallaxParseImageView coverPicture;

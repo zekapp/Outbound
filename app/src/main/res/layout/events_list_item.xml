@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="@dimen/outbound_list_view_item_height_ext">
 
-    <com.parse.ParseImageView
-        android:id="@+id/pm_user_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.outbound.ui.util.RoundedImageView
+        android:id="@+id/el_user_photo"
+        android:layout_width="@dimen/list_picture_width"
+        android:layout_height="@dimen/list_picture_height"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/list_picture_top_margin"
+        android:layout_marginLeft="@dimen/list_picture_left_margin"
+        android:scaleType="fitXY"
+        app:corner_radius="@dimen/list_picture_radius"
+        app:border_width="@dimen/list_picture_border_width"
+        app:oval="false"
+        app:border_color="@color/profile_picture_border_color"
         android:background="@drawable/white_rounded_rectangle"
-        android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
-        android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +28,7 @@
         android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin">
 
         <TextView
-            android:id="@+id/me_title"
+            android:id="@+id/el_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Event Name"/>
@@ -33,21 +41,21 @@
             >
 
             <TextView
-                android:id="@+id/me_date"
+                android:id="@+id/el_date"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:hint="8/08/14"
                 android:drawableLeft="@drawable/small_calander"
                 android:drawablePadding="7dp"/>
             <TextView
-                android:id="@+id/me_time"
+                android:id="@+id/el_time"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:hint="7:00pm"
                 android:drawableLeft="@drawable/small_time"
                 android:drawablePadding="7dp"/>
             <TextView
-                android:id="@+id/me_attending_count"
+                android:id="@+id/el_attending_count"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="18"

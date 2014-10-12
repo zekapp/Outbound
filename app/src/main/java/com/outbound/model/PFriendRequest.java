@@ -8,6 +8,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class PFriendRequest extends ParseObject {
     public static void findPendingUsersInBackground(PUser user, final FindCallback<PFriendRequest> callback){
         ParseQuery<PFriendRequest> query = ParseQuery.getQuery(PFriendRequest.class);
         query.whereEqualTo(strReceiver, user);
-        query.whereEqualTo(strStatus,"strStatusPending");
+        query.whereEqualTo(strStatus,strStatusPending);
         query.findInBackground(new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
@@ -60,4 +61,37 @@ public class PFriendRequest extends ParseObject {
         });
     }
 
+    public static void findAcceptedCurrentUserRequest(PUser user, final FindCallback<PUser> callback){
+        ParseQuery<PFriendRequest> query = ParseQuery.getQuery(PFriendRequest.class);
+        query.whereEqualTo(strForwarder, user);
+        query.whereEqualTo(strStatus,strStatusAccepted);
+        query.findInBackground(new FindCallback<PFriendRequest>() {
+            @Override
+            public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
+                List<PUser> userList = new ArrayList<PUser>();
+
+                for(PFriendRequest pFriendRequest:pFriendRequests){
+                    userList.add(pFriendRequest.getReceiver());
+                }
+                callback.done(userList,e);
+            }
+        });
+    }
+
+    public static void findPendingCurrentUserRequest(PUser user, final FindCallback<PUser> callback) {
+        ParseQuery<PFriendRequest> query = ParseQuery.getQuery(PFriendRequest.class);
+        query.whereEqualTo(strForwarder, user);
+        query.whereEqualTo(strStatus,strStatusPending);
+        query.findInBackground(new FindCallback<PFriendRequest>() {
+            @Override
+            public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
+                List<PUser> userList = new ArrayList<PUser>();
+
+                for(PFriendRequest pFriendRequest:pFriendRequests){
+                    userList.add(pFriendRequest.getReceiver());
+                }
+                callback.done(userList,e);
+            }
+        });
+    }
 }

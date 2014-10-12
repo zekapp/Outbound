@@ -62,4 +62,12 @@
     <dimen name="profile_picture_border_width">3dip</dimen>
     <dimen name="profile_picture_top_margin">10dp</dimen>
 
+    <!--List Picture-->
+    <dimen name="list_picture_height">70dp</dimen>
+    <dimen name="list_picture_width">70dp</dimen>
+    <dimen name="list_picture_radius">10dip</dimen>
+    <dimen name="list_picture_border_width">1dip</dimen>
+    <dimen name="list_picture_top_margin">3dp</dimen>
+    <dimen name="list_picture_left_margin">10dp</dimen>
+
 </resources>

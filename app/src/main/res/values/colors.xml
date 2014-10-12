@@ -52,5 +52,6 @@
 
 
     <color name="profile_picture_border_color">@color/white</color>
+    <color name="list_picture_border_color">@color/theme_primary</color>
 
 </resources>
