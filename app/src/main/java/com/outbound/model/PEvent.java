@@ -3,6 +3,7 @@ package com.outbound.model;
 import android.location.Location;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -113,8 +114,32 @@ public class PEvent extends ParseObject{
 
     public static void findEventsAraoundCurrentUser
             (PUser currentUser, double proximity, final FindCallback<PEvent> callback) {
+
         ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
         query.whereWithinRadians(eventLocationPoint,currentUser.getCurrentLocation(),proximity);
+        query.orderByAscending(startDate);
+//        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+        query.findInBackground(new FindCallback<PEvent>() {
+            @Override
+            public void done(List<PEvent> pEvents, ParseException e) {
+                callback.done(pEvents,e);
+            }
+        });
+    }
+
+    public void fetchEventCreater(final GetCallback<PUser> callback){
+        this.getCreatedBy().fetchIfNeededInBackground(new GetCallback<PUser>() {
+            @Override
+            public void done(PUser user, ParseException e) {
+                callback.done(user,e);
+            }
+        });
+    }
+
+    public static void findEventsOfSpecificUser(PUser user, final FindCallback<PEvent> callback){
+        ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
+        query.whereEqualTo(createdBy,user);
+        query.orderByAscending(startDate);
         query.findInBackground(new FindCallback<PEvent>() {
             @Override
             public void done(List<PEvent> pEvents, ParseException e) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
@@ -23,27 +24,42 @@
         android:textColor="@color/white"
         android:textSize="@dimen/action_bar_title_size"/>
 
-    <com.parse.ParseImageView
-        android:id="@+id/ab_icon_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!--<com.parse.ParseImageView-->
+        <!--android:id="@+id/ab_icon_1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
         android:background="@drawable/white_rounded_rectangle_small"
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="visible"-->
+        <!--android:layout_marginRight="7dp"/>-->
+
+    <com.outbound.ui.util.RoundedImageView
+        android:id="@+id/ab_picture"
+        android:layout_width="@dimen/bar_picture_width"
+        android:layout_height="@dimen/bar_picture_height"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:clickable="true"
-        android:visibility="visible"
-        android:layout_marginRight="7dp"/>
+        android:layout_marginRight="7dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/white_rounded_rectangle_small"
+        app:corner_radius="@dimen/bar_picture_radius"
+        app:border_width="@dimen/bar_picture_border_width"
+        app:oval="false"
+        app:border_color="@color/bar_picture_border_color"
+        />
 
-    <ImageView
-        android:id="@+id/ab_icon_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/action_search"
-        android:padding="7pt"
-        android:layout_toLeftOf="@id/ab_icon_1"
-        android:layout_centerVertical="true"
-        android:background="?android:selectableItemBackground"
-        android:clickable="true"
-        android:visibility="gone"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/ab_icon_2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/action_search"-->
+        <!--android:padding="7pt"-->
+        <!--android:layout_toLeftOf="@id/ab_icon_1"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:background="?android:selectableItemBackground"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="gone"/>-->
 
 </RelativeLayout>

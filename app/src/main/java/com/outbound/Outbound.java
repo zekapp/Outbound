@@ -24,7 +24,7 @@ public class Outbound extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Parse.enableLocalDatastore(this);
+//        Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(PUser.class);
         ParseObject.registerSubclass(PFriendRequest.class);
         ParseObject.registerSubclass(PEvent.class);

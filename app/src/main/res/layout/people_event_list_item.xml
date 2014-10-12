@@ -31,6 +31,7 @@
             android:id="@+id/me_time"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:hint="7:00pm"
             android:drawableLeft="@drawable/small_time"
             android:drawablePadding="7dp"/>

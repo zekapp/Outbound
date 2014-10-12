@@ -7,6 +7,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,4 +95,18 @@ public class PFriendRequest extends ParseObject {
             }
         });
     }
+
+    public static  void sendFriendRequest(PUser requestSender,PUser currentUser, final SaveCallback callback) {
+        PFriendRequest request = new PFriendRequest();
+        request.setForwarder(currentUser);
+        request.setReceiver(requestSender);
+        request.setStatus(strStatusPending);
+        request.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        });
+    }
+
 }

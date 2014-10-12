@@ -14,6 +14,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/ed_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="08/08/14 | 4pm"
@@ -32,6 +33,7 @@
             android:background="@color/theme_primary_grey">
 
             <TextView
+                android:id="@+id/ed_place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="San Fermin"
@@ -42,6 +44,7 @@
                 android:gravity="center_vertical"
                 />
             <TextView
+                android:id="@+id/ed_city_country"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:hint="Pamplona - Navarra, Spain"
@@ -55,6 +58,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/ed_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/test_message_medium"
@@ -64,6 +68,7 @@
 
 
             <ImageView
+                android:id="@+id/ed_join"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_join_event"
@@ -79,6 +84,7 @@
             android:background="@color/theme_primary_grey">
 
             <TextView
+                android:id="@+id/ed_attendingCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="230 Outbounders attending"

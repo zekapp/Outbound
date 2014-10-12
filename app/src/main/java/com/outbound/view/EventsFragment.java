@@ -86,8 +86,13 @@ public class EventsFragment extends BaseFragment {
                 @Override
                 public void onRefresh() {
                     //get the arround me
+                    findEventsAraoundCurrentUser();
                 }
             });
+        }
+
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(true);
         }
     }
 
@@ -97,16 +102,8 @@ public class EventsFragment extends BaseFragment {
 //            test.add(new Object());
 //        }
         mAdapter = new EventsAdapter(getActivity());
-        PEvent.findEventsAraoundCurrentUser(currentUser,
-                Constants.Distance.EVENT_AROUND_PROXIMITY_IN_MILE, new FindCallback<PEvent>() {
-                    @Override
-                    public void done(List<PEvent> pEvents, ParseException e) {
-                        for(PEvent event : pEvents){
-                            mAdapter.add(event);
-                        }
-                        updateView();
-                    }
-                });
+
+        findEventsAraoundCurrentUser();
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
@@ -115,9 +112,26 @@ public class EventsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks != null)
-                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,null,null);
+                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,parent.getAdapter().getItem(position),null);
             }
         });
+    }
+
+    private void findEventsAraoundCurrentUser() {
+        PEvent.findEventsAraoundCurrentUser(currentUser,
+                Constants.Distance.EVENT_AROUND_PROXIMITY_IN_MILE, new FindCallback<PEvent>() {
+                    @Override
+                    public void done(List<PEvent> pEvents, ParseException e) {
+                        if(e == null){
+                            mAdapter.clear();
+                            for(PEvent event : pEvents){
+                                mAdapter.add(event);
+                            }
+                            updateView();
+                        }
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
     }
 
     private void updateView() {

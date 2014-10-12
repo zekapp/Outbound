@@ -10,13 +10,12 @@
         android:layout_width="@dimen/list_picture_width"
         android:layout_height="@dimen/list_picture_height"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/list_picture_top_margin"
         android:layout_marginLeft="@dimen/list_picture_left_margin"
         android:scaleType="fitXY"
         app:corner_radius="@dimen/list_picture_radius"
         app:border_width="@dimen/list_picture_border_width"
         app:oval="false"
-        app:border_color="@color/profile_picture_border_color"
+        app:border_color="@color/list_picture_border_color"
         android:background="@drawable/white_rounded_rectangle"
         />
 
@@ -53,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:hint="7:00pm"
                 android:drawableLeft="@drawable/small_time"
-                android:drawablePadding="7dp"/>
+                android:drawablePadding="7dp"
+                android:layout_marginLeft="10dp"/>
             <TextView
                 android:id="@+id/el_attending_count"
                 android:layout_width="80dp"

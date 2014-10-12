@@ -73,6 +73,8 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     private Runnable frinedBadgeAction;
     private TextView currenLocText;
 
+    private ParallaxParseImageView coverPicture;
+
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
@@ -377,7 +379,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
     }
 
-    private ParallaxParseImageView coverPicture;
+
     private void setUpHeaderUserInfo(View v) {
         ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
 

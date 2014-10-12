@@ -22,16 +22,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PEvent;
+import com.outbound.model.PFriendRequest;
+import com.outbound.model.PUser;
+import com.outbound.ui.util.ParallaxParseImageView;
+import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.ZoomOutPageTransformer;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.PeopleEventAdapter;
 import com.outbound.util.Constants;
+import com.outbound.util.CountryCodes;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
+import java.util.List;
 
 /**
  * Created by zeki on 30/09/2014.
  */
-public class PeopleProfileFragment extends BaseFragment {
+public class PeopleProfileFragment extends BaseFragment implements ProfilePictureFragment.Listener, ProfileAboutFragment.Listener{
 
     private PeopleEventAdapter adapter = null;
     private ListView list;
@@ -41,10 +54,14 @@ public class PeopleProfileFragment extends BaseFragment {
     private PagerAdapter mPagerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayout addFriend;
+    private ParallaxParseImageView coverPicture;
 
+    private PUser person;
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
+        if(param1 instanceof PUser)
+            person = (PUser)param1;
     }
 
     @Override
@@ -55,7 +72,7 @@ public class PeopleProfileFragment extends BaseFragment {
 
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
-        TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
+        final TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
         title.setText(getResources().getString(R.string.outbounder_fragment_title));
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
         icon.setImageResource(R.drawable.action_message);
@@ -80,6 +97,15 @@ public class PeopleProfileFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        if(person != null)
+            person.fetchIfNeededInBackground(new GetCallback<PUser>() {
+                @Override
+                public void done(PUser user, ParseException e) {
+                    if(e == null)
+                        title.setText(user.getUserName());
+                }
+            });
     }
 
     @Override
@@ -89,13 +115,59 @@ public class PeopleProfileFragment extends BaseFragment {
         final View header = inflater.inflate(R.layout.people_profile_header,null);
 
         setUpSwipeRefreshLayout(view);
+
         //listView should be set up first
+        setUpHeader(header);
+
         setUpListView(view,header);
 
         setUpViewPager(view);
         setUpProfileFunctionLayout(view);
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        coverPicture.registerSensorManager();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        coverPicture.unregisterSensorManager();
+    }
+
+    private void setUpHeader(View v) {
+
+        final ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
+        final TextView profileName = (TextView)v.findViewById(R.id.profile_name);
+        final TextView age = (TextView)v.findViewById(R.id.profile_age);
+        final TextView gender = (TextView)v.findViewById(R.id.profile_gender);
+        final TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
+        coverPicture = (ParallaxParseImageView)v.findViewById(R.id.pp_coverPicture);
+        if(person != null){
+            person.fetchIfNeededInBackground(new GetCallback<PUser>() {
+                @Override
+                public void done(PUser pUser, ParseException e) {
+                    if(e == null){
+                        coverPicture.setParseFile(pUser.getCoverPicture());
+                        coverPicture.loadInBackground();
+                        profileName.setText(pUser.getUserName());
+                        age.setText(Integer.toString(pUser.getAge()));
+                        gender.setText(pUser.getGender());
+                        profile_home.setText(pUser.getNationality());
+                        flag.setImageResource(getResources().
+                                getIdentifier("drawable/" + pUser.getCountryCode().toLowerCase(),
+                                        null, getActivity().getPackageName()));
+                    }
+                }
+            });
+        }
+    }
+
+
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         if (mSwipeRefreshLayout != null){
@@ -142,8 +214,26 @@ public class PeopleProfileFragment extends BaseFragment {
 
     private void attempToSendFriendRequest() {
         // after sending request successfull
-        addFriend.setVisibility(View.GONE);
-        createFriendRequestDialog();
+
+        //add progress
+        person.fetchIfNeededInBackground(new GetCallback<PUser>() {
+            @Override
+            public void done(PUser pUser, ParseException e) {
+                if(e == null){
+                    PFriendRequest.sendFriendRequest(pUser,PUser.getCurrentUser(), new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                addFriend.setVisibility(View.GONE);
+                                createFriendRequestDialog();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
     }
 
     private void createFriendRequestDialog() {
@@ -163,9 +253,20 @@ public class PeopleProfileFragment extends BaseFragment {
 
         adapter = new PeopleEventAdapter(getActivity());
 
-        for (int i = 0; i < 50; i++) {
-            adapter.add(new Object());
-        }
+//        for (int i = 0; i < 50; i++) {
+//            adapter.add(new Object());
+//        }
+        PEvent.findEventsOfSpecificUser(person, new FindCallback<PEvent>() {
+            @Override
+            public void done(List<PEvent> pEvents, ParseException e) {
+                if(e == null){
+                    for (PEvent event : pEvents){
+                        adapter.add(event);
+                    }
+                    updateView();
+                }
+            }
+        });
 
         list = (ListView) view.findViewById(R.id.people_list_view);
         list.addHeaderView(header, null, false);
@@ -174,10 +275,15 @@ public class PeopleProfileFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks != null)
-                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,null,null);
+                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,parent.getAdapter().getItem(position),null);
             }
         });
 
+    }
+
+    private void updateView() {
+        if(adapter !=null)
+            adapter.notifyDataSetChanged();
     }
 
     private void setUpViewPager(View view) {
@@ -200,6 +306,36 @@ public class PeopleProfileFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onAboutFragmentViewCreated(View root, Fragment fragment) {
+
+    }
+
+    @Override
+    public void onPictureFragmentViewCreated(View v, Fragment fragment) {
+        final RoundedImageView profilePhoto = (RoundedImageView)v.findViewById(R.id.pp_photo);
+        final TextView homeText = (TextView)v.findViewById(R.id.pp_home_cityAndCountryCode_text);
+        final TextView currenLocText = (TextView)v.findViewById(R.id.pp_current_location_text);
+        person.fetchIfNeededInBackground(new GetCallback<PUser>() {
+            @Override
+            public void done(PUser user, ParseException e) {
+                if(e == null){
+                    profilePhoto.setParseFile(user.getProfilePicture());
+                    profilePhoto.loadInBackground();
+                    homeText.setText(user.getHometown()+", "+user.getCountryCode());
+                    CountryCodes cc = new CountryCodes();
+                    currenLocText.setText(user.getCurrentCity() + ", " + cc.getCode(user.getCurrentCountry()));
+                }
+            }
+        });
+
+//        profilePhoto.setParseFile(person.getProfilePicture());
+//        profilePhoto.loadInBackground();
+//        homeText.setText(person.getHometown()+", "+person.getCountryCode());
+//        CountryCodes cc = new CountryCodes();
+//        currenLocText.setText(person.getCurrentCity() + ", " + cc.getCode(person.getCurrentCountry()));
+    }
+
     private class ScreenSlidePagerAdapter extends BaseFragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -207,7 +343,24 @@ public class PeopleProfileFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
-            return position==0?new ProfilePictureFragment():new ProfileAboutFragment();
+            if(position == 0){
+                ProfilePictureFragment frag = new ProfilePictureFragment();
+                frag.setUp(PeopleProfileFragment.this);
+//                Bundle args = new Bundle();
+//                args.putInt(ARG_PROFILE_INDEX, position);
+//                frag.setArguments(args);
+                return frag;
+            }else{
+                ProfileAboutFragment frag = new ProfileAboutFragment();
+                frag.setUp(PeopleProfileFragment.this);
+//                Bundle args = new Bundle();
+//                args.putInt(ARG_PROFILE_INDEX, position);
+//                frag.setArguments(args);
+                return frag;
+            }
+
+
+//            return position==0?new ProfilePictureFragment():new ProfileAboutFragment();
         }
 
         @Override

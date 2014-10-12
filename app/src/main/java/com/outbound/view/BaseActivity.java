@@ -77,7 +77,7 @@ public class BaseActivity extends FragmentActivity implements
 
     // When new fragment created new fragment added end of array.
     // track for array
-    private static ArrayList<FragmentContainer> fragViewer = new ArrayList<FragmentContainer>();
+    private static ArrayList<FragmentContainer> fragContainer = new ArrayList<FragmentContainer>();
 
     private boolean mActionBarAutoHideEnabled = false;
     private int mActionBarAutoHideMinY = 0;
@@ -111,8 +111,8 @@ public class BaseActivity extends FragmentActivity implements
         public BaseFragment mFragment;
         private String mTag;
         private int mFragId;
-        private Object mParam1;
-        private Object mParam2;
+        private static Object mParam1;
+        private static Object mParam2;
 
         FragmentContainer(BaseFragment fragment, Object param1, Object param2, String tag, int fragId){
             mTag = tag;
@@ -122,7 +122,22 @@ public class BaseActivity extends FragmentActivity implements
             mParam2 = param2;
             mFragId = fragId;
             mFragment.setUp(param1, param2);
+        }
 
+        public Object getmParam1() {
+            return mParam1;
+        }
+
+        public void setmParam1(Object mParam1) {
+            this.mParam1 = mParam1;
+        }
+
+        public Object getmParam2() {
+            return mParam2;
+        }
+
+        public void setmParam2(Object mParam2) {
+            this.mParam2 = mParam2;
         }
     }
 
@@ -494,22 +509,22 @@ public class BaseActivity extends FragmentActivity implements
     private void addFragmentToOrderArray(int itemId, Object param1, Object param2) {
 
         //if item is one of the main fragment
-        int fragmentSize = fragViewer.size();
+        int fragmentSize = fragContainer.size();
         if(itemId <= 4 && fragmentSize>0)
         {
             //delete all fragment in the array except profile
-            fragViewer.subList(1,fragmentSize).clear();
-
-
+            fragContainer.subList(1,fragmentSize).clear();
         }
 
+        FRAGMENTS[itemId].setmParam1(param1);
+        FRAGMENTS[itemId].setmParam2(param2);
         FRAGMENTS[itemId].mFragment.setUp(param1,param2);
 
-        if(fragViewer.isEmpty()){
-            fragViewer.add(FRAGMENTS[itemId]);
+        if(fragContainer.isEmpty()){
+            fragContainer.add(FRAGMENTS[itemId]);
         }else {
-            if(fragViewer.get(fragViewer.size() - 1).mFragId != itemId)
-                fragViewer.add(FRAGMENTS[itemId]);
+            if(fragContainer.get(fragContainer.size() - 1).mFragId != itemId)
+                fragContainer.add(FRAGMENTS[itemId]);
         }
 
     }
@@ -526,19 +541,19 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void onBackPressed() {
-        LOGD(TAG,"fragViewer size: " + fragViewer.size() );
+        LOGD(TAG,"fragViewer size: " + fragContainer.size() );
         FragmentContainer displayFrag;
-        int fragViewerSize = fragViewer.size();
-        if(fragViewer.size() > 2){
-            fragViewer.remove(fragViewerSize-1);
-            displayFrag = fragViewer.get(fragViewerSize-2);
-            deployFragment(displayFrag.mFragId,displayFrag.mParam1,displayFrag.mParam2);
-        }else if (fragViewer.size() == 2)
+        int fragViewerSize = fragContainer.size();
+        if(fragContainer.size() > 2){
+            fragContainer.remove(fragViewerSize-1);
+            displayFrag = fragContainer.get(fragViewerSize-2);
+            deployFragment(displayFrag.mFragId,displayFrag.getmParam1(),displayFrag.getmParam2());
+        }else if (fragContainer.size() == 2)
         {
-            fragViewer.remove(1);
+            fragContainer.remove(1);
             onTabBarItemClicked(0);
-            displayFrag = fragViewer.get(0);
-            deployFragment(displayFrag.mFragId,displayFrag.mParam1,displayFrag.mParam2);
+            displayFrag = fragContainer.get(0);
+            deployFragment(displayFrag.mFragId,displayFrag.getmParam1(),displayFrag.getmParam2());
 
         }else
         {
