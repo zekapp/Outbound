@@ -12,20 +12,33 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PFriendRequest;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.PeopleFriendAdapter;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+
+import java.util.List;
+
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 1/10/2014.
  */
 public class PeopleProfileFriendFragment extends BaseFragment {
+    private static final String TAG = makeLogTag(BaseFragment.class);
 
     private PeopleFriendAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private PUser user;
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
+
+        if(param1 instanceof PUser)
+            user = (PUser)param1; // you dont need to call fetchIfNeededInBackground all field is full
     }
     @Override
     public void onAttach(Activity activity) {
@@ -57,16 +70,34 @@ public class PeopleProfileFriendFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.list_view_layout, container, false);
-        setUpPeopleFriendListView(view);
         setUpSwipeRefreshLayout(view);
+        setUpPeopleFriendListView(view);
         return view;
     }
 
     private void setUpPeopleFriendListView(View v) {
         adapter = new PeopleFriendAdapter(getActivity());
 
-        for (int i = 0; i < 50; i++) {
-            adapter.add(new Object());
+//        for (int i = 0; i < 50; i++) {
+//            adapter.add(new Object());
+//        }
+        if(user != null){
+            PFriendRequest.findFriends(PFriendRequest.ACCEPTED, user, new FindCallback<PUser>() {
+                @Override
+                public void done(List<PUser> pUsers, ParseException e) {
+                    if(e == null){
+                        for (PUser pUser : pUsers){
+                            if(adapter != null){
+                                adapter.add(pUser);
+                            }
+                        }
+                        updateView();
+                    }
+                }
+            });
+        }else
+        {
+            LOGE(TAG, "user is null....");
         }
 
         ListView list = (ListView) v.findViewById(R.id.list_view);
@@ -75,9 +106,15 @@ public class PeopleProfileFriendFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks != null)
-                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,null,null);
+                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,parent.getAdapter().getItem(position),null);
             }
         });
+        updateView();
+    }
+
+    private void updateView() {
+        if(adapter !=null)
+            adapter.notifyDataSetChanged();
     }
 
     private void setUpSwipeRefreshLayout(View view) {

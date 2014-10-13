@@ -11,10 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.adapters.SearchPeopleAdapter;
 import com.outbound.ui.util.HeaderGridView;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+
+import java.util.List;
 
 /**
  * Created by zeki on 15/09/2014.
@@ -52,17 +57,28 @@ public class SearchPeopleFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.search_people_fragment_layout, container, false);
         final View header = inflater.inflate(R.layout.search_people_grid_header,container,false);
 
-        setUpGridView(view,header);
         setUpSwipeRefreshLayout(view);
+        setUpGridView(view, header);
         return view;
     }
 
     private void setUpGridView(View view, View header) {
         adapter = new SearchPeopleAdapter(getActivity());
 
-        for (int i = 0; i < 50; i++) {
-            adapter.add(new Object());
-        }
+//        for (int i = 0; i < 50; i++) {
+//            adapter.add(new Object());
+//        }
+        PUser.getPeopleArroundMe(new FindCallback<PUser>() {
+            @Override
+            public void done(List<PUser> pUsers, ParseException e) {
+                if(e == null){
+                    for(PUser pUser : pUsers){
+                        adapter.add(pUser);
+                    }
+                }
+                updateView();
+            }
+        });
 
         HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.sp_grid_view);
         userGridView.addHeaderView(header, null, false);
@@ -72,11 +88,18 @@ public class SearchPeopleFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks != null)
                 {
-                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,null,null);
+                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,
+                            parent.getAdapter().getItem(position),null);
                 }
             }
         });
     }
+
+    private void updateView() {
+        if(adapter !=null)
+            adapter.notifyDataSetChanged();
+    }
+
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.sp_swipe_refresh_layout);
         if (mSwipeRefreshLayout != null){

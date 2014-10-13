@@ -1,5 +1,6 @@
 package com.outbound.model;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -8,6 +9,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 @ParseClassName("_User")
 public class PUser extends ParseUser{
+
+    public static final String strCurrentLocation = "currentLocation";
+    public static final String strObjectId = "objectId";
 
     public static PUser getCurrentUser(){
         return (PUser)ParseUser.getCurrentUser();
@@ -183,5 +188,30 @@ public class PUser extends ParseUser{
             return  (int)(TimeUnit.MILLISECONDS.toDays(curDate.getTime() - getDateOfBirth().getTime()) / 365);
         else
             return -1;
+    }
+
+    public String calculateDistanceinKmTo(PUser user){
+        double distance = this.getCurrentLocation().distanceInKilometersTo(user.getCurrentLocation());
+        DecimalFormat formatter = new DecimalFormat("##.#");
+        return formatter.format(distance)+"km";
+    }
+
+    public static void getUserListAsDistanceOrder(List<PUser> userList, final FindCallback<PUser> callback){
+
+
+//        ParseQuery<PUser> query = ParseQuery.getQuery(PUser.class);
+//        query.whereNear(PUser.strCurrentLocation,currentUser.getCurrentLocation());
+    }
+
+    public static void getPeopleArroundMe(final FindCallback<PUser> callback){
+        PUser currentUser = PUser.getCurrentUser();
+        ParseQuery<PUser> query = ParseQuery.getQuery(PUser.class);
+        query.whereNear(PUser.strCurrentLocation,currentUser.getCurrentLocation());
+        query.findInBackground(new FindCallback<PUser>() {
+            @Override
+            public void done(List<PUser> pUsers, ParseException e) {
+                callback.done(pUsers,e);
+            }
+        });
     }
 }

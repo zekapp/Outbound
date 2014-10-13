@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PUser;
@@ -42,6 +44,8 @@ public class EventDetailsAdapter extends ArrayAdapter<PUser>{
             holder = new ViewHolder();
             // Tag for lookup later
             holder.photo = (RoundedImageView)view.findViewById(R.id.gi_photo);
+            holder.distance = (TextView)view.findViewById(R.id.gi_distance_text);
+            holder.flag = (ImageView)view.findViewById(R.id.gi_flag);
             view.setTag(holder);
         }else
         {
@@ -62,10 +66,23 @@ public class EventDetailsAdapter extends ArrayAdapter<PUser>{
             }
         });
 
+        holder.distance.setText(people.calculateDistanceinKmTo(PUser.getCurrentUser()));
+        holder.flag.setImageResource(getContext().getResources().
+                getIdentifier("drawable/" + people
+                                .getCountryCode().toLowerCase(),
+                        null, getContext().getPackageName()));
+
+
         return view;
     }
 
+    public void filterAccourdinDistance() {
+
+    }
+
     private static class ViewHolder {
+        TextView distance;
         RoundedImageView photo;
+        ImageView flag;
     }
 }

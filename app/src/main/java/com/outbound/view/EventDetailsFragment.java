@@ -19,11 +19,15 @@ import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.EventDetailsAdapter;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.ParseObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.outbound.util.LogUtils.LOGD;
 import static com.outbound.util.LogUtils.makeLogTag;
@@ -155,8 +159,38 @@ public class EventDetailsFragment extends BaseFragment {
 //            adapter.add(new Object());
 //        }
 
+//        PUser.getUserListAsDistanceOrder(event.getOutboundersGoing(), new FindCallback<PUser>() {
+//            @Override
+//            public void done(List<PUser> pUsers, ParseException e) {
+//                for(PUser user : pUsers){
+//                    adapter.add(user);
+//                }
+//            }
+//        });
+
+
+
+//        for(PUser user : event.getOutboundersGoing()){
+//            adapter.add(user);
+//        }
+
+        final int participiantCount = event.getOutboundersGoing().size();
         for(PUser user : event.getOutboundersGoing()){
-            adapter.add(user);
+            user.fetchIfNeededInBackground(new GetCallback<PUser>() {
+                List<PUser> userList = new ArrayList<PUser>();
+                @Override
+                public void done(PUser pUser, ParseException e) {
+                    if(e == null){
+                        adapter.add(pUser);
+                        updateView();
+//                        if(adapter.getCount() == participiantCount){
+//                            adapter.filterAccourdinDistance();
+//                            updateView();
+//                        }
+                    }
+                }
+            });
+
         }
 
         HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.ed_grid_view);
@@ -170,6 +204,12 @@ public class EventDetailsFragment extends BaseFragment {
             }
         });
     }
+
+    private void updateView() {
+        if(adapter != null)
+            adapter.notifyDataSetChanged();
+    }
+
     private void setUpSwipeRefreshLayout(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.gw_swipe_refresh_layout);
         if (mSwipeRefreshLayout != null){

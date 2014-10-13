@@ -114,15 +114,22 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         final View view = inflater.inflate(R.layout.people_profile_fragment_layout, container, false);
         final View header = inflater.inflate(R.layout.people_profile_header,null);
 
+        coverPicture = (ParallaxParseImageView)header.findViewById(R.id.pp_coverPicture);
         setUpSwipeRefreshLayout(view);
 
-        //listView should be set up first
-        setUpHeader(header);
+        person.fetchIfNeededInBackground(new GetCallback<PUser>() {
+            @Override
+            public void done(PUser user, ParseException e) {
+                //listView should be set up first
 
-        setUpListView(view,header);
 
-        setUpViewPager(view);
-        setUpProfileFunctionLayout(view);
+                setUpHeader(header);
+                setUpListView(view,header);
+                setUpViewPager(view);
+                setUpProfileFunctionLayout(view, user);
+            }
+        });
+
         return view;
     }
 
@@ -146,7 +153,7 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         final TextView age = (TextView)v.findViewById(R.id.profile_age);
         final TextView gender = (TextView)v.findViewById(R.id.profile_gender);
         final TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
-        coverPicture = (ParallaxParseImageView)v.findViewById(R.id.pp_coverPicture);
+
         if(person != null){
             person.fetchIfNeededInBackground(new GetCallback<PUser>() {
                 @Override
@@ -186,12 +193,12 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         }
     }
 
-    private void setUpProfileFunctionLayout(View view) {
+    private void setUpProfileFunctionLayout(View view, final PUser user) {
         RelativeLayout relativeLayoutFriend = (RelativeLayout)view.findViewById(R.id.pf_friends_layout);
         relativeLayoutFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRIENDS_FRAG_ID,null,null);
+                mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRIENDS_FRAG_ID,user,null);
             }
         });
         LinearLayout travellerHistory = (LinearLayout)view.findViewById(R.id.pf_traveller_history_layout);
@@ -307,7 +314,16 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
     }
 
     @Override
-    public void onAboutFragmentViewCreated(View root, Fragment fragment) {
+    public void onAboutFragmentViewCreated(View v, Fragment fragment) {
+        final TextView aboutText = (TextView)v.findViewById(R.id.pa_about_text);
+        person.fetchIfNeededInBackground(new GetCallback<PUser>() {
+            @Override
+            public void done(PUser user, ParseException e) {
+                if(e == null){
+                    aboutText.setText(user.getShortDescription() != null ? user.getShortDescription() : "...");
+                }
+            }
+        });
 
     }
 

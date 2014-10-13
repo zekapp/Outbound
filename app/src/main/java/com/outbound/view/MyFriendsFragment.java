@@ -40,7 +40,7 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     private ViewPager mViewPager = null;
     private OurViewPagerAdapter mViewPagerAdapter = null;
 
-    private MyFriendsAdapter mMyFriendsAdapter;
+    private MyFriendsAdapter mMyFriendsAcceptedAdapter;
     private MyFriendsAdapter mMyFriendsPendingAdapter;
 
     private PUser currentUser;
@@ -102,21 +102,21 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
 //            arrayList.add(new Object());
 //        }
 
-        mMyFriendsAdapter = new MyFriendsAdapter(getActivity(), false);
-        PFriendRequest.findAcceptedCurrentUserRequest(currentUser, new FindCallback<PUser>() {
+        mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false);
+        PFriendRequest.findFriends(PFriendRequest.ACCEPTED, currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
-                if(mMyFriendsAdapter!=null){
+                if(mMyFriendsAcceptedAdapter!=null){
                     for (PUser user : pUsers){
-                        mMyFriendsAdapter.add(user);
-                        updateView(mMyFriendsAdapter);
+                        mMyFriendsAcceptedAdapter.add(user);
+                        updateView(mMyFriendsAcceptedAdapter);
                     }
                 }
             }
         });
 
         mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true);
-        PFriendRequest.findPendingCurrentUserRequest(currentUser, new FindCallback<PUser>() {
+        PFriendRequest.findFriends(PFriendRequest.PENDIGN, currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
                 if(mMyFriendsPendingAdapter!=null){
@@ -166,7 +166,7 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
         if(fragIndex == 0)
         {
-            fragment.setListAdapter(mMyFriendsAdapter);
+            fragment.setListAdapter(mMyFriendsAcceptedAdapter);
         }else{
             fragment.setListAdapter(mMyFriendsPendingAdapter);
         }
