@@ -13,51 +13,44 @@ import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PTrip;
-import com.outbound.model.PUser;
 import com.outbound.ui.util.SwipeRefreshLayout;
-import com.outbound.ui.util.adapters.MyTripsDetailAdapter;
+import com.outbound.ui.util.adapters.TripsAdapter;
 import com.outbound.util.Constants;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.outbound.util.LogUtils.LOGD;
-import static com.outbound.util.LogUtils.makeLogTag;
-
 /**
- * Created by zeki on 2/10/2014.
+ * Created by zeki on 14/10/2014.
  */
-public class MyTripsDetailFragment extends BaseFragment {
-    private static final String TAG = makeLogTag(MyTripsDetailFragment.class);
-
-    private MyTripsDetailAdapter mAdapter;
+public class TripsResultFragment extends BaseFragment {
+    private TripsAdapter mAdapter;
     private ListView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private TextView actionBarTitle;
-    private PTrip trip;
+
+    private List<PTrip> tripList;
 
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
 
-        if(param1 instanceof PTrip)
-            trip = (PTrip)param1;
+        if(param1 != null)
+            tripList = (List<PTrip>)param1;
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         setUpActionBar(activity);
     }
+
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
-        actionBarTitle = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        actionBarTitle.setText(getResources().getString(R.string.my_trips_detail_fragment_title));
+        TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
+        title.setText(getResources().getString(R.string.trips_fragment_title));
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
-        icon.setEnabled(false);
-
-
+        icon.setImageResource(R.drawable.action_add);
+        icon.setVisibility(View.GONE);
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
             actionBar.setCustomView(viewActionBar);
@@ -71,46 +64,31 @@ public class MyTripsDetailFragment extends BaseFragment {
             }
         });
 
+        icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.EXPLORE_TRIPS_ADD_NEW_TRIPS_FRAG_ID, null, null);
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View view = inflater.inflate(R.layout.my_trips_detail_fragment_layout, container, false);
-
+        final View view = inflater.inflate(R.layout.list_view_layout, container, false);
+        setUpMyTripsListView(view);
         setUpSwipeRefreshLayout(view);
-        setUpMyTripDetailListView(view);
-        setActionBarTitle();
-
         return view;
     }
 
-    private void setActionBarTitle() {
-        // set the title
-    }
+    private void setUpMyTripsListView(View v) {
+        mAdapter = new TripsAdapter(getActivity());
 
-    private void setUpMyTripDetailListView(View v) {
-
-        mAdapter = new MyTripsDetailAdapter(getActivity(),trip);
-//        ArrayList<Object> test = new ArrayList<Object>();
-//        for (int i = 0; i < 50; i++) {
-//            mAdapter.add(new Object());
-//        }
-
-        if(trip != null){
-            PTrip.findUsersAttendingThisTrip(trip, new FindCallback<PUser>() {
-                @Override
-                public void done(List<PUser> pUsers, ParseException e) {
-                    if(e == null){
-                        for(PUser user : pUsers){
-                            mAdapter.add(user);
-                        }
-                        updateView();
-                    }else {
-                        LOGD(TAG, "findUsersAttendingThisTrip: " + e.getMessage());
-                    }
-                }
-            });
+        if(tripList != null){
+            for(PTrip trip : tripList){
+                mAdapter.add(trip);
+            }
         }
 
         mListView = (ListView) v.findViewById(R.id.list_view);
@@ -119,9 +97,10 @@ public class MyTripsDetailFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks !=null)
-                    mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, parent.getAdapter().getItem(position), null);
+                    mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_DETAIL_FRAG_ID, parent.getAdapter().getItem(position), null);
             }
         });
+        updateView();
     }
 
     private void updateView() {
@@ -141,13 +120,9 @@ public class MyTripsDetailFragment extends BaseFragment {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    //get the latest status of this outbounder
+                    //get the latest events
                 }
             });
-        }
-
-        if (mSwipeRefreshLayout != null) {
-//            mSwipeRefreshLayout.setEnabled(false);
         }
     }
 }

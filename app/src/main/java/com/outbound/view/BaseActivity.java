@@ -142,7 +142,7 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[21];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[22];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -169,6 +169,7 @@ public class BaseActivity extends FragmentActivity implements
             new EventSearchFragment(),
             new MyTripsDetailFragment(),
             new CreateEventFragment(),
+            new TripsResultFragment()
     };
 
 //    /*

@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/theme_primary_light"
-            android:text="5"
+            android:text="-"
             android:drawableLeft="@drawable/small_users"
             android:drawablePadding="7dp"
             />

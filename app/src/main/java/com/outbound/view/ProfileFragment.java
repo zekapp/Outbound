@@ -167,7 +167,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
                     }
                 });
-                friendBadge.postDelayed(this,60000);
+                friendBadge.postDelayed(this,10000);
             }
         };
 
@@ -330,8 +330,12 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                 getAddress(new FindAddressCallback<Address>(this) {
                     @Override
                     public void done(String countryName, String cityName, String countryCode ,Exception e) {
-                        if(e == null)
+                        if(e == null){
                             currenLocText.setText(cityName + ", " + countryCode);
+                            currentUser.setCurrentCity(cityName);
+                            currentUser.setCurrentCountry(countryName);
+                            currentUser.saveInBackground();
+                        }
 
                         currenLocText.postDelayed(this.action,10000);
                     }

@@ -82,7 +82,7 @@ public class PeopleProfileFriendFragment extends BaseFragment {
 //            adapter.add(new Object());
 //        }
         if(user != null){
-            PFriendRequest.findFriends(PFriendRequest.ACCEPTED, user, new FindCallback<PUser>() {
+            PFriendRequest.findFriends(user, new FindCallback<PUser>() {
                 @Override
                 public void done(List<PUser> pUsers, ParseException e) {
                     if(e == null){

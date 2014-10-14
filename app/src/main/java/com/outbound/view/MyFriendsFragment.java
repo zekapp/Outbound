@@ -95,15 +95,8 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     }
 
     private void setUpFriendListAdapter() {
-        //Test date
-//        ArrayList<Object> arrayList = new ArrayList<Object>();
-//
-//        for (int i = 0; i < 50; i++) {
-//            arrayList.add(new Object());
-//        }
-
         mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false);
-        PFriendRequest.findFriends(PFriendRequest.ACCEPTED, currentUser, new FindCallback<PUser>() {
+        PFriendRequest.findFriends( currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
                 if(mMyFriendsAcceptedAdapter!=null){
@@ -116,7 +109,7 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         });
 
         mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true);
-        PFriendRequest.findFriends(PFriendRequest.PENDIGN, currentUser, new FindCallback<PUser>() {
+        PFriendRequest.findPendingFriends(currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
                 if(mMyFriendsPendingAdapter!=null){
@@ -160,7 +153,7 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     }
 
     @Override
-    public void onFragmentViewCreated(ListFragment fragment) {
+    public void onFragmentViewCreated(ListFragment fragment, View view) {
 //        fragment.getListView().addHeaderView(
 //                getLayoutInflater().inflate(R.layout.reserve_action_bar_space_header_view, null));
         int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
@@ -172,6 +165,7 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         }
 
     }
+
 
     @Override
     public void onFragmentAttached(MyFriendsListSubFragment fragment) {
@@ -187,8 +181,13 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     public void onListItemClicked(ListFragment fragment, ListView l, View v, int position, long id) {
         int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
 
-        if(mCallbacks != null)
-            mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, null, null);
+        if(mCallbacks != null && mMyFriendsAcceptedAdapter!= null&&mMyFriendsPendingAdapter!=null){
+            if(fragIndex == 0){
+                mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, mMyFriendsAcceptedAdapter.getItem(position), null);
+            }else{
+                mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, mMyFriendsPendingAdapter.getItem(position), null);
+            }
+        }
     }
 
     private class OurViewPagerAdapter extends BaseFragmentStatePagerAdapter {

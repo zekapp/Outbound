@@ -62,7 +62,7 @@ public class SignUpWithEmail extends Activity{
     private boolean profilePhotoAttached = false;
 
 
-    GregorianCalendar birthCalender;
+    private GregorianCalendar birthCalender;
     private String birthDateFormatted;
     private Dialog progressDialog;
     private String selectedCountry = null;

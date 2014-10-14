@@ -16,6 +16,12 @@
 
 package com.outbound.util.location;
 
+import com.outbound.model.PUser;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Defines app-wide constants and utilities
  */
@@ -60,5 +66,20 @@ public final class LocationUtils {
 
     // Create an empty string for initializing strings
     public static final String EMPTY_STRING = new String();
+
+    public static List<PUser> orderFriendsAccordingDistance(List<PUser> pUsers) {
+        final PUser currentUser = PUser.getCurrentUser();
+        Collections.sort(pUsers, new Comparator<PUser>() {
+            @Override
+            public int compare(PUser lhs, PUser rhs) {
+
+                Double dist1 = lhs.getCurrentLocation().distanceInKilometersTo(currentUser.getCurrentLocation());
+                Double dist2 = rhs.getCurrentLocation().distanceInKilometersTo(currentUser.getCurrentLocation());
+
+                return dist1.compareTo(dist2);
+            }
+        });
+        return pUsers;
+    }
 
 }

@@ -3,6 +3,8 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,19 +35,21 @@ import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.PeopleEventAdapter;
 import com.outbound.util.Constants;
 import com.outbound.util.CountryCodes;
+import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 import java.util.List;
+
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 30/09/2014.
  */
 public class PeopleProfileFragment extends BaseFragment implements ProfilePictureFragment.Listener, ProfileAboutFragment.Listener{
-
+    private static final String TAG = makeLogTag(PeopleProfileFragment.class);
     private PeopleEventAdapter adapter = null;
     private ListView list;
 
@@ -53,8 +57,9 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private LinearLayout addFriend;
+    private LinearLayout addFriendRequestLayout;
     private ParallaxParseImageView coverPicture;
+    private Dialog progress;
 
     private PUser person;
     @Override
@@ -121,10 +126,8 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
             @Override
             public void done(PUser user, ParseException e) {
                 //listView should be set up first
-
-
                 setUpHeader(header);
-                setUpListView(view,header);
+                setUpListView(view, header, user);
                 setUpViewPager(view);
                 setUpProfileFunctionLayout(view, user);
             }
@@ -154,24 +157,16 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         final TextView gender = (TextView)v.findViewById(R.id.profile_gender);
         final TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
 
-        if(person != null){
-            person.fetchIfNeededInBackground(new GetCallback<PUser>() {
-                @Override
-                public void done(PUser pUser, ParseException e) {
-                    if(e == null){
-                        coverPicture.setParseFile(pUser.getCoverPicture());
-                        coverPicture.loadInBackground();
-                        profileName.setText(pUser.getUserName());
-                        age.setText(Integer.toString(pUser.getAge()));
-                        gender.setText(pUser.getGender());
-                        profile_home.setText(pUser.getNationality());
-                        flag.setImageResource(getResources().
-                                getIdentifier("drawable/" + pUser.getCountryCode().toLowerCase(),
-                                        null, getActivity().getPackageName()));
-                    }
-                }
-            });
-        }
+        coverPicture.setParseFile(person.getCoverPicture());
+        coverPicture.loadInBackground();
+        profileName.setText(person.getUserName());
+        age.setText(Integer.toString(person.getAge()));
+        gender.setText(person.getGender());
+        profile_home.setText(person.getNationality());
+        flag.setImageResource(getResources().
+                getIdentifier("drawable/" + person.getCountryCode().toLowerCase(),
+                        null, getActivity().getPackageName()));
+
     }
 
 
@@ -191,9 +186,13 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
                 }
             });
         }
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     private void setUpProfileFunctionLayout(View view, final PUser user) {
+
         RelativeLayout relativeLayoutFriend = (RelativeLayout)view.findViewById(R.id.pf_friends_layout);
         relativeLayoutFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,31 +207,37 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
                 mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_FRAG_ID,null,null);
             }
         });
+    }
 
-        addFriend = (LinearLayout)view.findViewById(R.id.pf_add_friend_layout);
-        addFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //attemp t oSend Friend Request
-                attempToSendFriendRequest();
-            }
-        });
+    private void showProgressDialog() {
+        progress = ProgressDialog.show(getActivity(),"","Request Sending",true);
+    }
+    private void dissmissProgressDialog() {
+        if(progress != null)
+            progress.dismiss();
     }
 
     private void attempToSendFriendRequest() {
         // after sending request successfull
 
-        //add progress
+        showProgressDialog();
         person.fetchIfNeededInBackground(new GetCallback<PUser>() {
             @Override
             public void done(PUser pUser, ParseException e) {
                 if(e == null){
-                    PFriendRequest.sendFriendRequest(pUser,PUser.getCurrentUser(), new SaveCallback() {
+                    PFriendRequest.sendFriendRequest(pUser, new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
+                            dissmissProgressDialog();
                             if(e == null){
-                                addFriend.setVisibility(View.GONE);
+
+                                if(addFriendRequestLayout !=null)
+                                    addFriendRequestLayout.setVisibility(View.GONE);
+
                                 createFriendRequestDialog();
+                            }else
+                            {
+                                LOGD(TAG, "attempToSendFriendRequest: " + e.getMessage());
                             }
                         }
                     });
@@ -242,6 +247,7 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
 
 
     }
+
 
     private void createFriendRequestDialog() {
         AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -256,9 +262,11 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
                 .create().show();
     }
 
-    private void setUpListView(View view, View header) {
+    private void setUpListView(View view, View header , PUser user) {
 
         adapter = new PeopleEventAdapter(getActivity());
+
+        setUpFriendRequestLayout(header, user);
 
 //        for (int i = 0; i < 50; i++) {
 //            adapter.add(new Object());
@@ -288,9 +296,43 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
 
     }
 
+    private void setUpFriendRequestLayout(View view, PUser user) {
+        addFriendRequestLayout = (LinearLayout)view.findViewById(R.id.pf_add_friend_layout);
+
+        addFriendRequestLayout = (LinearLayout)view.findViewById(R.id.pf_add_friend_layout);
+        addFriendRequestLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //attemp t oSend Friend Request
+                attempToSendFriendRequest();
+            }
+        });
+
+        PFriendRequest.isThisUserAlreadyFriend(user, new ResultCallback() {
+            @Override
+            public void done(boolean res, ParseException e) {
+                if(e == null){
+                    if(res)
+                        addFriendRequestLayout.setVisibility(View.GONE);
+                    else
+                        addFriendRequestLayout.setVisibility(View.VISIBLE);
+
+                    LOGD(TAG, "setUpListView: is this guy a friend: " + res);
+                }
+                else {
+                    LOGD(TAG, "setUpListView e: " + e.getMessage());
+                }
+                updateView();
+            }
+        });
+    }
+
     private void updateView() {
+
         if(adapter !=null)
             adapter.notifyDataSetChanged();
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void setUpViewPager(View view) {
@@ -338,9 +380,12 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
                 if(e == null){
                     profilePhoto.setParseFile(user.getProfilePicture());
                     profilePhoto.loadInBackground();
-                    homeText.setText(user.getHometown()+", "+user.getCountryCode());
+                    homeText.setText((user.getHometown() == null?"   -  ":user.getHometown()) + ", " +user.getCountryCode());
                     CountryCodes cc = new CountryCodes();
-                    currenLocText.setText(user.getCurrentCity() + ", " + cc.getCode(user.getCurrentCountry()));
+                    if(user.getCurrentCountry()!=null )
+                        currenLocText.setText(user.getCurrentCity() + ", " + cc.getCode(user.getCurrentCountry()));
+                    else
+                        currenLocText.setText("    -, -     ");
                 }
             }
         });

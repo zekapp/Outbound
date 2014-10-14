@@ -1,5 +1,11 @@
 package com.outbound.util;
 
+import com.outbound.model.PUser;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Created by zeki on 15/09/2014.
  */
@@ -27,6 +33,7 @@ public final class Constants  {
     public static final int EVENT_SEARCH_FRAGMENT_ID = 18;
     public static final int PROFILE_MY_TRIP_DETAIL_FRAG_ID = 19;
     public static final int EVENT_CREATE_FRAGMENT_ID = 20;
+    public static final int TRIPS_RESULT_FRAGMENT_ID = 21;
     public static final int ITEM_INVALID = -1;
 
 
@@ -40,7 +47,6 @@ public final class Constants  {
     public static class Distance{
         public static final double EVENT_AROUND_PROXIMITY_IN_MILE = 124.274238; // 200 km
     }
-
 
 }
 

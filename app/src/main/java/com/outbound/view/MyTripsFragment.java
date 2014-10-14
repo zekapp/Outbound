@@ -12,18 +12,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PTrip;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.SwipeRefreshLayout;
-import com.outbound.ui.util.adapters.MyTripsAdapter;
+import com.outbound.ui.util.adapters.TripsAdapter;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.outbound.util.LogUtils.LOGD;
+import static com.outbound.util.LogUtils.makeLogTag;
 
 /**
  * Created by zeki on 24/09/2014.
  */
 public class MyTripsFragment extends BaseFragment {
+    private static final String TAG = makeLogTag(MyTripsFragment.class);
 
-    private MyTripsAdapter mAdapter;
+    private TripsAdapter mAdapter;
     private ListView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -75,21 +84,39 @@ public class MyTripsFragment extends BaseFragment {
     }
 
     private void setUpMyTripsListView(View v) {
-        ArrayList<Object> test = new ArrayList<Object>();
-        for (int i = 0; i < 50; i++) {
-            test.add(new Object());
-        }
-        mAdapter = new MyTripsAdapter(getActivity(), test);
 
+        mAdapter = new TripsAdapter(getActivity());
+//        for (int i = 0; i < 50; i++) {
+//            mAdapter.add(new PTrip());
+//        }
+
+        PTrip.findUserSpecificFutureTrips(PUser.getCurrentUser(),new FindCallback<PTrip>() {
+            @Override
+            public void done(List<PTrip> pTrips, ParseException e) {
+                if(e == null){
+                    for (PTrip trip : pTrips){
+                        mAdapter.add(trip);
+                    }
+                }else{
+                    LOGD(TAG, "findUserSpesificTrips e:" + e.getMessage());
+                }
+                updateView();
+            }
+        });
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks !=null)
-                    mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_DETAIL_FRAG_ID, null, null);
+                    mCallbacks.deployFragment(Constants.PROFILE_MY_TRIP_DETAIL_FRAG_ID, parent.getAdapter().getItem(position), null);
             }
         });
+    }
+
+    private void updateView() {
+        if(mAdapter != null)
+            mAdapter.notifyDataSetChanged();
     }
 
     private void setUpSwipeRefreshLayout(View view) {

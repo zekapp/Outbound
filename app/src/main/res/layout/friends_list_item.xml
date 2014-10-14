@@ -1,56 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/outbound_list_view_item_height_ext">
+    android:layout_height="@dimen/outbound_list_view_item_height_ext"
+    android:orientation="horizontal">
 
-    <com.parse.ParseImageView
+    <!--<com.parse.ParseImageView-->
+        <!--android:id="@+id/f_user_photo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/white_rounded_rectangle"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"-->
+        <!--android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>-->
+
+    <com.outbound.ui.util.RoundedImageView
         android:id="@+id/f_user_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/white_rounded_rectangle"
+        android:layout_width="@dimen/list_picture_width"
+        android:layout_height="@dimen/list_picture_height"
         android:layout_gravity="center"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
-        android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
-
-    <TextView
-        android:id="@+id/f_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/f_user_photo"
-        android:text="Name Surname"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
-        android:layout_marginTop="@dimen/outbound_list_view_item_text_top_margin"
-        android:drawableLeft="@drawable/test_flag"
-        android:drawablePadding="7dp"/>
-
-
-    <TextView
-        android:id="@+id/f_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:layout_below="@+id/f_user_name"
-        android:layout_toRightOf="@+id/f_user_photo"
-        android:text="1.0km"
-        android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
-        android:layout_marginRight="@dimen/outbound_list_view_item_text_right_margin"
-        android:layout_marginTop="10dp"
-        android:drawableLeft="@drawable/icon_active"
-        android:drawablePadding="7dp"
+        android:layout_marginLeft="@dimen/list_picture_left_margin"
+        android:scaleType="fitXY"
+        app:corner_radius="@dimen/list_picture_radius"
+        app:border_width="@dimen/list_picture_border_width"
+        app:oval="false"
+        app:border_color="@color/list_picture_border_color"
+        android:background="@drawable/white_rounded_rectangle"
+        android:layout_centerVertical="true"
         />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/f_user_name"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/f_user_photo"
+            android:text="Name Surname"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
+            android:drawableLeft="@drawable/test_flag"
+            android:ellipsize="end"
+            android:drawablePadding="7dp"/>
+
+
+        <TextView
+            android:id="@+id/f_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_below="@+id/f_user_name"
+            android:layout_toRightOf="@+id/f_user_photo"
+            android:text="1.0km"
+            android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
+            android:layout_marginRight="@dimen/outbound_list_view_item_text_right_margin"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/icon_active"
+            android:drawablePadding="7dp"
+            />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/fp_accept_button_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true">
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
         <ImageView
             android:id="@+id/fp_accept_button"
             android:layout_width="wrap_content"
@@ -70,4 +97,4 @@
             android:background="?android:selectableItemBackground"
             android:clickable="true"/>
      </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

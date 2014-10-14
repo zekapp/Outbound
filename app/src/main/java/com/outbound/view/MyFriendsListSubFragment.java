@@ -20,7 +20,7 @@ public class MyFriendsListSubFragment extends ListFragment{
     private Listener mCallBackFragment = null;
 
     public interface Listener {
-        public void onFragmentViewCreated(ListFragment fragment);
+        public void onFragmentViewCreated(ListFragment fragment, View view);
         public void onFragmentAttached(MyFriendsListSubFragment fragment);
         public void onFragmentDetached(MyFriendsListSubFragment fragment);
         public void onListItemClicked(ListFragment fragment,ListView l, View v, int position, long id );
@@ -52,7 +52,7 @@ public class MyFriendsListSubFragment extends ListFragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(mCallBackFragment!=null)
-            mCallBackFragment.onFragmentViewCreated(this);
+            mCallBackFragment.onFragmentViewCreated(this,view);
     }
 
     @Override
