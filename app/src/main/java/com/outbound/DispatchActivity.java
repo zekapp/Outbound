@@ -48,12 +48,12 @@ public class DispatchActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		// Check if there is current user info
-        db  = new DBManager(this);
-        if(db.isFirstInitialize()){
-            Intent intent = new Intent(this, WelcomePage.class);
-            startActivity(intent);
-            return;
-        }
+//        db  = new DBManager(this);
+//        if(db.isFirstInitialize()){
+//            Intent intent = new Intent(this, WelcomePage.class);
+//            startActivity(intent);
+//            return;
+//        }
 
 		if (ParseUser.getCurrentUser() != null) {
 			// Start an intent for the logged in activity

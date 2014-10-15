@@ -52,7 +52,8 @@ public class TripsAdapter extends ArrayAdapter<PTrip>{
         }
 
         final PTrip trip = getItem(position);
-        holder.cityCountry.setText(trip.getCity()==null?trip.getCountry():trip.getCity()+", "+trip.getCountry());
+
+        holder.cityCountry.setText(trip.getCity() + ", "+trip.getCountry());
         final TextView attendingCount = holder.attendingCount;
 
         holder.date.setHint(formatter.format(trip.getFromDate())+" to "+formatter.format(trip.getToDate()));

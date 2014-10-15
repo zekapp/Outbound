@@ -3,6 +3,7 @@ package com.outbound.model;
 import com.outbound.util.ResultCallback;
 import com.outbound.util.location.LocationUtils;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -215,6 +216,54 @@ public class PFriendRequest extends ParseObject {
                     callback.done(true , e);
                 else
                     callback.done(false,e);
+            }
+        });
+    }
+
+    public static void acceptFriendReuest(PUser user,final SaveCallback callback) {
+        PUser currentUser = PUser.getCurrentUser();
+        ParseQuery<PFriendRequest> query = ParseQuery.getQuery(PFriendRequest.class);
+        query.whereEqualTo(strForwarder, user);
+        query.whereEqualTo(strReceiver, currentUser);
+        query.getFirstInBackground(new GetCallback<PFriendRequest>() {
+            @Override
+            public void done(PFriendRequest pFriendRequest, ParseException e) {
+                if(e == null){
+                    pFriendRequest.setStatus(strStatusAccepted);
+                    pFriendRequest.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            callback.done(e);
+                        }
+                    });
+                }else
+                    callback.done(e);
+
+
+            }
+        });
+    }
+
+    public static void declineFriendReuest(PUser user, final SaveCallback callback) {
+        PUser currentUser = PUser.getCurrentUser();
+        ParseQuery<PFriendRequest> query = ParseQuery.getQuery(PFriendRequest.class);
+        query.whereEqualTo(strForwarder, user);
+        query.whereEqualTo(strReceiver, currentUser);
+        query.getFirstInBackground(new GetCallback<PFriendRequest>() {
+            @Override
+            public void done(PFriendRequest pFriendRequest, ParseException e) {
+                if(e == null){
+                    pFriendRequest.setStatus(strStatusDeclined);
+                    pFriendRequest.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            callback.done(e);
+                        }
+                    });
+                }else
+                    callback.done(e);
+
+
             }
         });
     }

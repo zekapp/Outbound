@@ -6,6 +6,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,6 +122,32 @@ public class PTrip extends ParseObject{
             @Override
             public void done(PTrip pTrip, ParseException e) {
                 callback.done(pTrip,e);
+            }
+        });
+    }
+
+    public static void addTrip(String city, String country, Date fromDate, Date toDate, final SaveCallback callback) {
+        PTrip trip = new PTrip();
+        trip.setCity(city);
+        trip.setCountry(country);
+        trip.setFromDate(fromDate);
+        trip.setToDate(toDate);
+        trip.setOutBounder(PUser.getCurrentUser());
+        trip.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        });
+    }
+
+    public static void bringTripsOrderedDate(final FindCallback<PTrip> callback) {
+        ParseQuery<PTrip> query = ParseQuery.getQuery(PTrip.class);
+        query.orderByAscending(strFromDate);
+        query.findInBackground(new FindCallback<PTrip>() {
+            @Override
+            public void done(List<PTrip> pTrips, ParseException e) {
+                callback.done(pTrips,e);
             }
         });
     }

@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:hint="Username"
                 android:layout_marginLeft="@dimen/text_left_margin"
                 android:layout_marginRight="@dimen/text_right_margin"/>
 

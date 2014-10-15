@@ -28,11 +28,14 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.outbound.util.LogUtils.*;
+
 /**
  * Created by zeki on 23/09/2014.
  */
-public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubFragment.Listener{
-
+public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubFragment.Listener ,
+        MyFriendsAdapter.FriendAcceptenceCallbacks{
+    private static final String TAG = makeLogTag(MyFriendsFragment.class);
     private static final String ARG_FRIEND_STATUS_INDEX
             = "com.outbound.ARG_FRIEND_STATUS_INDEX";
 
@@ -95,27 +98,42 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     }
 
     private void setUpFriendListAdapter() {
-        mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false);
-        PFriendRequest.findFriends( currentUser, new FindCallback<PUser>() {
+        mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false, this);
+        mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true, this);
+
+        updateFriendListAdapter();
+        updatePendingListAdaptter();
+    }
+
+    private void updatePendingListAdaptter() {
+
+        PFriendRequest.findPendingFriends(currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
-                if(mMyFriendsAcceptedAdapter!=null){
-                    for (PUser user : pUsers){
-                        mMyFriendsAcceptedAdapter.add(user);
-                        updateView(mMyFriendsAcceptedAdapter);
+                if(e == null){
+                    if(mMyFriendsPendingAdapter!=null){
+                        mMyFriendsPendingAdapter.clear();
+                        for (PUser user : pUsers){
+                            mMyFriendsPendingAdapter.add(user);
+                        }
+                        updateView(mMyFriendsPendingAdapter);
                     }
                 }
             }
         });
+    }
 
-        mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true);
-        PFriendRequest.findPendingFriends(currentUser, new FindCallback<PUser>() {
+    private void updateFriendListAdapter() {
+        PFriendRequest.findFriends( currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
-                if(mMyFriendsPendingAdapter!=null){
-                    for (PUser user : pUsers){
-                        mMyFriendsPendingAdapter.add(user);
-                        updateView(mMyFriendsPendingAdapter);
+                if(e == null){
+                    if(mMyFriendsAcceptedAdapter!=null){
+                        mMyFriendsAcceptedAdapter.clear();
+                        for (PUser user : pUsers){
+                            mMyFriendsAcceptedAdapter.add(user);
+                        }
+                        updateView(mMyFriendsAcceptedAdapter);
                     }
                 }
             }
@@ -129,10 +147,31 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         }
     }
 
+    @Override
+    public void friendRequestAccepted() {
+        updateFriendListAdapter();
+        mViewPager.setCurrentItem(0);
+    }
+
+    @Override
+    public void friendRequestDeclined() {
+        updateFriendListAdapter();
+    }
+
     private void setUpViewPager(View view) {
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPagerAdapter = new OurViewPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                LOGD(TAG, "onPageSelected: " + Integer.toString(position));
+                if(position == 0)
+                    updateFriendListAdapter();
+                else
+                    updatePendingListAdaptter();
+            }
+        });
     }
 
     private void setUpSlidingTabLayout(View view) {
@@ -189,6 +228,8 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
             }
         }
     }
+
+
 
     private class OurViewPagerAdapter extends BaseFragmentStatePagerAdapter {
 

@@ -16,6 +16,8 @@ import com.outbound.model.PTrip;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.TripsAdapter;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class TripsResultFragment extends BaseFragment {
     private ListView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private List<PTrip> tripList;
+    private List<PTrip> tripList = null;
 
     @Override
     protected void setUp(Object param1, Object param2) {
@@ -36,12 +38,12 @@ public class TripsResultFragment extends BaseFragment {
 
         if(param1 != null)
             tripList = (List<PTrip>)param1;
+
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        setUpActionBar(activity);
     }
 
     private void setUpActionBar(Activity activity) {
@@ -50,7 +52,7 @@ public class TripsResultFragment extends BaseFragment {
         title.setText(getResources().getString(R.string.trips_fragment_title));
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
         icon.setImageResource(R.drawable.action_add);
-        icon.setVisibility(View.GONE);
+//        icon.setVisibility(View.GONE);
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
             actionBar.setCustomView(viewActionBar);
@@ -76,6 +78,7 @@ public class TripsResultFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setUpActionBar(getActivity());
         final View view = inflater.inflate(R.layout.list_view_layout, container, false);
         setUpMyTripsListView(view);
         setUpSwipeRefreshLayout(view);
@@ -86,9 +89,21 @@ public class TripsResultFragment extends BaseFragment {
         mAdapter = new TripsAdapter(getActivity());
 
         if(tripList != null){
-            for(PTrip trip : tripList){
-                mAdapter.add(trip);
-            }
+            mAdapter.addAll(tripList);
+        }else
+        {
+            tripList = new ArrayList<PTrip>();
+            PTrip.bringTripsOrderedDate(new FindCallback<PTrip>() {
+                @Override
+                public void done(List<PTrip> pTrips, ParseException e) {
+                    if(e == null){
+                        if(mAdapter != null) {
+                            mAdapter.addAll(pTrips);
+                            tripList.addAll(pTrips);
+                        }
+                    }
+                }
+            });
         }
 
         mListView = (ListView) v.findViewById(R.id.list_view);
