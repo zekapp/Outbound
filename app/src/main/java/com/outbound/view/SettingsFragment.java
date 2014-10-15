@@ -240,7 +240,7 @@ public class SettingsFragment extends BaseFragment {
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                finishProgress();
+                stopProgress();
 
                 if(e == null)
                     updateSuccessful();

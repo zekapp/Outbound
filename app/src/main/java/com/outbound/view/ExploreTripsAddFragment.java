@@ -40,9 +40,6 @@ import static com.outbound.util.LogUtils.makeLogTag;
  */
 public class ExploreTripsAddFragment extends BaseFragment {
     private static final String TAG = makeLogTag(ExploreTripsAddFragment.class);
-
-    private Dialog progress;
-
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
@@ -120,30 +117,29 @@ public class ExploreTripsAddFragment extends BaseFragment {
         }
 
         if(!cancel){
-            startProgress();
-            showToasMessege("Your Trip saving database...");
+            startProgress("Your Trip adding database... ");
             PTrip.addTrip(selectedCity,selectedCountry,tripFromDate.getTime(),tripToDate.getTime(),new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if(e == null){
-                        showToasMessege("Your Trip saved database");
+                        showToastMessage("Your Trip saved database");
                         if(mCallbacks != null){
-                            dissmissProgress();
+                            stopProgress();
                             mCallbacks.deployFragment(Constants.TRIPS_RESULT_FRAGMENT_ID,null,null);
                         }
                     }else {
-                        showToasMessege("Network Error. Check your connection...");
+                        showToastMessage("Network Error. Check your connection...");
                     }
-                    dissmissProgress();
+                    stopProgress();
                 }
             });
         }else
             focusView.requestFocus();
     }
 
-    private void showToasMessege(String message){
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
+//    private void showToasMessege(String message){
+//        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+//    }
 
     private void resetErrors() {
         countrySelectButton.setError(null);
@@ -152,12 +148,9 @@ public class ExploreTripsAddFragment extends BaseFragment {
         tripToDateButton.setError(null);
     }
 
-    private void startProgress(){
-        progress = ProgressDialog.show(getActivity(), "", "Your Trip adding database... ", true);
-    }
-    private void dissmissProgress(){
-        progress.dismiss();
-    }
+//    private void dissmissProgress(){
+//        progress.dismiss();
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -151,4 +151,16 @@ public class PTrip extends ParseObject{
             }
         });
     }
+
+    public static void findUserSpecificHistoryTrips(PUser user, final FindCallback<PTrip> callback) {
+        ParseQuery<PTrip> query = ParseQuery.getQuery(PTrip.class);
+        query.whereEqualTo(strOutBounder, user);
+        query.whereGreaterThanOrEqualTo(strFromDate, new Date());
+        query.findInBackground(new FindCallback<PTrip>() {
+            @Override
+            public void done(List<PTrip> pTrips, ParseException e) {
+                callback.done(pTrips,e);
+            }
+        });
+    }
 }

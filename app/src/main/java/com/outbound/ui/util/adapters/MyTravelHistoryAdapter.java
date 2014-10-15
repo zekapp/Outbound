@@ -1,5 +1,6 @@
 package com.outbound.ui.util.adapters;
 
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,26 +9,49 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PTrip;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
  * Created by zeki on 24/09/2014.
  */
-public class MyTravelHistoryAdapter extends ArrayAdapter<Object> {
-    public MyTravelHistoryAdapter(FragmentActivity activity, ArrayList<Object> objectArrayList) {
-        super(activity, R.layout.my_travel_history_list_item,objectArrayList);
+public class MyTravelHistoryAdapter extends ArrayAdapter<PTrip> {
+
+    private LayoutInflater inflater;
+    private SimpleDateFormat formatter;
+    public MyTravelHistoryAdapter(FragmentActivity activity) {
+        super(activity, R.layout.my_travel_history_list_item);
+
+        inflater = (LayoutInflater) getContext().getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+
+        formatter = new SimpleDateFormat("dd/MM/yyyy");
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
+        ViewHolder holder;
+        if(view == null){
+            view = inflater.inflate(R.layout.my_travel_history_list_item,parent,false);
+            holder = new ViewHolder();
+            holder.cityCountry = (TextView)view.findViewById(R.id.th_city_country);
+            holder.date = (TextView)view.findViewById(R.id.th_date);
+        }else{
+            holder = (ViewHolder)view.getTag();
+        }
 
-        if(convertView == null)
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_travel_history_list_item,parent,false);
+        final PTrip trip = getItem(position);
 
-        TextView cityCountry = (TextView)convertView.findViewById(R.id.th_city_country);
-        TextView date = (TextView)convertView.findViewById(R.id.th_date);
+        holder.cityCountry.setText(trip.getCity() + "," + trip.getCountry());
+        holder.date.setHint(formatter.format(trip.getFromDate() + " to " + trip.getToDate()));
 
-        return convertView;
+        return view;
+    }
+
+    private static class ViewHolder {
+        TextView cityCountry;
+        TextView date;
     }
 }

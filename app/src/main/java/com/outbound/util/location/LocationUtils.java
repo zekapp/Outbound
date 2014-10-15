@@ -16,7 +16,16 @@
 
 package com.outbound.util.location;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.AsyncTask;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.outbound.model.PUser;
+import com.outbound.util.GeoCodeCallback;
+import com.parse.ParseGeoPoint;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,6 +76,7 @@ public final class LocationUtils {
     // Create an empty string for initializing strings
     public static final String EMPTY_STRING = new String();
 
+
     public static List<PUser> orderFriendsAccordingDistance(List<PUser> pUsers) {
         final PUser currentUser = PUser.getCurrentUser();
         Collections.sort(pUsers, new Comparator<PUser>() {
@@ -80,6 +90,63 @@ public final class LocationUtils {
             }
         });
         return pUsers;
+    }
+
+    public static void findGeoLocationFromAddress(String[] addr, Context context, GeoCodeCallback callback ){
+        GeoLocationTask geoLocationTask = new GeoLocationTask(context,callback);
+        geoLocationTask.execute(addr);
+    }
+
+    private static class GeoLocationTask extends AsyncTask<String[], Void, ParseGeoPoint>{
+        private  GeoCodeCallback callback;
+        private Context localContext;
+
+        public GeoLocationTask(Context context,GeoCodeCallback cb) {
+            // Required by the semantics of AsyncTask
+            super();
+            localContext = context;
+            callback = cb;
+        }
+
+        @Override
+        protected ParseGeoPoint doInBackground(String[]... params) {
+            String[] addr = params[0];
+            String place = addr[0] + " " + addr[1] + " " + addr[2];
+            ParseGeoPoint latLng = new ParseGeoPoint();
+            try {
+                Geocoder selected_place_geocoder = new Geocoder(localContext);
+                List<Address> address;
+
+                address = selected_place_geocoder.getFromLocationName(place, 5);
+
+                if (address == null) {
+//                    d.dismiss();
+                } else {
+                    Address location = address.get(0);
+                    latLng.setLatitude(location.getLatitude());
+                    latLng.setLongitude(location.getLongitude());
+                }
+
+                return latLng;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+//                FetchLatLongFromService fetch_latlng_from_service_abc = new FetchLatLongFromService(
+//                        place.replaceAll("\\s+", ""));
+//                fetch_latlng_from_service_abc.execute();
+                return null;
+
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ParseGeoPoint parseGeoPoint) {
+            if(parseGeoPoint == null){
+                callback.done(null,null);
+            }else{
+                callback.done(parseGeoPoint,null);
+            }
+        }
     }
 
 }

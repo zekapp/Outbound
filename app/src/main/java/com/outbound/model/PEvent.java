@@ -25,12 +25,27 @@ public class PEvent extends ParseObject{
     private final static String createdBy = "createdBy";
     private final static String outBoundersGoing = "outBoundersGoing";
     private final static String startDate = "startDate";
+    private final static String startTime = "startTime";
     private final static String endDate = "endDate";
+    private final static String endTime = "endTime";
     private final static String country = "country";
     private final static String city = "city";
     private final static String place = "place";
     private final static String eventLocationPoint = "eventLocationPoint";
 
+    public Date getStartTime() {
+        return getDate(startTime);
+    }
+    public void setStartTime(Date time) {
+        put(startTime,time);
+    }
+
+    public Date getEndTime() {
+        return getDate(endTime);
+    }
+    public void setEndTime(Date time) {
+        put(endTime,time);
+    }
 
     public String getEventName() {
         return getString(eventName);
@@ -108,8 +123,8 @@ public class PEvent extends ParseObject{
         return getParseGeoPoint(eventLocationPoint);
     }
 
-    public void setLocation(ParseGeoPoint loc) {
-        put(eventLocationPoint, loc);
+    public void setLocation(ParseGeoPoint pLoc) {
+        put(eventLocationPoint, pLoc);
     }
 
     public static void findEventsAraoundCurrentUser

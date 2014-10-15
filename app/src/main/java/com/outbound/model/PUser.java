@@ -24,6 +24,25 @@ public class PUser extends ParseUser{
 
     public static final String strCurrentLocation = "currentLocation";
     public static final String strObjectId = "objectId";
+    public static final String facebookId = "facebookID";
+    public static final String userName = "username";
+    public static final String gender = "gender";
+    public static final String emailStr = "email";
+    public static final String profileImage = "profileImage";
+    public static final String backGroundIamge = "backGroundImage";
+    public static final String homeTown = "homeTown";
+    public static final String sexualPreference = "sexualPreference";
+    public static final String travelType = "travelType";
+    public static final String currentLocation = "currentLocation";
+    public static final String shortDescription = "shortDescription";
+    public static final String nextTravels = "NextTravels";
+    public static final String age = "age";
+    public static final String friends = "friends";
+    public static final String countryCode = "countryCode";
+    public static final String viewedBy = "viewedBy";
+    public static final String currentCity = "currentCity";
+    public static final String currentCountry = "currentCountry";
+    public static final String nationality = "nationality";
 
     public static PUser getCurrentUser(){
         return (PUser)ParseUser.getCurrentUser();
@@ -153,9 +172,10 @@ public class PUser extends ParseUser{
     public String getCountryCode(){
         return getString("countryCode");
     }
-    public void setCountryCode(String countryCode){
-        put("countryCode", countryCode);
+    public void setCountryCode(String cntrCode){
+        put("countryCode", cntrCode);
     }
+
 
     //ViewedBy
     public String getViewedBy(){
@@ -164,6 +184,7 @@ public class PUser extends ParseUser{
     public void setViewedBy(String viewedBy){
         put("viewedBy", viewedBy);
     }
+
 
     //CurrentCity
     public String getCurrentCity(){

@@ -29,6 +29,15 @@ public class SearchPeopleFragment extends BaseFragment {
     private SearchPeopleAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private List<PUser> userList = null;
+    @Override
+    protected void setUp(Object param1, Object param2) {
+        super.setUp(param1, param2);
+        if(param1 != null) {
+            userList = (List<PUser>)param1;
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -68,17 +77,20 @@ public class SearchPeopleFragment extends BaseFragment {
 //        for (int i = 0; i < 50; i++) {
 //            adapter.add(new Object());
 //        }
-        PUser.getPeopleArroundMe(new FindCallback<PUser>() {
-            @Override
-            public void done(List<PUser> pUsers, ParseException e) {
-                if(e == null){
-                    for(PUser pUser : pUsers){
-                        adapter.add(pUser);
+        if(userList == null){
+            PUser.getPeopleArroundMe(new FindCallback<PUser>() {
+                @Override
+                public void done(List<PUser> pUsers, ParseException e) {
+                    if(e == null){
+                        adapter.addAll(pUsers);
                     }
+                    updateView();
                 }
-                updateView();
-            }
-        });
+            });
+        }else{
+            adapter.addAll(userList);
+        }
+
 
         HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.sp_grid_view);
         userGridView.addHeaderView(header, null, false);

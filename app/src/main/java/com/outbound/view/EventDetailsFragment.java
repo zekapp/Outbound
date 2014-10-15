@@ -109,7 +109,6 @@ public class EventDetailsFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if(mCallbacks !=null){
-
                     mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,event.getCreatedBy(),null);
                 }
             }
@@ -133,7 +132,7 @@ public class EventDetailsFragment extends BaseFragment {
 
     private void setUpHeaderField(View header) {
         TextView date = (TextView)header.findViewById(R.id.ed_date);
-        date.setText(dateFormat.format(event.getStartDate()) + " | " + timeFormat.format(event.getStartDate()));
+        date.setText(dateFormat.format(event.getStartDate()) + " | " + timeFormat.format(event.getStartTime()));
         TextView placeText = (TextView)header.findViewById(R.id.ed_place);
         placeText.setText(event.getPlace());
         TextView cityCountryText = (TextView)header.findViewById(R.id.ed_city_country);

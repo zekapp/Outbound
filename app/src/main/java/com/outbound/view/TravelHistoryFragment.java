@@ -11,15 +11,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PTrip;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.MyTravelHistoryAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 24/09/2014.
  */
 public class TravelHistoryFragment extends BaseFragment {
+    private static final String TAG = makeLogTag(TravelHistoryFragment.class);
 
     private MyTravelHistoryAdapter mAdapter;
     private ListView mListView;
@@ -64,11 +72,22 @@ public class TravelHistoryFragment extends BaseFragment {
     }
 
     private void setUpMyTravelHistoryListView(View v) {
-        ArrayList<Object> test = new ArrayList<Object>();
-        for (int i = 0; i < 50; i++) {
-            test.add(new Object());
-        }
-        mAdapter = new MyTravelHistoryAdapter(getActivity(), test);
+
+        mAdapter = new MyTravelHistoryAdapter(getActivity());
+
+        PTrip.findUserSpecificHistoryTrips(PUser.getCurrentUser(),new FindCallback<PTrip>() {
+            @Override
+            public void done(List<PTrip> pTrips, ParseException e) {
+                if(e == null){
+                    mAdapter.addAll(pTrips);
+                }else
+                {
+                    LOGD(TAG, "setUpMyTravelHistoryListView: " + e.getMessage());
+                    showToastMessage("Network Error. Check connection");
+                }
+
+            }
+        });
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);

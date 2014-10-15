@@ -86,17 +86,12 @@ public class MyTripsFragment extends BaseFragment {
     private void setUpMyTripsListView(View v) {
 
         mAdapter = new TripsAdapter(getActivity());
-//        for (int i = 0; i < 50; i++) {
-//            mAdapter.add(new PTrip());
-//        }
 
         PTrip.findUserSpecificFutureTrips(PUser.getCurrentUser(),new FindCallback<PTrip>() {
             @Override
             public void done(List<PTrip> pTrips, ParseException e) {
                 if(e == null){
-                    for (PTrip trip : pTrips){
-                        mAdapter.add(trip);
-                    }
+                    mAdapter.addAll(pTrips);
                 }else{
                     LOGD(TAG, "findUserSpesificTrips e:" + e.getMessage());
                 }

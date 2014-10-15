@@ -147,7 +147,7 @@ public abstract class BaseFragment extends Fragment {
         alertDialog.show();
     }
 
-    protected void finishProgress() {
+    protected void stopProgress() {
         BaseFragment.this.progressDialog.dismiss();
     }
 
@@ -155,6 +155,7 @@ public abstract class BaseFragment extends Fragment {
         BaseFragment.this.progressDialog = ProgressDialog.show(
                 getActivity(), "", message, true);
     }
+
 
     protected void showToastMessage(String message){
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();

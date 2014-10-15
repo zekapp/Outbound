@@ -57,7 +57,7 @@ public class EventsAdapter extends ArrayAdapter<PEvent> {
 
         final RoundedImageView photo = holder.photo;
         List<PUser> attendingPeople = event.getOutboundersGoing();
-        if(!attendingPeople.isEmpty()){
+        if(attendingPeople != null){
             event.fetchEventCreater(new GetCallback<PUser>() {
                 @Override
                 public void done(PUser pUser, ParseException e) {

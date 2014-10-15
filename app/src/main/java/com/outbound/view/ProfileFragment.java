@@ -383,7 +383,6 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
     }
 
-
     private void setUpHeaderUserInfo(View v) {
         ImageView flag = (ImageView)v.findViewById(R.id.profile_flag);
 
