@@ -34,20 +34,27 @@ public class EventsFragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private PUser currentUser = PUser.getCurrentUser();
 
+    private List<PEvent> eventList = null;
     @Override
     protected void setUp( Object param1, Object param2) {
         super.setUp(param1,param2);
+
+        if(param1 instanceof List)
+            eventList = (List<PEvent>)param1;
     }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        setUpActionBar(activity);
     }
 
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_events, null);
         TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        title.setText(getResources().getString(R.string.action_bar_events_title));
+        if(eventList == null)
+            title.setText(getResources().getString(R.string.action_bar_events_title));
+        else
+            title.setText(getResources().getString(R.string.action_bar_events_result_title));
+
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_events_search_icon);
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +74,7 @@ public class EventsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setUpActionBar(getActivity());
         final View view = inflater.inflate(R.layout.list_view_layout, container, false);
         setUpSwipeRefreshLayout(view);
         setUpEventsAroundMeListView(view);
@@ -89,10 +97,6 @@ public class EventsFragment extends BaseFragment {
                     findEventsAraoundCurrentUser();
                 }
             });
-        }
-
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(true);
         }
     }
 
@@ -118,20 +122,28 @@ public class EventsFragment extends BaseFragment {
     }
 
     private void findEventsAraoundCurrentUser() {
-        PEvent.findEventsAraoundCurrentUser(currentUser,
-                Constants.Distance.EVENT_AROUND_PROXIMITY_IN_MILE, new FindCallback<PEvent>() {
-                    @Override
-                    public void done(List<PEvent> pEvents, ParseException e) {
-                        if(e == null){
-                            mAdapter.clear();
-                            for(PEvent event : pEvents){
-                                mAdapter.add(event);
+        if(eventList == null){
+
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+
+            PEvent.findEventsAroundCurrentUser(currentUser,
+                    Constants.Distance.EVENT_AROUND_PROXIMITY_IN_MILE, new FindCallback<PEvent>() {
+                        @Override
+                        public void done(List<PEvent> pEvents, ParseException e) {
+                            if(e == null){
+                                mAdapter.clear();
+                                mAdapter.addAll(pEvents);
+                                updateView();
                             }
-                            updateView();
+                            mSwipeRefreshLayout.setRefreshing(false);
                         }
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+                    });
+        }else{
+            mAdapter.addAll(eventList);
+        }
+
     }
 
     private void updateView() {

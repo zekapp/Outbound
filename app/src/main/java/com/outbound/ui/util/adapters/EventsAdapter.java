@@ -53,7 +53,7 @@ public class EventsAdapter extends ArrayAdapter<PEvent> {
 
         holder.eventName.setText(event.getEventName());
         holder.date.setHint(dateFormat.format(event.getStartDate()));
-        holder.time.setHint(timeFormat.format(event.getStartDate()));
+        holder.time.setHint(timeFormat.format(event.getStartTime()));
 
         final RoundedImageView photo = holder.photo;
         List<PUser> attendingPeople = event.getOutboundersGoing();

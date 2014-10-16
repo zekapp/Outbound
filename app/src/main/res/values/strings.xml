@@ -110,5 +110,6 @@
     <string name="play_services_available"><![CDATA[play_services_available\">Google Play services is available]]></string>
     <string name="no_geocoder_available">Cannot get address. No geocoder available.</string>
     <string name="trips_fragment_title">Trips</string>
+    <string name="action_bar_events_result_title">Search Result</string>
 
 </resources>

@@ -34,10 +34,9 @@ public class SearchPeopleFragment extends BaseFragment {
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1, param2);
         if(param1 != null) {
-            userList = (List<PUser>)param1;
+            userList = (List)param1;
         }
     }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

@@ -48,6 +48,8 @@ public abstract class BaseFragment extends Fragment {
 
     private GetAddressTask mDownloadAddressTask;
 
+    private Context context;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,7 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(activity);
         try {
             mCallbacks = (BaseFragmentCallbacks) activity;
+            context = activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
@@ -96,6 +99,8 @@ public abstract class BaseFragment extends Fragment {
 
         //hide the tabbar
         void hideTabbar();
+
+        boolean isLocationServiceConnected();
     }
 
     protected void setUp( Object param1, Object param2){
@@ -127,7 +132,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void showAlertDialog(String title, String message, Boolean status) {
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         // Setting Dialog Title
         alertDialog.setTitle(title);
 
@@ -153,12 +158,12 @@ public abstract class BaseFragment extends Fragment {
 
     protected void startProgress(String message) {
         BaseFragment.this.progressDialog = ProgressDialog.show(
-                getActivity(), "", message, true);
+                context, "", message, true);
     }
 
 
     protected void showToastMessage(String message){
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     protected void getAddress(final FindAddressCallback<Address> callback){
@@ -166,17 +171,17 @@ public abstract class BaseFragment extends Fragment {
         // In Gingerbread and later, use Geocoder.isPresent() to see if a geocoder is available.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && !Geocoder.isPresent()) {
             // No geocoder is present. Issue an error message
-            Toast.makeText(getActivity(), R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.no_geocoder_available, Toast.LENGTH_LONG).show();
             return;
         }
 
-        Location loc = mCallbacks.getLocation();
-
-        mDownloadAddressTask = new GetAddressTask(getActivity(),callback);
-        mDownloadAddressTask.execute(loc);
-
-
-//        (new GetAddressTask(getActivity(),callback)).execute(loc);
+        if(mCallbacks.isLocationServiceConnected()){
+            Location loc = mCallbacks.getLocation();
+            mDownloadAddressTask = new GetAddressTask(getActivity(),callback);
+            mDownloadAddressTask.execute(loc);
+        }else{
+            callback.done(null,null,null,new Exception("Service not connected yet"));
+        }
     }
 
     private class GetAddressTask extends AsyncTask<Location, Void, Address> {

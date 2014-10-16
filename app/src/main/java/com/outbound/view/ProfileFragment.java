@@ -3,10 +3,12 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -110,11 +112,23 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         super.onCreate(savedInstanceState);
     }
 
+    private static final String CURRENT_CITY_INSTANCE = "selected_city_name";
+    private static final String CURRENT_COUNTRY_NAME_INSTANCE = "selected_country_name_name";
+    private static final String CURRENT_COUNTRY_CODE_INSTANCE = "selected_country_code";
+    private String currentCity;
+    private String currentCountryName;
+    private String currentCountryCode;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.profile_fragment, container, false);
         final View header = inflater.inflate(R.layout.profile_header,null);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        currentCity = sp.getString(CURRENT_CITY_INSTANCE, "-");
+        currentCountryName = sp.getString(CURRENT_COUNTRY_NAME_INSTANCE, "-");
+        currentCountryCode = sp.getString(CURRENT_COUNTRY_CODE_INSTANCE, "-");
+
 
         setUpHeaderUserInfo(header);
         setUpheaderFunction(header);
@@ -129,7 +143,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         return view;
     }
 
-//    private void setUpTimer() {
+    //    private void setUpTimer() {
 //        new CountDownTimer(30000, 1000) {
 //
 //            public void onTick(long millisUntilFinished) {
@@ -161,8 +175,8 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                                 friendBadge.setVisibility(View.GONE);
                         }else
                         {
-                            showToastMessage(e.getMessage());
                             LOGD(TAG,"updateFriendBadge friendRequestSize: " + e.getMessage());
+                            showToastMessage("Network Error. Check connection.");
                         }
 
                     }
@@ -282,7 +296,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         travellerHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_FRAG_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_FRAG_ID,PUser.getCurrentUser(),null);
             }
         });
         LinearLayout events = (LinearLayout)view.findViewById(R.id.pf_my_events_layout);
@@ -324,6 +338,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
         currenLocText = (TextView)v.findViewById(R.id.pp_current_location_text);
 
+        currenLocText.setText(currentCity + ", " + currentCountryCode);
         currentLocationAction = new Runnable() {
             @Override
             public void run() {
@@ -331,11 +346,15 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                     @Override
                     public void done(String countryName, String cityName, String countryCode ,Exception e) {
                         if(e == null){
-                            currenLocText.setText(cityName + ", " + countryCode);
+                            currentCity = cityName;
+                            currentCountryName = countryName;
+                            currentCountryCode = countryCode;
+                            currenLocText.setText(currentCity + ", " + currentCountryCode);
                             currentUser.setCurrentCity(cityName);
                             currentUser.setCurrentCountry(countryName);
                             currentUser.saveInBackground();
-                        }
+                        }else
+                            currenLocText.setText(currentCity + ", " + currentCountryCode);
 
                         currenLocText.postDelayed(this.action,10000);
                     }
@@ -376,10 +395,17 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     @Override
     public void onPause() {
         super.onPause();
-        currenLocText.removeCallbacks(currentLocationAction);
-        friendBadge.removeCallbacks(frinedBadgeAction);
+        if(currentLocationAction != null && currenLocText != null)
+            currenLocText.removeCallbacks(currentLocationAction);
+        if(frinedBadgeAction != null && friendBadge != null)
+            friendBadge.removeCallbacks(frinedBadgeAction);
 
         coverPicture.unregisterSensorManager();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.edit().putString(CURRENT_CITY_INSTANCE, currentCity).commit();
+        sp.edit().putString(CURRENT_COUNTRY_NAME_INSTANCE, currentCountryName).commit();
+        sp.edit().putString(CURRENT_COUNTRY_CODE_INSTANCE, currentCountryCode).commit();
 
     }
 

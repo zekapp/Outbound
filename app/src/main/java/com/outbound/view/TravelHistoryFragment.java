@@ -32,10 +32,14 @@ public class TravelHistoryFragment extends BaseFragment {
     private MyTravelHistoryAdapter mAdapter;
     private ListView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private PUser pUser;
 
     @Override
     protected void setUp(Object param1, Object param2) {
         super.setUp(param1,param2);
+
+        if( param1 instanceof PUser)
+            pUser = (PUser)param1;
     }
     @Override
     public void onAttach(Activity activity) {
@@ -75,7 +79,7 @@ public class TravelHistoryFragment extends BaseFragment {
 
         mAdapter = new MyTravelHistoryAdapter(getActivity());
 
-        PTrip.findUserSpecificHistoryTrips(PUser.getCurrentUser(),new FindCallback<PTrip>() {
+        PTrip.findUserSpecificHistoryTrips(pUser,new FindCallback<PTrip>() {
             @Override
             public void done(List<PTrip> pTrips, ParseException e) {
                 if(e == null){

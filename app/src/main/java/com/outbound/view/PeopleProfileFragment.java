@@ -204,7 +204,7 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         travellerHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_FRAG_ID,null,null);
+                mCallbacks.deployFragment(Constants.PROFILE_TRAVEL_HISTORY_FRAG_ID,user,null);
             }
         });
     }

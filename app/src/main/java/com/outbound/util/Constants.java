@@ -34,6 +34,8 @@ public final class Constants  {
     public static final int PROFILE_MY_TRIP_DETAIL_FRAG_ID = 19;
     public static final int EVENT_CREATE_FRAGMENT_ID = 20;
     public static final int TRIPS_RESULT_FRAGMENT_ID = 21;
+    public static final int SEARCH_PEOPLE_RESULT_FRAG_ID = 22;
+    public static final int SEARCH_EVENTS_RESULT_FRAG_ID = 23;
     public static final int ITEM_INVALID = -1;
 
 

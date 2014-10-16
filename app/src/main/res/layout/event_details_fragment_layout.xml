@@ -13,7 +13,7 @@
         android:stretchMode="columnWidth"
         android:horizontalSpacing="2dip"
         android:verticalSpacing="2dip"
-        android:paddingBottom="80dp">
+        android:paddingBottom="65dp">
 
     </com.outbound.ui.util.HeaderGridView>
 </com.outbound.ui.util.MultiSwipeRefreshLayout>

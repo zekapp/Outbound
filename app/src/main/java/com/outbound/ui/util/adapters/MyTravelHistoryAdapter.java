@@ -45,7 +45,7 @@ public class MyTravelHistoryAdapter extends ArrayAdapter<PTrip> {
         final PTrip trip = getItem(position);
 
         holder.cityCountry.setText(trip.getCity() + "," + trip.getCountry());
-        holder.date.setHint(formatter.format(trip.getFromDate() + " to " + trip.getToDate()));
+        holder.date.setHint(formatter.format(trip.getFromDate()) + " to " + formatter.format(trip.getToDate()));
 
         return view;
     }

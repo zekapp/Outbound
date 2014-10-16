@@ -12,16 +12,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PEvent;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.EventsAdapter;
 import com.outbound.util.Constants;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 24/09/2014.
  */
 public class MyEventsFragment extends BaseFragment {
+    private static final String TAG = makeLogTag(MyEventsFragment.class);
 
     private EventsAdapter mAdapter;
     private ListView mListView;
@@ -94,11 +102,25 @@ public class MyEventsFragment extends BaseFragment {
         }
     }
     private void setUpMyTravelHistoryListView(View v) {
-        ArrayList<Object> test = new ArrayList<Object>();
-        for (int i = 0; i < 50; i++) {
-            test.add(new Object());
-        }
         mAdapter = new EventsAdapter(getActivity());
+
+        PEvent.findEventsOfSpecificUser(PUser.getCurrentUser(),new FindCallback<PEvent>() {
+            @Override
+            public void done(List<PEvent> pEvents, ParseException e) {
+                if(e == null){
+                    mAdapter.addAll(pEvents);
+                    updateView();
+                }else
+                {
+                    if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
+                        showToastMessage("You don't have an Event ");
+                    }else{
+                        LOGD(TAG, "findEventsOfSpecificUser e:" +e.getMessage());
+                        showToastMessage("Network Error. Check connection.");
+                    }
+                }
+            }
+        });
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);
@@ -106,8 +128,13 @@ public class MyEventsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mCallbacks !=null)
-                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,null,null);
+                    mCallbacks.deployFragment(Constants.EVENT_DETAIL_FRAG_ID,parent.getAdapter().getItem(position),null);
             }
         });
+    }
+
+    private void updateView() {
+        if(mAdapter != null)
+            mAdapter.notifyDataSetChanged();
     }
 }

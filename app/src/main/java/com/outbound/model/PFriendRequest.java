@@ -116,6 +116,7 @@ public class PFriendRequest extends ParseObject {
         mainQuery.include(strReceiver);
         mainQuery.include(strForwarder);
 
+        mainQuery.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         mainQuery.findInBackground(new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
@@ -156,6 +157,7 @@ public class PFriendRequest extends ParseObject {
         query.whereEqualTo(strStatus, strStatusPending);
         query.whereEqualTo(strReceiver, user);
         query.include(strForwarder);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findInBackground(new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
@@ -220,7 +222,7 @@ public class PFriendRequest extends ParseObject {
         });
     }
 
-    public static void acceptFriendReuest(PUser user,final SaveCallback callback) {
+    public static void acceptFriendRequest(PUser user,final SaveCallback callback) {
         PUser currentUser = PUser.getCurrentUser();
         ParseQuery<PFriendRequest> query = ParseQuery.getQuery(PFriendRequest.class);
         query.whereEqualTo(strForwarder, user);

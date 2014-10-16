@@ -47,6 +47,7 @@ import com.outbound.util.location.LocationUtils;
 import com.parse.ParseGeoPoint;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.outbound.util.Constants.*;
 import static com.outbound.util.LogUtils.*;
@@ -98,6 +99,7 @@ public class BaseActivity extends FragmentActivity implements
 
     private LinearLayout mTabBar;
 
+    public static boolean isLocationConnected = false;
 
     SharedPreferences mPrefs;
     SharedPreferences.Editor mEditor;
@@ -111,8 +113,8 @@ public class BaseActivity extends FragmentActivity implements
         public BaseFragment mFragment;
         private String mTag;
         private int mFragId;
-        private static Object mParam1;
-        private static Object mParam2;
+        private Object mParam1;
+        private Object mParam2;
 
         FragmentContainer(BaseFragment fragment, Object param1, Object param2, String tag, int fragId){
             mTag = tag;
@@ -142,7 +144,7 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[22];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[24];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -169,7 +171,10 @@ public class BaseActivity extends FragmentActivity implements
             new EventSearchFragment(),
             new MyTripsDetailFragment(),
             new CreateEventFragment(),
-            new TripsResultFragment()
+            new TripsResultFragment(),
+            new SearchPeopleFragment(),
+            new EventsFragment()
+
     };
 
 //    /*
@@ -346,7 +351,7 @@ public class BaseActivity extends FragmentActivity implements
     @Override
     public Location getLocation(){
         if (servicesConnected())
-            return mLocationClient.getLastLocation();
+            return mLocationClient.getLastLocation(); // todo:  Not connected. Call connect() and wait for onConnected() to be called.
         else
             return null;
     }
@@ -439,6 +444,7 @@ public class BaseActivity extends FragmentActivity implements
     public void onConnected(Bundle bundle) {
         LOGD(TAG, "onConnected...");
         startPeriodicUpdates();
+        isLocationConnected = true;
 //        if (mUpdatesRequested) {
 //            LOGD(TAG, "onConnected... mUpdatesRequested not null");
 //            startPeriodicUpdates();
@@ -447,7 +453,7 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void onDisconnected() {
-
+        isLocationConnected = false;
     }
     //GooglePlayServicesClient.OnConnectionFailedListener
     @Override
@@ -459,7 +465,7 @@ public class BaseActivity extends FragmentActivity implements
                 connectionResult.startResolutionForResult(
                         this,
                         LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
+                isLocationConnected = false;
                 /*
                 * Thrown if Google Play services canceled the original
                 * PendingIntent
@@ -507,6 +513,28 @@ public class BaseActivity extends FragmentActivity implements
 
     }
 
+    @Override
+    public void onBackPressed() {
+        LOGD(TAG,"fragViewer size: " + fragContainer.size() );
+        FragmentContainer displayFrag;
+        int fragViewerSize = fragContainer.size();
+        if(fragContainer.size() > 2){
+            displayFrag = fragContainer.get(fragViewerSize-2);
+            fragContainer.remove(fragViewerSize - 1);
+            deployFragment(displayFrag.mFragId, displayFrag.getmParam1(), displayFrag.getmParam2());
+        }else if (fragContainer.size() == 2)
+        {
+            fragContainer.remove(1);
+            onTabBarItemClicked(0);
+            displayFrag = fragContainer.get(0);
+            deployFragment(displayFrag.mFragId,displayFrag.getmParam1(),displayFrag.getmParam2());
+
+        }else
+        {
+            super.onBackPressed();
+        }
+    }
+
     private void addFragmentToOrderArray(int itemId, Object param1, Object param2) {
 
         //if item is one of the main fragment
@@ -541,29 +569,6 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onBackPressed() {
-        LOGD(TAG,"fragViewer size: " + fragContainer.size() );
-        FragmentContainer displayFrag;
-        int fragViewerSize = fragContainer.size();
-        if(fragContainer.size() > 2){
-            fragContainer.remove(fragViewerSize-1);
-            displayFrag = fragContainer.get(fragViewerSize-2);
-            deployFragment(displayFrag.mFragId,displayFrag.getmParam1(),displayFrag.getmParam2());
-        }else if (fragContainer.size() == 2)
-        {
-            fragContainer.remove(1);
-            onTabBarItemClicked(0);
-            displayFrag = fragContainer.get(0);
-            deployFragment(displayFrag.mFragId,displayFrag.getmParam1(),displayFrag.getmParam2());
-
-        }else
-        {
-            super.onBackPressed();
-        }
-    }
-
-
-    @Override
     public void backIconClicked() {
         //back
         onBackPressed();
@@ -574,6 +579,11 @@ public class BaseActivity extends FragmentActivity implements
         if(mTabBar != null) {
             mTabBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public boolean isLocationServiceConnected() {
+        return isLocationConnected;
     }
 
 

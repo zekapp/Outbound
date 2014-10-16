@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PUser;
+import com.outbound.ui.util.AgeRangeDialog;
 import com.outbound.ui.util.CityDialog;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.util.Constants;
@@ -24,7 +25,9 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -84,14 +87,12 @@ public class SearchPeopleDetailFragment extends BaseFragment {
         });
     }
 
-    private String userName = null;
-    private String cender = null;
     private String selectedCountry = null;
     private String selectedNationality = null;
     private String selectedCountryCode = null;
     private String selectedCity = null;
-    private GregorianCalendar birthDateFrom = null;
-    private GregorianCalendar birthDateTo = null;
+    private Date birthDateFrom = null;
+    private Date birthDateTo = null;
     private String nextTravelCountry = null;
 
 
@@ -131,8 +132,8 @@ public class SearchPeopleDetailFragment extends BaseFragment {
         if(selectedCity != null)
             query.whereEqualTo(PUser.currentCity, selectedCity);
         if(birthDateFrom != null && birthDateTo != null){
-            query.whereGreaterThanOrEqualTo(PUser.age, birthDateFrom.getTime());
-            query.whereLessThanOrEqualTo(PUser.age, birthDateTo.getTime());
+            query.whereGreaterThanOrEqualTo(PUser.age, birthDateFrom);
+            query.whereLessThanOrEqualTo(PUser.age, birthDateTo);
         }
         if(selectedNationality != null)
             query.whereEqualTo(PUser.nationality, selectedNationality);
@@ -152,7 +153,7 @@ public class SearchPeopleDetailFragment extends BaseFragment {
                     if(pUsers.size() > 0){
                         showToastMessage(pUsers.size() + " Outbounders found");
                         if(mCallbacks != null)
-                            mCallbacks.deployFragment(Constants.TAB_BAR_ITEM_SEARCH_FRAG_ID, LocationUtils.orderFriendsAccordingDistance(pUsers),null);
+                            mCallbacks.deployFragment(Constants.SEARCH_PEOPLE_RESULT_FRAG_ID, LocationUtils.orderFriendsAccordingDistance(pUsers),null);
                     }else {
                         showToastMessage("No Outbounders found");
                     }
@@ -243,9 +244,17 @@ public class SearchPeopleDetailFragment extends BaseFragment {
     }
 
     private void setUpSelectAgeRange() {
-
+        ageSelectButton.setHint("Select");
+        ageSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ageSelectButton.setHint("Select");
+                birthDateFrom = null;
+                birthDateTo = null;
+                openAgeSelectDialog(v);
+            }
+        });
     }
-
     private void setUpSelectCity() {
         citySelectButton.setHint("Select");
         citySelectButton.
@@ -305,6 +314,22 @@ public class SearchPeopleDetailFragment extends BaseFragment {
             }
         });
         cd.show();
+    }
+
+
+    private void openAgeSelectDialog(final View v) {
+        AgeRangeDialog ad = new AgeRangeDialog(getActivity());
+        ad.addAgeDialogListener(new AgeRangeDialog.AgeDialogListener() {
+            @Override
+            public void onAgeSelected(Date dateOfBirthFrom, Date dateOfBirthTo , int ageFrom, int ageTo) {
+                ((Button)v).setHint(Integer.toString(ageFrom)+ " to " + Integer.toString(ageTo));
+//                SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+//                ((Button)v).setHint(formatter.format(dateOfBirthFrom)+ " to " + formatter.format(dateOfBirthTo));
+                birthDateFrom = dateOfBirthFrom;
+                birthDateTo = dateOfBirthTo;
+            }
+        });
+        ad.show();
     }
 
     private void openTravellerDialog(final View v) {
@@ -402,4 +427,6 @@ public class SearchPeopleDetailFragment extends BaseFragment {
             }
         }).show();
     }
+
+
 }

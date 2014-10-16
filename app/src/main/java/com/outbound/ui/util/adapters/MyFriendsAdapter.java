@@ -101,7 +101,7 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
             public void onClick(View v) {
                 disableButtons(holder);
                 showToasMessege("Friend request from " + user.getUserName() + " accepting...");
-                PFriendRequest.acceptFriendReuest(user, new SaveCallback() {
+                PFriendRequest.acceptFriendRequest(user, new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         if(e == null){

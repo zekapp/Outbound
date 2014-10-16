@@ -2,6 +2,7 @@ package com.outbound.model;
 
 import android.location.Location;
 
+import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
@@ -9,6 +10,7 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -20,18 +22,19 @@ import java.util.List;
  */
 @ParseClassName("Events")
 public class PEvent extends ParseObject{
-    private final static String eventName = "eventName";
-    private final static String description = "description";
-    private final static String createdBy = "createdBy";
-    private final static String outBoundersGoing = "outBoundersGoing";
-    private final static String startDate = "startDate";
-    private final static String startTime = "startTime";
-    private final static String endDate = "endDate";
-    private final static String endTime = "endTime";
-    private final static String country = "country";
-    private final static String city = "city";
-    private final static String place = "place";
-    private final static String eventLocationPoint = "eventLocationPoint";
+    public final static String objectId = "objectId";
+    public final static String eventName = "eventName";
+    public final static String description = "description";
+    public final static String createdBy = "createdBy";
+    public final static String outBoundersGoing = "outBoundersGoing";
+    public final static String startDate = "startDate";
+    public final static String startTime = "startTime";
+    public final static String endDate = "endDate";
+    public final static String endTime = "endTime";
+    public final static String country = "country";
+    public final static String city = "city";
+    public final static String place = "place";
+    public final static String eventLocationPoint = "eventLocationPoint";
 
     public Date getStartTime() {
         return getDate(startTime);
@@ -76,7 +79,7 @@ public class PEvent extends ParseObject{
     }
 
     public void setOutboundersGoing(List<PUser> going) {
-        put(outBoundersGoing, Arrays.asList(going));
+        put(outBoundersGoing, going);
     }
 
     public Date getStartDate() {
@@ -127,13 +130,14 @@ public class PEvent extends ParseObject{
         put(eventLocationPoint, pLoc);
     }
 
-    public static void findEventsAraoundCurrentUser
+    public static void findEventsAroundCurrentUser
             (PUser currentUser, double proximity, final FindCallback<PEvent> callback) {
 
         ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
         query.whereWithinRadians(eventLocationPoint,currentUser.getCurrentLocation(),proximity);
         query.orderByAscending(startDate);
-//        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+//        query.include(PEvent.outBoundersGoing);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findInBackground(new FindCallback<PEvent>() {
             @Override
             public void done(List<PEvent> pEvents, ParseException e) {
@@ -155,10 +159,41 @@ public class PEvent extends ParseObject{
         ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
         query.whereEqualTo(createdBy,user);
         query.orderByAscending(startDate);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findInBackground(new FindCallback<PEvent>() {
             @Override
             public void done(List<PEvent> pEvents, ParseException e) {
                 callback.done(pEvents,e);
+            }
+        });
+    }
+
+    public static void joinTheEvent(PEvent event, final SaveCallback callback) {
+        event.add(PEvent.outBoundersGoing, PUser.getCurrentUser());
+        event.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                callback.done(e);
+            }
+        });
+    }
+
+    public static void checkIsAlreadyJoined(final PEvent event, final ResultCallback callback) {
+        ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
+        query.whereEqualTo(PEvent.objectId, event.getObjectId());
+        query.whereEqualTo(PEvent.outBoundersGoing, PUser.getCurrentUser());
+        query.getFirstInBackground(new GetCallback<PEvent>() {
+            @Override
+            public void done(PEvent pEvent, ParseException e) {
+                if(e != null){
+                    if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
+                        callback.done(false, null);
+                    }else
+                        callback.done(true,e);
+                }else{
+                    callback.done(true,e);
+                }
+
             }
         });
     }

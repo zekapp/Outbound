@@ -19,11 +19,13 @@ import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.EventDetailsAdapter;
 import com.outbound.util.Constants;
+import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -145,6 +147,36 @@ public class EventDetailsFragment extends BaseFragment {
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startProgress("You are logging in...");
+                PEvent.checkIsAlreadyJoined(event, new ResultCallback() {
+                    @Override
+                    public void done(boolean res, ParseException e) {
+                        if(!res){
+                            PEvent.joinTheEvent(event, new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    stopProgress();
+                                    if(e == null){
+                                        updateAdapter();
+                                        showToastMessage("You logged in \"" + event.getEventName() + "\" event.");
+                                    }else
+                                    {
+                                        showToastMessage("Network error. Check connection");
+                                        LOGD(TAG, "setUpHeaderField-joinTheEvent: " + e.getMessage());
+                                    }
+                                }
+                            });
+                        }else if( e == null){
+                            //object exist
+                            stopProgress();
+                            showToastMessage("You've already joined this event");
+                        }else{
+                            stopProgress();
+                            showToastMessage("Network error. Check connection");
+                            LOGD(TAG, "setUpHeaderField-checkIsAlreadyJoined e: " + e.getMessage());
+                        }
+                    }
+                });
 
             }
         });
@@ -154,43 +186,9 @@ public class EventDetailsFragment extends BaseFragment {
     private void setUpGridView(View view, View header) {
         adapter = new EventDetailsAdapter(getActivity());
 
-//        for (int i = 0; i < 50; i++) {
-//            adapter.add(new Object());
-//        }
-
-//        PUser.getUserListAsDistanceOrder(event.getOutboundersGoing(), new FindCallback<PUser>() {
-//            @Override
-//            public void done(List<PUser> pUsers, ParseException e) {
-//                for(PUser user : pUsers){
-//                    adapter.add(user);
-//                }
-//            }
-//        });
-
-
-
-//        for(PUser user : event.getOutboundersGoing()){
-//            adapter.add(user);
-//        }
-
         final int participiantCount = event.getOutboundersGoing().size();
-        for(PUser user : event.getOutboundersGoing()){
-            user.fetchIfNeededInBackground(new GetCallback<PUser>() {
-                List<PUser> userList = new ArrayList<PUser>();
-                @Override
-                public void done(PUser pUser, ParseException e) {
-                    if(e == null){
-                        adapter.add(pUser);
-                        updateView();
-//                        if(adapter.getCount() == participiantCount){
-//                            adapter.filterAccourdinDistance();
-//                            updateView();
-//                        }
-                    }
-                }
-            });
 
-        }
+        updateAdapter();
 
         HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.ed_grid_view);
         userGridView.addHeaderView(header, null, false);
@@ -202,6 +200,24 @@ public class EventDetailsFragment extends BaseFragment {
                     mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,parent.getAdapter().getItem(position),null);
             }
         });
+    }
+
+    private void updateAdapter() {
+
+        if(adapter != null)
+            adapter.clear();
+
+        for(PUser user : event.getOutboundersGoing()){
+            user.fetchIfNeededInBackground(new GetCallback<PUser>() {
+                @Override
+                public void done(PUser pUser, ParseException e) {
+                    if(e == null){
+                        adapter.add(pUser);
+                    }
+                }
+            });
+        }
+        updateView();
     }
 
     private void updateView() {

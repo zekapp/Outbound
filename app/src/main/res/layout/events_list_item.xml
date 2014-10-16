@@ -48,7 +48,7 @@
                 android:drawablePadding="7dp"/>
             <TextView
                 android:id="@+id/el_time"
-                android:layout_width="80dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:hint="7:00pm"
                 android:drawableLeft="@drawable/small_time"

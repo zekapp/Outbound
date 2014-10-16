@@ -9,10 +9,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="COUNTRY"
-        android:paddingLeft="54dp"
+        android:paddingLeft="47dp"
         android:layout_marginTop="10dp"
-
+        android:textStyle="bold"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -32,18 +33,20 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
-            android:paddingLeft="12dip"
-            android:text="Select"
+            android:hint="Select"
             />
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="CITY"
-        android:paddingLeft="54dp"
+        android:paddingLeft="47dp"
         android:layout_marginTop="10dp"
+        android:textStyle="bold"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -63,8 +66,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
-            android:text="Select"
-            android:paddingLeft="12dip"
+            android:hint="Select"
             />
     </LinearLayout>
 
@@ -84,11 +86,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/text_left_margin"
+            android:layout_marginLeft="9sp"
             android:layout_marginRight="@dimen/text_right_margin"
+            android:textSize="16sp"
             android:hint="Place"/>
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="DATE"
+        android:paddingLeft="47dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,25 +117,27 @@
             android:layout_marginLeft="@dimen/icon_margin_left"/>
         <Button
             style="?android:attr/spinnerStyle"
-            android:id="@+id/es_traveller_type_button"
+            android:id="@+id/es_event_date_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
-            android:text="Select"
-            android:paddingLeft="12dip"
+            android:hint="Select"
             />
     </LinearLayout>
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="PROXIMITY"
-        android:paddingLeft="54dp"
+        android:paddingLeft="47dp"
         android:layout_marginTop="10dp"
+        android:textStyle="bold"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -141,9 +157,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
-            android:text="Select"
-            android:paddingLeft="12dip"
+            android:hint="Select"
             />
     </LinearLayout>
-
 </LinearLayout>

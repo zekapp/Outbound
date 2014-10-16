@@ -111,7 +111,18 @@ public final class LocationUtils {
         @Override
         protected ParseGeoPoint doInBackground(String[]... params) {
             String[] addr = params[0];
+            if(addr[0] == null){
+                addr[0] = "";
+            }
+            if(addr[1] == null){
+                addr[1] = "";
+            }
+            if(addr[2] == null){
+                addr[2] = "";
+            }
+
             String place = addr[0] + " " + addr[1] + " " + addr[2];
+
             ParseGeoPoint latLng = new ParseGeoPoint();
             try {
                 Geocoder selected_place_geocoder = new Geocoder(localContext);
