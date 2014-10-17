@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.outbound.model.PEvent;
 import com.outbound.model.PFriendRequest;
+import com.outbound.model.PNoticeBoard;
 import com.outbound.model.PTrip;
 import com.outbound.model.PUser;
 import com.parse.Parse;
@@ -30,6 +31,7 @@ public class Outbound extends Application {
         ParseObject.registerSubclass(PFriendRequest.class);
         ParseObject.registerSubclass(PEvent.class);
         ParseObject.registerSubclass(PTrip.class);
+        ParseObject.registerSubclass(PNoticeBoard.class);
 //        PushService.setDefaultPushCallback(this, DispatchActivity.class);
 
         // Required - Initialize the Parse SDK

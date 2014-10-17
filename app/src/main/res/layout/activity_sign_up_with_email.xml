@@ -343,25 +343,24 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/outbound_sign_up_with_email_icon_padding_left"
-                    android:paddingTop="@dimen/outbound_sign_up_with_email_icon_padding_top"
-                    android:paddingRight="@dimen/outbound_sign_up_with_email_icon_padding_right"
-                    android:paddingBottom="@dimen/outbound_sign_up_with_email_icon_padding_bottom"
                     android:src="@drawable/list_hometown"
-                    android:layout_gravity="center"/>
-                <EditText
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/icon_margin_left"/>
+                <Button
+                    style="?android:attr/spinnerStyle"
                     android:id="@+id/home_town_sign_up_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/outbound_sign_up_with_height_edit_text"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="@dimen/outbound_sign_up_with_email_padding_right"
                     android:hint="@string/sing_up_user_hown_town_hint"
-                    android:layout_gravity="bottom"
                     />
             </LinearLayout>
 
@@ -404,6 +403,8 @@
                     android:layout_toRightOf="@+id/traveller_type_imageview_sign_up"
                     android:layout_alignParentBottom="true"
                     android:textColor="@color/black"
+                    android:lines="1"
+                    android:ellipsize="end"
                     android:hint="@string/sing_up_traveller_type_hint"
 />
                 />

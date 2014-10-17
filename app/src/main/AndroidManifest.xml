@@ -44,14 +44,17 @@
 
         <activity
             android:name=".view.BaseActivity"
+            android:screenOrientation="portrait"
              >
         </activity>
         <activity
             android:name=".view.MessageActivity"
+            android:screenOrientation="portrait"
             >
         </activity>
         <activity
             android:name=".view.NoticeBoardMessageActivity"
+            android:screenOrientation="portrait"
             >
         </activity>
         <activity
@@ -68,6 +71,7 @@
         </activity>
         <activity
             android:name=".loginSignUp.LoginWithEmail"
+            android:screenOrientation="portrait"
             android:parentActivityName="com.outbound.loginSignUp.WelcomePage"
             android:label="@string/title_activity_login_with_email">
         </activity>
@@ -75,6 +79,7 @@
         <!--FACEBOOK LOGIN-->
         <activity
             android:name="com.facebook.LoginActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_facebook_login" >
         </activity>
     </application>

@@ -48,12 +48,12 @@ public class MyTripsDetailFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        setUpActionBar(activity);
     }
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
         actionBarTitle = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        actionBarTitle.setText(getResources().getString(R.string.my_trips_detail_fragment_title));
+//        actionBarTitle.setText(getResources().getString(R.string.my_trips_detail_fragment_title));
+        actionBarTitle.setText(trip.getCity()+", "+trip.getCountry());
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
         icon.setEnabled(false);
 
@@ -76,6 +76,7 @@ public class MyTripsDetailFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setUpActionBar(getActivity());
         final View view = inflater.inflate(R.layout.my_trips_detail_fragment_layout, container, false);
 
         setUpSwipeRefreshLayout(view);

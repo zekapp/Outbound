@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.outbound.R;
+import com.outbound.model.PNoticeBoard;
 import com.outbound.ui.util.SlidingTabLayout;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.NoticeBoardMessageAdapter;
@@ -127,6 +128,8 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                 adapter[i].add(new Object());
             }
         }
+
+//        PNoticeBoard.findNoticeBoardPostsWhitinKm((float)20)
     }
 
     @Override

@@ -18,9 +18,7 @@
             android:src="@drawable/bg_profile_cover"
             android:scaleType="fitXY"
             parallax:tiltSensitivity="0.5"
-            parallax:scaledIntensity="true"
-            parallax:forwardTiltOffset="0.5"
-            parallax:intensity="1.05"/>
+            />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/profile_pager"

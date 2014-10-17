@@ -118,7 +118,7 @@ public class ExploreTripsAddFragment extends BaseFragment {
 
         if(!cancel){
             startProgress("Your Trip adding database... ");
-            PTrip.addTrip(selectedCity,selectedCountry,tripFromDate.getTime(),tripToDate.getTime(),new SaveCallback() {
+            PTrip.addTrip(selectedCity,selectedCountry,selectedCountryCode, tripFromDate.getTime(),tripToDate.getTime(),new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if(e == null){

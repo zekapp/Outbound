@@ -64,6 +64,8 @@
                 android:text="@string/test_message_medium"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="15dp"
+                android:maxLines="5"
+                android:ellipsize="end"
                 />
 
 

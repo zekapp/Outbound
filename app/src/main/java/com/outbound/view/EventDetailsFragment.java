@@ -3,6 +3,7 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,6 +133,7 @@ public class EventDetailsFragment extends BaseFragment {
         return view;
     }
 
+    private static  boolean aboutFieldExpanded = false;
     private void setUpHeaderField(View header) {
         TextView date = (TextView)header.findViewById(R.id.ed_date);
         date.setText(dateFormat.format(event.getStartDate()) + " | " + timeFormat.format(event.getStartTime()));
@@ -147,7 +149,27 @@ public class EventDetailsFragment extends BaseFragment {
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startProgress("You are logging in...");
+//                if(!checkThatisThisUserAlreadJoined()){
+//                    startProgress("You are joining...");
+//                    PEvent.joinTheEvent(event, new SaveCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            stopProgress();
+//                            if(e == null){
+//                                updateAdapter();
+//                                showToastMessage("You joined \"" + event.getEventName() + "\" event.");
+//                            }else
+//                            {
+//                                showToastMessage("Network error. Check connection");
+//                                LOGD(TAG, "setUpHeaderField-joinTheEvent: " + e.getMessage());
+//                            }
+//                        }
+//                    });
+//                }else{
+//                    showToastMessage("You've already joined this event");
+//                }
+
+                startProgress("You are joining...");
                 PEvent.checkIsAlreadyJoined(event, new ResultCallback() {
                     @Override
                     public void done(boolean res, ParseException e) {
@@ -158,7 +180,7 @@ public class EventDetailsFragment extends BaseFragment {
                                     stopProgress();
                                     if(e == null){
                                         updateAdapter();
-                                        showToastMessage("You logged in \"" + event.getEventName() + "\" event.");
+                                        showToastMessage("You joined in \"" + event.getEventName() + "\" event.");
                                     }else
                                     {
                                         showToastMessage("Network error. Check connection");
@@ -180,6 +202,34 @@ public class EventDetailsFragment extends BaseFragment {
 
             }
         });
+
+        final TextView abouttext = (TextView)header.findViewById(R.id.ed_about);
+        abouttext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(aboutFieldExpanded){
+                    aboutFieldExpanded = false;
+                    abouttext.setMaxLines(5);
+                }else{
+                    aboutFieldExpanded = true;
+                    abouttext.setMaxLines(105);
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+    private boolean checkThatisThisUserAlreadJoined() {
+//        List<PUser> userList = new ArrayList<PUser>();
+//        for(int i=0; i<adapter.getCount(); i++){
+//            userList.add(adapter.getItem(i));
+//        }
+//        return  userList.contains(PUser.getCurrentUser());
+
+        List<PUser> userList = event.getOutboundersGoing();
+        return userList.contains(PUser.getCurrentUser());
 
     }
 

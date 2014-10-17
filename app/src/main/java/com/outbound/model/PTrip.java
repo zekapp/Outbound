@@ -103,8 +103,8 @@ public class PTrip extends ParseObject{
 
     public static void findUserSpecificFutureTrips(PUser user,final FindCallback<PTrip> callback ){
         ParseQuery<PTrip> query = ParseQuery.getQuery(PTrip.class);
-        query.whereEqualTo(strOutBounder, user);
-        query.whereGreaterThanOrEqualTo(strFromDate, new Date());
+        query.whereEqualTo(PTrip.strOutBounder, user);
+        query.whereGreaterThanOrEqualTo(PTrip.strFromDate, new Date());
         query.findInBackground(new FindCallback<PTrip>() {
             @Override
             public void done(List<PTrip> pTrips, ParseException e) {
@@ -126,10 +126,11 @@ public class PTrip extends ParseObject{
         });
     }
 
-    public static void addTrip(String city, String country, Date fromDate, Date toDate, final SaveCallback callback) {
+    public static void addTrip(String city, String country,String countryCode, Date fromDate, Date toDate, final SaveCallback callback) {
         PTrip trip = new PTrip();
         trip.setCity(city);
         trip.setCountry(country);
+        trip.setCountryCode(countryCode);
         trip.setFromDate(fromDate);
         trip.setToDate(toDate);
         trip.setOutBounder(PUser.getCurrentUser());
@@ -155,7 +156,7 @@ public class PTrip extends ParseObject{
     public static void findUserSpecificHistoryTrips(PUser user, final FindCallback<PTrip> callback) {
         ParseQuery<PTrip> query = ParseQuery.getQuery(PTrip.class);
         query.whereEqualTo(strOutBounder, user);
-        query.whereGreaterThanOrEqualTo(strFromDate, new Date());
+        query.whereLessThanOrEqualTo(strFromDate, new Date());
         query.findInBackground(new FindCallback<PTrip>() {
             @Override
             public void done(List<PTrip> pTrips, ParseException e) {

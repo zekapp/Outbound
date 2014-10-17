@@ -150,30 +150,30 @@ public class BaseActivity extends FragmentActivity implements
     *       Indices must correspond to array {@link #Constants} items.
     * */
     private final static BaseFragment[] BASE_FRAGMENTS = {
-            new ProfileFragment(),
-            new ExploreTripsFragment(),
-            new EventsFragment(),
-            new SearchPeopleFragment(),
-            new NoticeBoardFragment(),
-            new MyFriendsFragment(),
-            new MyTripsFragment(),
-            new TravelHistoryFragment(),
-            new MyEventsFragment(),
-            new SettingsFragment(),
-            new ExploreTripsSearchFragment(),
-            new ExploreTripsAddFragment(),
-            new EventDetailsFragment(),
-            new SearchPeopleDetailFragment(),
-            new PeopleProfileFragment(),
-            new PeopleProfileFriendFragment(),
-            new NoticeBoardSearchMsgFrag(),
-            new NoticeBoardCreateMsgFrag(),
-            new EventSearchFragment(),
-            new MyTripsDetailFragment(),
-            new CreateEventFragment(),
-            new TripsResultFragment(),
-            new SearchPeopleFragment(),
-            new EventsFragment()
+            new ProfileFragment(),              //0
+            new ExploreTripsFragment(),         //1
+            new EventsFragment(),               //2
+            new SearchPeopleFragment(),         //3
+            new NoticeBoardFragment(),          //4
+            new MyFriendsFragment(),            //5
+            new MyTripsFragment(),              //6
+            new TravelHistoryFragment(),        //7
+            new MyEventsFragment(),             //8
+            new SettingsFragment(),             //9
+            new ExploreTripsSearchFragment(),   //10
+            new ExploreTripsAddFragment(),      //11
+            new EventDetailsFragment(),         //12
+            new SearchPeopleDetailFragment(),   //13
+            new PeopleProfileFragment(),        //14
+            new PeopleProfileFriendFragment(),  //15
+            new NoticeBoardSearchMsgFrag(),     //16
+            new NoticeBoardCreateMsgFrag(),     //17
+            new EventSearchFragment(),          //18
+            new MyTripsDetailFragment(),        //19
+            new CreateEventFragment(),          //20
+            new TripsResultFragment(),          //21
+            new SearchPeopleFragment(),         //22
+            new EventsFragment()                //23
 
     };
 
@@ -351,7 +351,7 @@ public class BaseActivity extends FragmentActivity implements
     @Override
     public Location getLocation(){
         if (servicesConnected())
-            return mLocationClient.getLastLocation(); // todo:  Not connected. Call connect() and wait for onConnected() to be called.
+            return mLocationClient.getLastLocation();
         else
             return null;
     }

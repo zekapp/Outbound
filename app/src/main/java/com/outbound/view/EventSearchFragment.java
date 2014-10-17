@@ -26,6 +26,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.parse.codec.binary.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,8 +92,8 @@ public class EventSearchFragment extends BaseFragment {
     private EditText eventPlaceEdit;
 
     //Proximity
-    final CharSequence distanceList[] = { "10km", "100km", "1000km", "1000+km" };
-    final double distance[] = {10,1000,1000,1000000};
+    final CharSequence distanceList[] = { "1km", "5km", "10km", "20km", "50km", "100km", "100km+" };
+    final double distance[] = {1,5,10,20,50,100,1000};
 
     private void attempToSearchEvent() {
 
@@ -108,7 +109,16 @@ public class EventSearchFragment extends BaseFragment {
             focusView = countrySelectButton;
             cancel = true;
         }
-        if(proximity == 0){
+
+        if(selectedCity == null ){
+            proximity = 5000; //5000 km diameter search. Country search
+        }
+
+        if(place == null){
+            proximity = 200; //200km km diameter search. City search
+        }
+
+        if((proximity == 0) && !selectedCity.isEmpty() && !place.isEmpty()){
             proximitySelectButton.setError("Required");
             focusView = countrySelectButton;
             cancel = true;
@@ -144,7 +154,7 @@ public class EventSearchFragment extends BaseFragment {
                                     if(mCallbacks != null)
                                         mCallbacks.deployFragment(Constants.SEARCH_EVENTS_RESULT_FRAG_ID, pEvents, null);
                                 }else
-                                    showToastMessage(" No Event found.");
+                                    showToastMessage(" No Event found. Increase Proximity");
                             }else
                             {
                                 LOGD(TAG, "findInBackground e: " + e.getMessage());
@@ -194,7 +204,18 @@ public class EventSearchFragment extends BaseFragment {
                 proximitySelectButton.setHint("Select");
                 proximitySelectButton.setError(null);
                 proximity = 0;
-                openProximityDialogButton(v);
+
+                if(selectedCity == null){
+                    citySelectButton.setError("Required Field!");
+                    citySelectButton.requestFocus();
+                }else if(eventPlaceEdit.getText().toString().isEmpty()){
+                    eventPlaceEdit.setError("Required Field!");
+                    citySelectButton.requestFocus();
+                }else
+                {
+                    openProximityDialogButton(v);
+                }
+
             }
         });
     }
@@ -268,7 +289,7 @@ public class EventSearchFragment extends BaseFragment {
                 setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        countrySelectButton.setError(null);
+                        citySelectButton.setError(null);
                         citySelectButton.setHint("Select");
                         selectedCity = null;
                         if (selectedCountry == null) {

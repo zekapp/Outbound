@@ -85,13 +85,6 @@ public class ExploreTripsSearchFragment extends BaseFragment {
             }
         });
     }
-    private void startProgress(){
-        progress = ProgressDialog.show(getActivity(),"","Trips Searching... ", true);
-    }
-
-    private void dissmissProgress(){
-        progress.dismiss();
-    }
     private void searchTrips() {
         ParseQuery<PTrip> query = ParseQuery.getQuery(PTrip.class);
         if(selectedCountry != null)
@@ -103,16 +96,25 @@ public class ExploreTripsSearchFragment extends BaseFragment {
         if (tripToDate != null)
             query.whereLessThanOrEqualTo(PTrip.strToDate, tripToDate.getTime());
 
-        startProgress();
+        startProgress("Exploring the Trips...");
         query.findInBackground(new FindCallback<PTrip>() {
             @Override
             public void done(List<PTrip> pTrips, ParseException e) {
-                dissmissProgress();
+                stopProgress();
                 if(e == null){
-                    LOGD(TAG, "Trips count: " + Integer.toString(pTrips.size()));
-
-                    if(mCallbacks != null)
-                        mCallbacks.deployFragment(Constants.TRIPS_RESULT_FRAGMENT_ID, pTrips, null);
+                    if(pTrips.size() >0 ){
+                        LOGD(TAG, "Trips count: " + Integer.toString(pTrips.size()));
+                        showToastMessage(pTrips.size() + " Trips found");
+                        if(mCallbacks != null)
+                            mCallbacks.deployFragment(Constants.TRIPS_RESULT_FRAGMENT_ID, pTrips, null);
+                    }else
+                    {
+                        showToastMessage("No Trips found");
+                    }
+                }else
+                {
+                    LOGD(TAG, "searchTrips-findInBackground e " + e.getMessage());
+                    showToastMessage(e.getMessage());
                 }
             }
         });

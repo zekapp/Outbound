@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.outbound.R;
 import com.outbound.model.PUser;
+import com.outbound.ui.util.CityDialog;
 import com.outbound.ui.util.CountryDialog;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.DispatchActivity;
@@ -66,6 +67,8 @@ public class SignUpWithEmail extends Activity{
     private String birthDateFormatted;
     private Dialog progressDialog;
     private String selectedCountry = null;
+    private String selectedCity = null;
+    private String selectedCountryCode = null;
 
 
     private boolean dateOfBirthSelected = false;
@@ -77,7 +80,7 @@ public class SignUpWithEmail extends Activity{
     private EditText mPasswordView;
     private Button birthDateButton;
     private Button countrySelectionButton;
-    private EditText homeTown;
+    private Button citySelectButton;
     private EditText aboutUser;
 
     private String selectedImagePathProfile = null;
@@ -111,6 +114,9 @@ public class SignUpWithEmail extends Activity{
             user = PUser.getCurrentUser();
         }
 
+        citySelectButton = (Button)findViewById(R.id.home_town_sign_up_edit_text);
+        countrySelectionButton = (Button)findViewById(R.id.country_button_sign_up);
+
         setUpActionBar();
 
         setUpEditText();
@@ -131,7 +137,34 @@ public class SignUpWithEmail extends Activity{
     }
 
     private void setUpHomeTownSelect() {
-        homeTown = (EditText)findViewById(R.id.home_town_sign_up_edit_text);
+
+        citySelectButton.setHint("Select");
+        citySelectButton.
+                setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        countrySelectionButton.setError(null);
+                        citySelectButton.setHint("Select");
+                        selectedCity = null;
+                        if (selectedCountry == null) {
+                            countrySelectionButton.setError("Required Field!");
+                            countrySelectionButton.requestFocus();
+                        } else {
+                            openCityDialog(v);
+                        }
+                    }
+                });
+    }
+    private void openCityDialog(final View v) {
+        CityDialog cd = new CityDialog(this, selectedCountryCode);
+        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+            @Override
+            public void onCitySelected(String countryName, String countryCode, String cityName) {
+                ((Button)v).setHint(cityName);
+                selectedCity = cityName;
+            }
+        });
+        cd.show();
     }
 
     private void setUpEditText() {
@@ -315,14 +348,32 @@ public class SignUpWithEmail extends Activity{
         }).show();
     }
     private void setUpCountrySelection() {
-        countrySelectionButton = (Button)findViewById(R.id.country_button_sign_up);
+
+        countrySelectionButton.setHint("Select");
         countrySelectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteSelectedCity();
-                showCountryPickerDialog(v);
+                countrySelectionButton.setError(null);
+                selectedCity = null;
+                selectedCountry = null;
+                citySelectButton.setHint("Select");
+                countrySelectionButton.setHint("Select");
+                openCountryDialog(v);
             }
         });
+    }
+
+    private void openCountryDialog(final View v) {
+        CountryDialog cd = new CountryDialog(this);
+        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+            @Override
+            public void onCountrySelected(String countryName, String countryCode) {
+                ((Button)v).setHint(countryName);
+                selectedCountry = countryName;
+                selectedCountryCode = countryCode;
+            }
+        });
+        cd.show();
     }
 
     private void deleteSelectedCity() {
@@ -547,8 +598,8 @@ public class SignUpWithEmail extends Activity{
             parseUser.setDateOfBirth(birthCalender.getTime());
             parseUser.setNationality(selectedCountry);
             parseUser.setCountryCode(new CountryCodes().getCode(selectedCountry).trim());
-            if(homeTown.getText().toString() != null )
-                parseUser.setHometown(homeTown.getText().toString());
+            if(selectedCity != null )
+                parseUser.setHometown(selectedCity);
             if(travSelList.size() > 0)
                 parseUser.setTravelerType(getTravTypeArray(travSelList));
             if(aboutUser.getText().toString() != null )

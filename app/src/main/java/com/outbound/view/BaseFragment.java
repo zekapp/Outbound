@@ -195,6 +195,8 @@ public abstract class BaseFragment extends Fragment {
         }
         @Override
         protected Address doInBackground(Location... params){
+            if(localContext == null)
+                return  null;
             Geocoder geocoder = new Geocoder(localContext, Locale.getDefault());
             Location location = params[0];
             List<Address> addresses = null;

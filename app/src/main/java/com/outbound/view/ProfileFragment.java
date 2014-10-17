@@ -115,19 +115,19 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     private static final String CURRENT_CITY_INSTANCE = "selected_city_name";
     private static final String CURRENT_COUNTRY_NAME_INSTANCE = "selected_country_name_name";
     private static final String CURRENT_COUNTRY_CODE_INSTANCE = "selected_country_code";
-    private String currentCity;
-    private String currentCountryName;
-    private String currentCountryCode;
+    private String currentCity = "-";
+    private String currentCountryName = "-";
+    private String currentCountryCode = "-";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.profile_fragment, container, false);
         final View header = inflater.inflate(R.layout.profile_header,null);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currentCity = sp.getString(CURRENT_CITY_INSTANCE, "-");
-        currentCountryName = sp.getString(CURRENT_COUNTRY_NAME_INSTANCE, "-");
-        currentCountryCode = sp.getString(CURRENT_COUNTRY_CODE_INSTANCE, "-");
+//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        currentCity = sp.getString(CURRENT_CITY_INSTANCE, "-");
+//        currentCountryName = sp.getString(CURRENT_COUNTRY_NAME_INSTANCE, "-");
+//        currentCountryCode = sp.getString(CURRENT_COUNTRY_CODE_INSTANCE, "-");
 
 
         setUpHeaderUserInfo(header);
@@ -402,10 +402,10 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
         coverPicture.unregisterSensorManager();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.edit().putString(CURRENT_CITY_INSTANCE, currentCity).commit();
-        sp.edit().putString(CURRENT_COUNTRY_NAME_INSTANCE, currentCountryName).commit();
-        sp.edit().putString(CURRENT_COUNTRY_CODE_INSTANCE, currentCountryCode).commit();
+//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        sp.edit().putString(CURRENT_CITY_INSTANCE, currentCity).commit();
+//        sp.edit().putString(CURRENT_COUNTRY_NAME_INSTANCE, currentCountryName).commit();
+//        sp.edit().putString(CURRENT_COUNTRY_CODE_INSTANCE, currentCountryCode).commit();
 
     }
 

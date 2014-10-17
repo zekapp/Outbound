@@ -14,10 +14,7 @@
         android:layout_height="match_parent"
         android:src="@drawable/bg_landing"
         android:scaleType="centerCrop"
-        parallax:tiltSensitivity="2.5"
-        parallax:scaledIntensity="true"
-        parallax:forwardTiltOffset="0.35"
-        parallax:intensity="1.2"
+        parallax:tiltSensitivity="1.5"
         />
 
     <ImageView
