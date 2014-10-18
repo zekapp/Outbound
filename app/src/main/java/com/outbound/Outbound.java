@@ -39,6 +39,7 @@ public class Outbound extends Application {
 //        Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
         ParseFacebookUtils.initialize(getString(R.string.facebook_app_id));
+        
 
         instance = this;
 

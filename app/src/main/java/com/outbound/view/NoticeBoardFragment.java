@@ -4,8 +4,10 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -15,7 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Session;
+import com.facebook.widget.WebDialog;
 import com.outbound.R;
 import com.outbound.model.PNoticeBoard;
 import com.outbound.model.PUser;
@@ -24,9 +31,10 @@ import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.NoticeBoardMessageAdapter;
 import com.outbound.util.Constants;
-import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +49,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     private static final String TAG = makeLogTag(NoticeBoardFragment.class);
     private static final String ARG_FRIEND_STATUS_INDEX
             = "com.outbound.ARG_NOTICE_BOARD_INDEX";
+    private final int REQUIRED_FRIEND_COUNT = 5;
 
     //four adapter for four different distance.
     private NoticeBoardMessageAdapter[] adapter = new NoticeBoardMessageAdapter[4];
@@ -48,6 +57,8 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     private OurViewPagerAdapter mViewPagerAdapter = null;
     private SlidingTabLayout mSlidingTabLayout = null;
 
+    private static int invitedFriendCount = 0;
+    private static final String INVITED_FACEBOOK_FRIEND_COUNT = "invoted_facebook_friend_count";
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -57,6 +68,9 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        invitedFriendCount = sp.getInt(INVITED_FACEBOOK_FRIEND_COUNT, 0);
 
         int i;
         for (i = 0; i < 4; i++) {
@@ -117,6 +131,136 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
         mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 3){
+                    if(invitedFriendCount < REQUIRED_FRIEND_COUNT){
+                        openFacebookRequestDialog();
+                    }
+                }
+            }
+        });;
+
+    }
+
+    private void openFacebookRequestDialog() {
+        final AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
+        ad.setTitle("Invite your Friends");
+        ad.setMessage("This application is better with friends! Would you like" +
+                " to invite them. Inviting 5 friends will activate the WorldWide noticeboard ");
+        ad.setPositiveButton("Invite", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                inviteFriends(new FunctionCallback<Integer>() {
+                    @Override
+                    public void done(Integer count, ParseException e) {
+                        if(count != null){
+                            if(count >= (REQUIRED_FRIEND_COUNT - invitedFriendCount)){
+                                // update parse database
+                                invitedFriendCount = count + invitedFriendCount;
+                                saveFriendRequestCount(invitedFriendCount);
+                                showToastMessage("WorldWide noticeboard opened");
+                                updateAdapterWhitinWorld(null);
+                            }else
+                            {
+                                invitedFriendCount = count + invitedFriendCount;
+                                saveFriendRequestCount(invitedFriendCount);
+                                showToastMessage("You have to invite at least "+
+                                        Integer.toString(REQUIRED_FRIEND_COUNT-invitedFriendCount)+" friends...");
+                                mViewPager.setCurrentItem(2);
+                            }
+
+                        }else
+                        {
+                            mViewPager.setCurrentItem(2);
+                        }
+
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+        ad.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mViewPager.setCurrentItem(2);
+                dialog.dismiss();
+            }
+        });
+        ad.show();
+
+    }
+
+    private void saveFriendRequestCount(int count) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.edit().putInt(INVITED_FACEBOOK_FRIEND_COUNT, count).commit();
+    }
+
+    private void inviteFriends(final FunctionCallback<Integer> callback) {
+        final Session session = ParseFacebookUtils.getSession();
+        if(session != null && session.isOpened()){
+            LOGD(TAG, "facebook session is open");
+            Bundle params = new Bundle();
+            params.putString("message", "Hey. Have you try the \"Outbounders\". It is an awesome application for backpackers.");
+
+            WebDialog requestsDialog = (
+                    new WebDialog.RequestsDialogBuilder(getActivity(),
+                            Session.getActiveSession(),
+                            params))
+                    .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+                        @Override
+                        public void onComplete(Bundle values,
+                                               FacebookException error) {
+                            if (error != null) {
+                                if (error instanceof FacebookOperationCanceledException) {
+                                    Toast.makeText(getActivity().getApplicationContext(),
+                                            "Request cancelled",
+                                            Toast.LENGTH_SHORT).show();
+                                    callback.done(null,null);
+                                } else {
+                                    Toast.makeText(getActivity().getApplicationContext(),
+                                            "Network Error",
+                                            Toast.LENGTH_SHORT).show();
+                                    callback.done(null,null);
+                                }
+                            } else {
+                                ArrayList<String> to = new ArrayList<String>();
+                                final String requestId = values.getString("request");
+                                int i = 0;
+                                while (true) {
+                                    String x = values.getString("to["+i+"]");
+                                    if (x == null) {
+                                        break;
+                                    } else {
+                                        to.add(x);
+                                        i++;
+                                    }
+                                }
+                                if (requestId != null) {
+                                    Toast.makeText(getActivity().getApplicationContext(),
+                                            "Request sent",
+                                            Toast.LENGTH_SHORT).show();
+                                    callback.done(to.size(),null);// you need count;
+                                } else {
+                                    Toast.makeText(getActivity().getApplicationContext(),
+                                            "Request cancelled",
+                                            Toast.LENGTH_SHORT).show();
+                                    callback.done(null,null);
+                                }
+                            }
+                        }
+                    })
+                    .build();
+            requestsDialog.show();
+
+        }else{
+            LOGD(TAG, "facebook session is closed");
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "facebook session is closed",
+                    Toast.LENGTH_SHORT).show();
+            callback.done(null,null);
+        }
     }
 
     private void setSlidingTabLayoutContentDescriptions() {
@@ -137,7 +281,9 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
         updateAdapterWhitin20Km(null);
         updateAdapterWhitin100Km(null);
         updateAdapterWhitinCountry(null);
-        updateAdapterWhitinWorld(null);
+
+        if(invitedFriendCount >= REQUIRED_FRIEND_COUNT)
+            updateAdapterWhitinWorld(null);
     }
 
     private void updateAdapterWhitinWorld(final SwipeRefreshLayout swipeRefreshLayout) {
@@ -222,6 +368,8 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
         adapter[fragId].notifyDataSetChanged();
     }
 
+    // NoticeBoardSubListFragment.Listener
+    //--------------------------------------------------------
     @Override
     public void onFragmentViewCreated(ListFragment fragment) {
         //        fragment.getListView().addHeaderView(
@@ -257,12 +405,13 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                 updateAdapterWhitinCountry(swipeRefreshLayout);
                 break;
             case 3:
-                updateAdapterWhitinWorld(swipeRefreshLayout);
+                if(invitedFriendCount >= REQUIRED_FRIEND_COUNT)
+                    updateAdapterWhitinWorld(swipeRefreshLayout);
                 break;
         }
-
-
     }
+
+    //-------------------------------------------
 
     @Override
     public void profilePictureClicked(PUser user) {

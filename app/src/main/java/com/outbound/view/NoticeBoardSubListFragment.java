@@ -38,6 +38,7 @@ public class NoticeBoardSubListFragment extends ListFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         mRoot = inflater.inflate(R.layout.notice_board_sub_fragment, container, false);
         if (mContentDescription != null) {
             mRoot.setContentDescription(mContentDescription);
