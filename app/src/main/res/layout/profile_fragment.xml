@@ -8,7 +8,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profile_message_list"/>
+        android:id="@+id/profile_message_list"
+        android:paddingBottom="@dimen/listView_bottom_padding"/>
 
 </com.outbound.ui.util.MultiSwipeRefreshLayout>
 

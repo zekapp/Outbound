@@ -1,18 +1,25 @@
 package com.outbound.model;
 
+import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.DecimalFormat;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,6 +50,8 @@ public class PUser extends ParseUser{
     public static final String currentCity = "currentCity";
     public static final String currentCountry = "currentCountry";
     public static final String nationality = "nationality";
+    public static final String blockedBy = "blockedBy";
+
 
     public static PUser getCurrentUser(){
         return (PUser)ParseUser.getCurrentUser();
@@ -203,6 +212,15 @@ public class PUser extends ParseUser{
         put("currentCountry", currentCountry);
     }
 
+    //BlockedBy
+    public List<PUser> getBlockedBy(){
+        return getList(blockedBy);
+    }
+    public void setBlockedByUser(PUser user){
+        //use cloud code
+    }
+
+
     public int getAge() {
         Date curDate = new Date();
         if(getDateOfBirth() != null)
@@ -232,6 +250,34 @@ public class PUser extends ParseUser{
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
                 callback.done(pUsers,e);
+            }
+        });
+    }
+
+    public static void blockThisUser(PUser user , final ResultCallback callback) {
+        ParseCloud.callFunctionInBackground("block_user",new AbstractMap<String, Object>() {
+            @Override
+            public Set<Entry<String, Object>> entrySet() {
+                return null;
+            }
+        }, new FunctionCallback<Object>() {
+            @Override
+            public void done(Object o, ParseException e) {
+                if(e == null){
+                    callback.done(true, null);
+                }else
+                    callback.done(false, e);
+            }
+        });
+    }
+
+    public static void fetchTheSpesificUserFromId(String userObjectID, final GetCallback<PUser> callback) {
+        ParseQuery<PUser> query = ParseQuery.getQuery(PUser.class);
+        query.whereEqualTo(PUser.strObjectId, userObjectID);
+        query.getFirstInBackground(new GetCallback<PUser>() {
+            @Override
+            public void done(PUser pUser, ParseException e) {
+                callback.done(pUser, e);
             }
         });
     }

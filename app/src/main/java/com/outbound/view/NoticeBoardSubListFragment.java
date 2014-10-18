@@ -27,7 +27,7 @@ public class NoticeBoardSubListFragment extends ListFragment{
         public void onFragmentViewCreated(ListFragment fragment);
         public void onFragmentAttached(ListFragment fragment);
         public void onFragmentDetached(ListFragment fragment);
-        public void onFragmentSwipeRefreshed(ListFragment fragment);
+        public void onFragmentSwipeRefreshed(ListFragment fragment,SwipeRefreshLayout swipeRefreshLayout );
     }
 
     public void setUp(Fragment mCallerFragment){
@@ -77,7 +77,7 @@ public class NoticeBoardSubListFragment extends ListFragment{
                     //get the latest message for this user.
 
                     if(mCallBackFragment!=null)
-                        mCallBackFragment.onFragmentSwipeRefreshed(NoticeBoardSubListFragment.this);
+                        mCallBackFragment.onFragmentSwipeRefreshed(NoticeBoardSubListFragment.this,mSwipeRefreshLayout );
                 }
             });
         }

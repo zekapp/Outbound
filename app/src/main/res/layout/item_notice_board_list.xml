@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="@dimen/outbound_list_view_item_height_with_picture_and_message">
@@ -10,13 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/outbound_list_view_item_height_ext">
 
-        <com.parse.ParseImageView
+        <!--<com.parse.ParseImageView-->
+            <!--android:id="@+id/nb_user_photo"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/white_rounded_rectangle"-->
+            <!--android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"-->
+            <!--android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>-->
+
+        <com.outbound.ui.util.RoundedImageView
             android:id="@+id/nb_user_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/list_picture_width"
+            android:layout_height="@dimen/list_picture_height"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/list_picture_left_margin"
+            android:scaleType="fitXY"
+            app:corner_radius="@dimen/list_picture_radius"
+            app:border_width="@dimen/list_picture_border_width"
+            app:oval="false"
+            app:border_color="@color/list_picture_border_color"
             android:background="@drawable/white_rounded_rectangle"
-            android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
-            android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,10 +89,10 @@
         android:id="@+id/nb_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:lines="2"
+        android:maxLines="2"
         android:ellipsize="end"
         android:hint="@string/test_message_medium"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="10dp"/>
 
     <LinearLayout
@@ -87,6 +102,7 @@
         android:layout_gravity="end">
 
         <TextView
+            android:id="@+id/nb_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/theme_accent_1"
@@ -103,6 +119,7 @@
             android:padding="7dp"/>
 
         <TextView
+            android:id="@+id/nb_block"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/theme_accent_1"

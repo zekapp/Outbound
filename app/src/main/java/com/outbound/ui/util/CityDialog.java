@@ -38,6 +38,10 @@ public class CityDialog extends Dialog{
 
     private final List<CityDialogListener> listeners = new LinkedList<CityDialogListener>();
 
+    public void addCityDialogListener(CityDialogListener listener) {
+        listeners.add(listener);
+    }
+
     public CityDialog(Context context, String selectedCountryCode) {
         super(context);
         countryCode = selectedCountryCode;
@@ -147,7 +151,5 @@ public class CityDialog extends Dialog{
         });
     }
 
-    public void addCityDialogListener(CityDialogListener listener) {
-        listeners.add(listener);
-    }
+
 }

@@ -2,6 +2,8 @@ package com.outbound.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,18 +18,27 @@ import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PNoticeBoard;
+import com.outbound.model.PUser;
 import com.outbound.ui.util.SlidingTabLayout;
+import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
 import com.outbound.ui.util.adapters.NoticeBoardMessageAdapter;
 import com.outbound.util.Constants;
+import com.outbound.util.ResultCallback;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.outbound.util.LogUtils.*;
 
 /**
  * Created by zeki on 15/09/2014.
  */
-public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubListFragment.Listener{
-
+public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubListFragment.Listener ,
+        NoticeBoardMessageAdapter.OnNoticeBoardItemClickedListener{
+    private static final String TAG = makeLogTag(NoticeBoardFragment.class);
     private static final String ARG_FRIEND_STATUS_INDEX
             = "com.outbound.ARG_NOTICE_BOARD_INDEX";
 
@@ -50,6 +61,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
         int i;
         for (i = 0; i < 4; i++) {
             adapter[i] = new NoticeBoardMessageAdapter(getActivity());
+            adapter[i].addOnItemclickedListener(this);
         }
     }
 
@@ -122,14 +134,92 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     }
 
     private void setUpNoticeBoardAdapter() {
-        //Test data
-        for (int i = 0; i < adapter.length; i++) {
-            for (int j = 0; j < 50; j++) {
-                adapter[i].add(new Object());
-            }
-        }
+        updateAdapterWhitin20Km(null);
+        updateAdapterWhitin100Km(null);
+        updateAdapterWhitinCountry(null);
+        updateAdapterWhitinWorld(null);
+    }
 
-//        PNoticeBoard.findNoticeBoardPostsWhitinKm((float)20)
+    private void updateAdapterWhitinWorld(final SwipeRefreshLayout swipeRefreshLayout) {
+        PNoticeBoard.findPostsWhitinWorld(new FindCallback<PNoticeBoard>() {
+            @Override
+            public void done(List<PNoticeBoard> pNoticeBoards, ParseException e) {
+                if(swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
+
+                if (e == null) {
+                    adapter[3].clear();
+                    adapter[3].addAll(pNoticeBoards);
+                    updateView(3);
+                } else {
+                    LOGD(TAG, "findPostsWhitinWorld e: " + e.getMessage());
+                    showToastMessage("Noetwork Error. Check connection");
+                }
+            }
+        });
+    }
+
+    private void updateAdapterWhitinCountry(final SwipeRefreshLayout swipeRefreshLayout) {
+        PNoticeBoard.findPostsWhitinCountry(new FindCallback<PNoticeBoard>() {
+            @Override
+            public void done(List<PNoticeBoard> pNoticeBoards, ParseException e) {
+                if(swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
+
+                if (e == null) {
+                    adapter[2].clear();
+                    adapter[2].addAll(pNoticeBoards);
+                    updateView(2);
+                } else {
+                    LOGD(TAG, "findPostsWhitinCountry e: " + e.getMessage());
+                    showToastMessage("Noetwork Error. Check connection");
+                }
+            }
+        });
+    }
+
+    private void updateAdapterWhitin100Km(final SwipeRefreshLayout swipeRefreshLayout) {
+        PNoticeBoard.findPostsWhitinKm((float)100, new FindCallback<PNoticeBoard>() {
+            @Override
+            public void done(List<PNoticeBoard> pNoticeBoards, ParseException e) {
+                if(swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
+                if(e == null){
+                    adapter[1].clear();
+                    adapter[1].addAll(pNoticeBoards);
+                    updateView(1);
+
+                }else
+                {
+                    LOGD(TAG, "findPostsWhitinKm 100 e: " + e.getMessage());
+                    showToastMessage("Noetwork Error. Check connection");
+                }
+            }
+        });
+    }
+
+    private void updateAdapterWhitin20Km(final SwipeRefreshLayout swipeRefreshLayout) {
+        PNoticeBoard.findPostsWhitinKm((float)20, new FindCallback<PNoticeBoard>() {
+            @Override
+            public void done(List<PNoticeBoard> pNoticeBoards, ParseException e) {
+                if(swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
+
+                if(e == null){
+                    adapter[0].clear();
+                    adapter[0].addAll(pNoticeBoards);
+                    updateView(0);
+                }else
+                {
+                    LOGD(TAG, "findPostsWhitinKm 20 e: " + e.getMessage());
+                    showToastMessage("Noetwork Error. Check connection");
+                }
+            }
+        });
+    }
+
+    private void updateView(int fragId) {
+        adapter[fragId].notifyDataSetChanged();
     }
 
     @Override
@@ -137,6 +227,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
         //        fragment.getListView().addHeaderView(
 //                getLayoutInflater().inflate(R.layout.reserve_action_bar_space_header_view, null));
         int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
+        LOGD(TAG, "onFragmentViewCreated index: " + fragIndex);
         fragment.setListAdapter(adapter[fragIndex]);
     }
 
@@ -151,10 +242,32 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     }
 
     @Override
-    public void onFragmentSwipeRefreshed(ListFragment fragment) {
+    public void onFragmentSwipeRefreshed(ListFragment fragment,SwipeRefreshLayout swipeRefreshLayout) {
         //fragIndex Refrehsed
         int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
 
+        switch (fragIndex){
+            case 0:
+                updateAdapterWhitin20Km(swipeRefreshLayout);
+                break;
+            case 1:
+                updateAdapterWhitin100Km(swipeRefreshLayout);
+                break;
+            case 2:
+                updateAdapterWhitinCountry(swipeRefreshLayout);
+                break;
+            case 3:
+                updateAdapterWhitinWorld(swipeRefreshLayout);
+                break;
+        }
+
+
+    }
+
+    @Override
+    public void profilePictureClicked(PUser user) {
+        if(mCallbacks != null)
+            mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID,user,null);
     }
 
     private class OurViewPagerAdapter extends BaseFragmentStatePagerAdapter {

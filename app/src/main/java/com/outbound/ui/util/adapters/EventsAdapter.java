@@ -14,6 +14,7 @@ import com.outbound.model.PUser;
 import com.outbound.ui.util.RoundedImageView;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.text.SimpleDateFormat;
@@ -62,7 +63,8 @@ public class EventsAdapter extends ArrayAdapter<PEvent> {
                 @Override
                 public void done(PUser pUser, ParseException e) {
                     if(e == null) {
-                        photo.setParseFile(pUser.getProfilePicture());
+                        ParseFile file = pUser.getProfilePicture();
+                        photo.setParseFile(file);
                         photo.loadInBackground();
                     }
                 }
