@@ -100,6 +100,9 @@ public abstract class BaseFragment extends Fragment {
         //hide the tabbar
         void hideTabbar();
 
+        //showTabbar
+        void showTabbar();
+
         boolean isLocationServiceConnected();
     }
 

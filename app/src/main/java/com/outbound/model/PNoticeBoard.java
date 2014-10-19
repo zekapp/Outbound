@@ -93,8 +93,6 @@ public class PNoticeBoard extends ParseObject {
     }
 
     public List<NoticeBoardMessage> getAllMessages() {
-
-
         Gson gson = new Gson();
 //        String jsonString = getString(messages);
         JSONArray array = getJSONArray(messages);

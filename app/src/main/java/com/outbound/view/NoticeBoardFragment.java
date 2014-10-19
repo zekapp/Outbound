@@ -59,6 +59,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
 
     private static int invitedFriendCount = 0;
     private static final String INVITED_FACEBOOK_FRIEND_COUNT = "invoted_facebook_friend_count";
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -74,8 +75,10 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
 
         int i;
         for (i = 0; i < 4; i++) {
-            adapter[i] = new NoticeBoardMessageAdapter(getActivity());
-            adapter[i].addOnItemclickedListener(this);
+            if(adapter[i] == null){
+                adapter[i] = new NoticeBoardMessageAdapter(getActivity());
+                adapter[i].addOnItemclickedListener(this);
+            }
         }
     }
 
@@ -278,12 +281,18 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     }
 
     private void setUpNoticeBoardAdapter() {
-        updateAdapterWhitin20Km(null);
-        updateAdapterWhitin100Km(null);
-        updateAdapterWhitinCountry(null);
 
-        if(invitedFriendCount >= REQUIRED_FRIEND_COUNT)
-            updateAdapterWhitinWorld(null);
+        if(adapter[0].isEmpty())
+            updateAdapterWhitin20Km(null);
+        if(adapter[1].isEmpty())
+            updateAdapterWhitin100Km(null);
+        if(adapter[2].isEmpty())
+            updateAdapterWhitinCountry(null);
+
+        if(invitedFriendCount >= REQUIRED_FRIEND_COUNT) {
+            if(adapter[3].isEmpty())
+                updateAdapterWhitinWorld(null);
+        }
     }
 
     private void updateAdapterWhitinWorld(final SwipeRefreshLayout swipeRefreshLayout) {
@@ -409,6 +418,18 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                     updateAdapterWhitinWorld(swipeRefreshLayout);
                 break;
         }
+    }
+
+    @Override
+    public void onListFragmentAnItemClicked(ListFragment fragment, int itemPositionInList) {
+        int fragIndex = fragment.getArguments().getInt(ARG_FRIEND_STATUS_INDEX, 0);
+        //store fragment index to user mViewPager.setCurrentItem(2);
+        //store adapter[4] to regenerate the this fragment
+
+        PNoticeBoard post = adapter[fragIndex].getItem(itemPositionInList);
+
+        if(mCallbacks != null)
+            mCallbacks.deployFragment(Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID,post,null);
     }
 
     //-------------------------------------------

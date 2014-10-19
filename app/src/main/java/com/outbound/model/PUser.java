@@ -230,7 +230,12 @@ public class PUser extends ParseUser{
     }
 
     public String calculateDistanceinKmTo(PUser user){
-        double distance = this.getCurrentLocation().distanceInKilometersTo(user.getCurrentLocation());
+        ParseGeoPoint peopleCurrentLoc = this.getCurrentLocation();
+
+        if(peopleCurrentLoc == null)
+            peopleCurrentLoc = new ParseGeoPoint(0,0);
+
+        double distance = peopleCurrentLoc.distanceInKilometersTo(user.getCurrentLocation());
         DecimalFormat formatter = new DecimalFormat("##.#");
         return formatter.format(distance)+"km";
     }

@@ -120,18 +120,20 @@ public class PFriendRequest extends ParseObject {
         mainQuery.findInBackground(new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
-                List<PUser> pUsers = new ArrayList<PUser>();
-                LOGD(TAG, "friends count: " + pFriendRequests.size());
-                for (PFriendRequest pFriendRequest : pFriendRequests) {
-                    if (!pFriendRequest.getReceiver().getObjectId().equals(user.getObjectId()))
-                        pUsers.add(pFriendRequest.getReceiver());
-                    else
-                        pUsers.add(pFriendRequest.getForwarder());
+                if(e == null){
+                    List<PUser> pUsers = new ArrayList<PUser>();
+                    LOGD(TAG, "friends count: " + pFriendRequests.size());
+                    for (PFriendRequest pFriendRequest : pFriendRequests) {
+                        if (!pFriendRequest.getReceiver().getObjectId().equals(user.getObjectId()))
+                            pUsers.add(pFriendRequest.getReceiver());
+                        else
+                            pUsers.add(pFriendRequest.getForwarder());
+                    }
+
+                    callback.done(LocationUtils.orderFriendsAccordingDistance(pUsers), e);
+                }else{
+                    LOGD(TAG, "findFriends e: " + e.getMessage());
                 }
-
-                callback.done(LocationUtils.orderFriendsAccordingDistance(pUsers), e);
-
-                LOGD(TAG, "findFriends e: " + ((e != null) ? e.getMessage() : "null"));
             }
         });
     }
@@ -161,14 +163,19 @@ public class PFriendRequest extends ParseObject {
         query.findInBackground(new FindCallback<PFriendRequest>() {
             @Override
             public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
-                List<PUser> userList = new ArrayList<PUser>();
                 if(e == null){
-                    for(PFriendRequest request : pFriendRequests){
-                        userList.add(request.getForwarder());
+                    List<PUser> userList = new ArrayList<PUser>();
+                    if(e == null){
+                        for(PFriendRequest request : pFriendRequests){
+                            userList.add(request.getForwarder());
+                        }
                     }
-                }
 
-                findCallback.done(LocationUtils.orderFriendsAccordingDistance(userList),e);
+                    findCallback.done(LocationUtils.orderFriendsAccordingDistance(userList),e);
+                }else
+                {
+
+                }
             }
         });
 

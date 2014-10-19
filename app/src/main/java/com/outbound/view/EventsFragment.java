@@ -105,9 +105,11 @@ public class EventsFragment extends BaseFragment {
 //        for (int i = 0; i < 50; i++) {
 //            test.add(new Object());
 //        }
-        mAdapter = new EventsAdapter(getActivity());
+        if(mAdapter == null)
+            mAdapter = new EventsAdapter(getActivity());
 
-        findEventsAraoundCurrentUser();
+        if(mAdapter.isEmpty())
+            findEventsAraoundCurrentUser();
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);

@@ -43,6 +43,7 @@ import com.outbound.R;
 import com.outbound.model.PUser;
 import com.outbound.ui.util.SoftKeyboardStateHelper;
 import com.outbound.ui.util.SwipeRefreshLayout;
+import com.outbound.util.Constants;
 import com.outbound.util.location.LocationUtils;
 import com.parse.ParseGeoPoint;
 
@@ -144,7 +145,7 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[24];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[25];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -173,7 +174,8 @@ public class BaseActivity extends FragmentActivity implements
             new CreateEventFragment(),          //20
             new TripsResultFragment(),          //21
             new SearchPeopleFragment(),         //22
-            new EventsFragment()                //23
+            new EventsFragment(),               //23
+            new NoticeBoardMessageFragment()    //24
 
     };
 
@@ -379,11 +381,13 @@ public class BaseActivity extends FragmentActivity implements
         softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
             @Override
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+                if(mCurrentFragmentItemId != Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID)
                 hideTabbar();
             }
 
             @Override
             public void onSoftKeyboardClosed() {
+                if(mCurrentFragmentItemId != Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID)
                 showTabbar();
             }
         });
@@ -502,6 +506,9 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void deployFragment(final  int itemId, Object param1, Object param2) {
+
+        mCurrentFragmentItemId = itemId;
+
         LOGD(TAG,"deployFragment: " + FRAGMENTS[itemId].mTag );
 
         addFragmentToOrderArray(itemId, param1, param2 );
@@ -580,6 +587,12 @@ public class BaseActivity extends FragmentActivity implements
             mTabBar.setVisibility(View.GONE);
         }
     }
+    @Override
+    public void showTabbar() {
+        if(mTabBar != null){
+            mTabBar.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public boolean isLocationServiceConnected() {
@@ -587,12 +600,6 @@ public class BaseActivity extends FragmentActivity implements
     }
 
 
-    private void showTabbar() {
-        if(mTabBar != null){
-            mTabBar.setVisibility(View.VISIBLE);
-        }
-
-    }
 
     @Override
     public void registerHideableHeaderView(View hideableHeaderView) {

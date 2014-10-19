@@ -59,10 +59,10 @@ public class NoticeBoardMessageActivity extends FragmentActivity{
     }
 
     private void generateTestData(){
-        for (int i = 0; i < 50; i++) {
-            MessageDummyClass ms = new MessageDummyClass();
-            mAdapter.add(ms);
-        }
+//        for (int i = 0; i < 50; i++) {
+//            MessageDummyClass ms = new MessageDummyClass();
+//            mAdapter.add(ms);
+//        }
     }
     private void setupActionBar() {
         View viewActionBar = getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);

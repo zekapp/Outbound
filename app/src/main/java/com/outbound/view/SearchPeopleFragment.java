@@ -71,25 +71,11 @@ public class SearchPeopleFragment extends BaseFragment {
     }
 
     private void setUpGridView(View view, View header) {
-        adapter = new SearchPeopleAdapter(getActivity());
+        if(adapter == null)
+            adapter = new SearchPeopleAdapter(getActivity());
 
-//        for (int i = 0; i < 50; i++) {
-//            adapter.add(new Object());
-//        }
-        if(userList == null){
-            PUser.getPeopleArroundMe(new FindCallback<PUser>() {
-                @Override
-                public void done(List<PUser> pUsers, ParseException e) {
-                    if(e == null){
-                        adapter.addAll(pUsers);
-                    }
-                    updateView();
-                }
-            });
-        }else{
-            adapter.addAll(userList);
-        }
-
+        if(adapter.isEmpty())
+            feedAdapter();
 
         HeaderGridView userGridView = (HeaderGridView)view.findViewById(R.id.sp_grid_view);
         userGridView.addHeaderView(header, null, false);
@@ -104,6 +90,31 @@ public class SearchPeopleFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void feedAdapter() {
+        if(userList == null){
+
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+
+            PUser.getPeopleArroundMe(new FindCallback<PUser>() {
+                @Override
+                public void done(List<PUser> pUsers, ParseException e) {
+                    if(e == null){
+                        adapter.addAll(pUsers);
+                    }
+                    updateView();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }else{
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+            adapter.addAll(userList);
+        }
     }
 
     private void updateView() {
@@ -124,6 +135,10 @@ public class SearchPeopleFragment extends BaseFragment {
                 @Override
                 public void onRefresh() {
                     //get the latest events
+                    if(userList == null)
+                        feedAdapter();
+                    else
+                        mSwipeRefreshLayout.setRefreshing(false);
                 }
             });
         }

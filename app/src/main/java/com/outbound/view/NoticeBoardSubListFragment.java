@@ -22,12 +22,13 @@ public class NoticeBoardSubListFragment extends ListFragment{
     private View mRoot = null;
     private Listener mCallBackFragment = null;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
+    private static int currentSelectedListViewItem = 0;
     public interface Listener {
         public void onFragmentViewCreated(ListFragment fragment);
         public void onFragmentAttached(ListFragment fragment);
         public void onFragmentDetached(ListFragment fragment);
         public void onFragmentSwipeRefreshed(ListFragment fragment,SwipeRefreshLayout swipeRefreshLayout );
+        public void onListFragmentAnItemClicked(ListFragment fragment, int itemPositionInList);
     }
 
     public void setUp(Fragment mCallerFragment){
@@ -46,6 +47,16 @@ public class NoticeBoardSubListFragment extends ListFragment{
         setUpSwipeRefreshLayout(mRoot);
 
         return mRoot;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getListAdapter() != null){
+            if(!getListAdapter().isEmpty())
+                getListView().setSelection(currentSelectedListViewItem);
+        }
+
     }
 
     public void setContentDescription(String desc) {
@@ -87,11 +98,13 @@ public class NoticeBoardSubListFragment extends ListFragment{
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
-        ListAdapter adapter = l.getAdapter();
-        Object obj = adapter.getItem(position);
-
-        Intent intent = new Intent(getActivity(), NoticeBoardMessageActivity.class);
-        startActivity(intent);
+        currentSelectedListViewItem = position;
+        if(mCallBackFragment != null)
+            mCallBackFragment.onListFragmentAnItemClicked(this,position);
+//        ListAdapter adapter = l.getAdapter();
+//        Object obj = adapter.getItem(position);
+//
+//        Intent intent = new Intent(getActivity(), NoticeBoardMessageActivity.class);
+//        startActivity(intent);
     }
 }

@@ -40,7 +40,7 @@ public class TripsAdapter extends ArrayAdapter<PTrip>{
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;
 
-        if(view == null){
+        if(view == null || view.getTag() == null){
             view = inflater.inflate(R.layout.my_trips_list_item, parent, false);
             holder = new ViewHolder();
             holder.cityCountry = (TextView)view.findViewById(R.id.mt_city_country);
@@ -53,7 +53,13 @@ public class TripsAdapter extends ArrayAdapter<PTrip>{
 
         final PTrip trip = getItem(position);
 
-        holder.cityCountry.setText(trip.getCity() + ", "+trip.getCountry());
+        if(trip.getCity() == null && trip.getCountry() != null)
+            holder.cityCountry.setText(trip.getCountry());
+        else if(trip.getCity() != null &&  trip.getCountry() == null)
+            holder.cityCountry.setText(trip.getCity());
+        else
+            holder.cityCountry.setText(trip.getCity() + ", "+ trip.getCountry());
+
         final TextView attendingCount = holder.attendingCount;
 
         holder.date.setHint(formatter.format(trip.getFromDate())+" to "+formatter.format(trip.getToDate()));

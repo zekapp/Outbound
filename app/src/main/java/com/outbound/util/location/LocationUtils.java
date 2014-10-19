@@ -83,10 +83,21 @@ public final class LocationUtils {
             @Override
             public int compare(PUser lhs, PUser rhs) {
 
-                Double dist1 = lhs.getCurrentLocation().distanceInKilometersTo(currentUser.getCurrentLocation());
-                Double dist2 = rhs.getCurrentLocation().distanceInKilometersTo(currentUser.getCurrentLocation());
+                ParseGeoPoint lhsCurrentLoc = lhs.getCurrentLocation();
+                if(lhsCurrentLoc == null)
+                    lhsCurrentLoc = new ParseGeoPoint(0,0);
+                ParseGeoPoint rhsCurrentLoc = rhs.getCurrentLocation();
+                if(rhsCurrentLoc == null)
+                    rhsCurrentLoc = new ParseGeoPoint(0,0);
 
-                return dist1.compareTo(dist2);
+                if(currentUser.getCurrentLocation() == null)
+                    return 0;
+                else {
+                    Double dist1 = lhsCurrentLoc.distanceInKilometersTo(currentUser.getCurrentLocation());
+                    Double dist2 = rhsCurrentLoc.distanceInKilometersTo(currentUser.getCurrentLocation());
+
+                    return dist1.compareTo(dist2);
+                }
             }
         });
         return pUsers;

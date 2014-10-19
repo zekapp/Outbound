@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -8,22 +9,38 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp
+        ">
 
-        <com.parse.ParseImageView
+        <!--<com.parse.ParseImageView-->
+            <!--android:id="@+id/nb_user_photo"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/white_rounded_rectangle"-->
+            <!--android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"-->
+            <!--android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>-->
+        <com.outbound.ui.util.RoundedImageView
             android:id="@+id/nb_user_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/white_rounded_rectangle"
-            android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"
-            android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>
+            android:layout_width="@dimen/list_picture_width"
+            android:layout_height="@dimen/list_picture_height"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/list_picture_left_margin"
+            android:scaleType="fitXY"
+            app:corner_radius="@dimen/list_picture_radius"
+            app:border_width="@dimen/list_picture_border_width"
+            app:oval="false"
+            app:border_color="@color/list_picture_border_color"
+            android:background="@drawable/white_rounded_rectangle"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/outbound_list_view_item_text_left_margin"
-            android:layout_marginTop="14dp">
+            android:layout_marginTop="14dp"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -37,8 +54,8 @@
                     android:layout_alignParentLeft="true"
                     android:lines="1"
                     android:ellipsize="end"
-                    android:layout_toLeftOf="@+id/nb_post_count"
-                    android:textColor="@color/theme_accent_1"/>
+                    android:textColor="@color/theme_accent_1"
+                    />
 
                 <TextView
                     android:id="@+id/nb_create_date"
@@ -55,7 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:hint="@string/test_message_short"/>
+                android:maxLines="5"
+                android:ellipsize="end"
+                android:hint="@string/test_message_very_short"/>
 
         </LinearLayout>
 
@@ -68,6 +87,7 @@
         android:layout_gravity="end">
 
         <TextView
+            android:id="@+id/nb_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/theme_accent_1"
@@ -84,6 +104,7 @@
             android:padding="7dp"/>
 
         <TextView
+            android:id="@+id/nb_block"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/theme_accent_1"

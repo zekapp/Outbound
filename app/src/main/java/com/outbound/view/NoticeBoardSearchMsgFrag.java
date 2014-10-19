@@ -40,7 +40,8 @@ public class NoticeBoardSearchMsgFrag extends BaseFragment {
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.backIconClicked();
+                if(mCallbacks !=null)
+                    mCallbacks.backIconClicked();
             }
         });
     }
