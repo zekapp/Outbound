@@ -108,11 +108,9 @@ public class NoticeBoardMessageAdapter extends ArrayAdapter<PNoticeBoard>{
                     listener.profilePictureClicked(post.getCreatedBy());
             }
         });
-        NoticeBoardMessage noticeBoardMessage = post.getMessageItem(0); // allways get the first message of this post
-        if(noticeBoardMessage != null){
-            holder.message.setHint(noticeBoardMessage.getText());
-        }else
-            holder.message.setHint("No Message...");
+
+        holder.message.setHint(post.getDescription());
+
         return view;
     }
 

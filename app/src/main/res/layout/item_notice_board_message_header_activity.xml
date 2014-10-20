@@ -4,23 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/theme_primary_grey">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp
-        ">
+        android:paddingBottom="10dp">
 
         <!--<com.parse.ParseImageView-->
-            <!--android:id="@+id/nb_user_photo"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/white_rounded_rectangle"-->
-            <!--android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"-->
-            <!--android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>-->
+        <!--android:id="@+id/nb_user_photo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/white_rounded_rectangle"-->
+        <!--android:layout_marginLeft="@dimen/outbound_list_view_item_picture_left_margin"-->
+        <!--android:layout_marginTop="@dimen/outbound_list_view_item_picture_top_margin"/>-->
         <com.outbound.ui.util.RoundedImageView
             android:id="@+id/nb_user_photo"
             android:layout_width="@dimen/list_picture_width"

@@ -3,8 +3,8 @@ package com.outbound.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import com.outbound.util.JsonUtils;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -12,15 +12,20 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static com.outbound.util.JsonUtils.convertClassToJsonObject;
+import static com.outbound.util.JsonUtils.convertClassToJsonString;
 
 /**
  * Created by zeki on 17/10/2014.
@@ -65,7 +70,20 @@ public class PNoticeBoard extends ParseObject {
     }
 
     public void setParticipants(PUser  user) {
-        put(participants, user);
+//        List<PUser> participantsArray = getParticipants();
+//
+//        if(participantsArray == null)
+//        {
+//            participantsArray = new ArrayList<PUser>();
+//            participantsArray.add(user);
+//        }
+//        else
+//        {
+//            participantsArray.add(user);
+//        }
+//
+//        put(participants, participantsArray);
+        add(participants,user);
     }
 
     public String getCountry() {
@@ -88,8 +106,8 @@ public class PNoticeBoard extends ParseObject {
         return  getList(travellerType);
     }
 
-    public void setTravellerType(List<String> list) {
-        put(travellerType, list);
+    public void setTravellerType(String[] list) {
+        put(travellerType, Arrays.asList(list));
     }
 
     public List<NoticeBoardMessage> getAllMessages() {
@@ -149,10 +167,32 @@ public class PNoticeBoard extends ParseObject {
 //        ParseFile parseFile = new ParseFile("sda",);
 //    }
 
-    public void setMessages(NoticeBoardMessage msg) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(msg);
-        put(messages,jsonString);
+    public void setMessages(NoticeBoardMessage message) throws JSONException {
+//        List<JSONObject> res = JsonUtils.convertClassToJsonString(getAllMessages(), message);
+//        addIfThisUserIsNew(participants, PUser.getCurrentUser());
+//        put(messages, res);
+
+        addIfThisUserIsNew(PUser.getCurrentUser());
+        add(messages, convertClassToJsonObject(message));
+    }
+
+    private void addIfThisUserIsNew(PUser currentUser) {
+        List<PUser> party = getParticipants();
+        boolean isInParty = false;
+        if(party != null){
+            for(PUser u : party){
+                if(u.getObjectId().equals(currentUser.getObjectId()))
+                {
+                    isInParty = true;
+                    break;
+                }
+            }
+        }else
+            isInParty= false;
+
+
+        if(!isInParty)
+            this.setParticipants(currentUser);
     }
 
     public NoticeBoardMessage getMessageItem(int item){
@@ -170,12 +210,20 @@ public class PNoticeBoard extends ParseObject {
         else
             return 0;
     }
+    public int getParticipiantCount(){
+        List<PUser> part = getParticipants();
+        if(part != null)
+            return part.size();
+        else
+            return 0;
+    }
+
 
     public ParseGeoPoint getNoticeBoardLocation() {
         return getParseGeoPoint(noticeBoardLocation);
     }
 
-    public void setNoticeBoardLocation(String location) {
+    public void setNoticeBoardLocation(ParseGeoPoint location) {
         put(noticeBoardLocation,location);
     }
 
@@ -197,6 +245,10 @@ public class PNoticeBoard extends ParseObject {
 
     public String getPlace() {
         return  getString(noticeBoardPlace);
+    }
+
+    public void setPlace(String plc){
+        put(noticeBoardPlace,plc);
     }
 
     public void setNoticeBoardPlace(String place) {

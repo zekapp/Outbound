@@ -5,12 +5,15 @@
 
     <TextView
         android:id="@+id/action_bar_title"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/action_bar_title_size"/>
+        android:textSize="@dimen/action_bar_title_size"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:gravity="center"/>
 
     <ImageView
         android:id="@+id/ab_events_search_icon"

@@ -103,6 +103,7 @@ public class SearchPeopleFragment extends BaseFragment {
                 @Override
                 public void done(List<PUser> pUsers, ParseException e) {
                     if(e == null){
+                        adapter.clear();
                         adapter.addAll(pUsers);
                     }
                     updateView();
@@ -113,6 +114,7 @@ public class SearchPeopleFragment extends BaseFragment {
             if (mSwipeRefreshLayout != null) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
+            adapter.clear();
             adapter.addAll(userList);
         }
     }

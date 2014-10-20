@@ -279,6 +279,7 @@ public class PUser extends ParseUser{
     public static void fetchTheSpesificUserFromId(String userObjectID, final GetCallback<PUser> callback) {
         ParseQuery<PUser> query = ParseQuery.getQuery(PUser.class);
         query.whereEqualTo(PUser.strObjectId, userObjectID);
+        query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.getFirstInBackground(new GetCallback<PUser>() {
             @Override
             public void done(PUser pUser, ParseException e) {

@@ -11,21 +11,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.outbound.R;
-import com.outbound.ui.util.adapters.NoticeBoardMsgListViewAdapter;
+import com.outbound.ui.util.adapters.NoticeBoardMessageDetailAdapter;
 import com.outbound.util.MessageDummyClass;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by zeki on 2/10/2014.
  */
-public class NoticeBoardMessageActivity extends FragmentActivity{
+public class __NoticeBoardMessageActivity extends FragmentActivity{
 
     private TextView actionBarTitle;
 
     private ListView mListView;
-    private NoticeBoardMsgListViewAdapter mAdapter ;
+    private NoticeBoardMessageDetailAdapter mAdapter ;
 
     private ArrayList<MessageDummyClass> testMessages = new ArrayList<MessageDummyClass>();
     @Override
@@ -53,7 +52,7 @@ public class NoticeBoardMessageActivity extends FragmentActivity{
         mListView = (ListView)findViewById(R.id.message_list);
         mListView.setDivider(new ColorDrawable(this.getResources().getColor(R.color.gray)));
         mListView.setDividerHeight(1);
-        mAdapter = new NoticeBoardMsgListViewAdapter(this);
+        mAdapter = new NoticeBoardMessageDetailAdapter(this);
         mListView.setAdapter(mAdapter);
         generateTestData();
     }

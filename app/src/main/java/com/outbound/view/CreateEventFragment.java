@@ -399,7 +399,7 @@ public class CreateEventFragment extends BaseFragment {
                 setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        countrySelectButton.setError(null);
+                        citySelectButton.setError(null);
                         if (selectedCountry == null) {
                             countrySelectButton.setError("Required Field!");
                             countrySelectButton.requestFocus();

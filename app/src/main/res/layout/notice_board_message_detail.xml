@@ -39,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Type message"
+            android:maxLines="3"
             android:layout_weight="10"
             />
 
@@ -49,7 +50,16 @@
             android:layout_weight="1"
             android:background="?android:selectableItemBackground"
             android:clickable="true">
+            <ProgressBar
+                android:id="@+id/send_progress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
             <ImageView
+                android:id="@+id/send_button_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_send_message"

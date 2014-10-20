@@ -13,10 +13,8 @@ import android.widget.Toast;
 
 import com.outbound.R;
 import com.outbound.model.NoticeBoardMessage;
-import com.outbound.model.PNoticeBoard;
 import com.outbound.model.PUser;
 import com.outbound.ui.util.RoundedImageView;
-import com.outbound.util.MessageDummyClass;
 import com.outbound.util.ResultCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -28,8 +26,8 @@ import static com.outbound.util.LogUtils.*;
 /**
  * Created by zeki on 2/10/2014.
  */
-public class NoticeBoardMsgListViewAdapter extends ArrayAdapter<NoticeBoardMessage> {
-    private static final String TAG = makeLogTag(NoticeBoardMsgListViewAdapter.class);
+public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<NoticeBoardMessage> {
+    private static final String TAG = makeLogTag(NoticeBoardMessageDetailAdapter.class);
     private LayoutInflater inflater;
     private SimpleDateFormat formatter;
     private Context context;
@@ -44,7 +42,7 @@ public class NoticeBoardMsgListViewAdapter extends ArrayAdapter<NoticeBoardMessa
             listener = (OnNoticeBoardMsgItemClickedListener)frag;
     }
 
-    public NoticeBoardMsgListViewAdapter(Context context) {
+    public NoticeBoardMessageDetailAdapter(Context context) {
         super(context, 0);
         this.context = context;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,7 +56,7 @@ public class NoticeBoardMsgListViewAdapter extends ArrayAdapter<NoticeBoardMessa
             view = inflater.inflate(R.layout.item_notice_board_message_activity,parent, false);
             holder = new ViewHolder();
             holder.photo = (RoundedImageView)view.findViewById(R.id.nb_user_photo);
-            holder.nameSurnae = (TextView)view.findViewById(R.id.nb_name_of_creater);
+            holder.nameSurname = (TextView)view.findViewById(R.id.nb_name_of_creater);
             holder.timeStamp = (TextView)view.findViewById(R.id.nb_create_date);
             holder.message = (TextView)view.findViewById(R.id.nb_message);
             holder.block = (TextView)view.findViewById(R.id.nb_block);
@@ -91,9 +89,10 @@ public class NoticeBoardMsgListViewAdapter extends ArrayAdapter<NoticeBoardMessa
                     }
                 }
             });
-            holder.nameSurnae.setText(noticeBoardMessage.getUserName());
+
+            holder.nameSurname.setText(noticeBoardMessage.getUserName());
 //            holder.timeStamp.setHint(formatter.format(noticeBoardMessage.getDate()));
-            holder.timeStamp.setHint(noticeBoardMessage.getDate());
+//            holder.timeStamp.setHint(noticeBoardMessage.getDate());
             holder.message.setHint(noticeBoardMessage.getText());
             holder.report.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,7 +112,7 @@ public class NoticeBoardMsgListViewAdapter extends ArrayAdapter<NoticeBoardMessa
 
     public static class ViewHolder {
         RoundedImageView photo;
-        TextView nameSurnae;
+        TextView nameSurname;
         TextView timeStamp; //hint
         TextView message;
         TextView block;

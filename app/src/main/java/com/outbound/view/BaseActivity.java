@@ -48,7 +48,6 @@ import com.outbound.util.location.LocationUtils;
 import com.parse.ParseGeoPoint;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.outbound.util.Constants.*;
 import static com.outbound.util.LogUtils.*;
@@ -175,7 +174,7 @@ public class BaseActivity extends FragmentActivity implements
             new TripsResultFragment(),          //21
             new SearchPeopleFragment(),         //22
             new EventsFragment(),               //23
-            new NoticeBoardMessageFragment()    //24
+            new NoticeBoardMessageDetailFragment()    //24
 
     };
 

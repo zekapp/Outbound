@@ -104,7 +104,7 @@ public class NoticeBoardSubListFragment extends ListFragment{
 //        ListAdapter adapter = l.getAdapter();
 //        Object obj = adapter.getItem(position);
 //
-//        Intent intent = new Intent(getActivity(), NoticeBoardMessageActivity.class);
+//        Intent intent = new Intent(getActivity(), __NoticeBoardMessageActivity.class);
 //        startActivity(intent);
     }
 }

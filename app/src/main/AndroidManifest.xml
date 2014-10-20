@@ -53,7 +53,7 @@
             >
         </activity>
         <activity
-            android:name=".view.NoticeBoardMessageActivity"
+            android:name=".view.__NoticeBoardMessageActivity"
             android:screenOrientation="portrait"
             >
         </activity>
