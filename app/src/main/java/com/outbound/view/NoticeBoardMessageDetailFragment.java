@@ -7,8 +7,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,8 +29,9 @@ import com.outbound.ui.util.RoundedImageView;
 import com.outbound.ui.util.adapters.NoticeBoardMessageDetailAdapter;
 import com.outbound.util.ConnectionDetector;
 import com.outbound.util.Constants;
+import com.outbound.util.GenericMessage;
+import com.outbound.util.MessagesResultCallback;
 import com.outbound.util.ResultCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
@@ -61,6 +60,10 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
     private InputMethodManager imm;
     private ProgressBar mProgressView;
     private View sendButtonView;
+    private  View rootView;
+    private View headerView;
+
+    private Runnable newMessageCheckAction;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,8 +121,7 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
         }
     }
 
-    private  View rootView;
-    private View headerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -131,7 +133,7 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
         sendMessageBtn = (RelativeLayout)rootView.findViewById(R.id.nb_send_message_button);
         messageEditText = (EditText)rootView.findViewById(R.id.ma_edit_message_text);
         mProgressView = (ProgressBar)rootView.findViewById(R.id.send_progress);
-        mProgressView.getIndeterminateDrawable().setColorFilter(Color.BLUE, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mProgressView.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.theme_accent_1), android.graphics.PorterDuff.Mode.MULTIPLY);
         sendButtonView = rootView.findViewById(R.id.send_button_img);
         setUpListView();
         setUpSentTextButton();
@@ -144,7 +146,7 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
             @Override
             public void onClick(View v) {
                 if(detector.isConnectingToInternet()){
-                    final NoticeBoardMessage msg;
+                    final GenericMessage msg;
                     try {
                         showProgress(true);
                         msg = generateTheMessage();
@@ -211,7 +213,17 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
         }
     }
 
-    private NoticeBoardMessage generateTheMessage() {
+    private GenericMessage generateTheMessage() {
+        PUser currentUser = PUser.getCurrentUser();
+        GenericMessage message = new GenericMessage();
+        message.setUserName(currentUser.getUserName());
+        message.setUserID(currentUser.getObjectId());
+        message.setProfilePicture(currentUser.getProfilePicture());
+        message.setMessage(messageEditText.getText().toString());
+        message.setCreatedAt(new Date());
+        return message;
+    }
+    private NoticeBoardMessage _generateTheMessage() {
         NoticeBoardMessage message = new NoticeBoardMessage();
         PUser currentUser = PUser.getCurrentUser();
         message.setUserName(currentUser.getUserName());
@@ -232,6 +244,43 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
         mAdapter.addOnNoticeBoardMsgItemClickedListener(this);
         feedTheAdapter();
         mListView.setAdapter(mAdapter);
+
+        setUpListViewAction();
+
+    }
+
+    private void setUpListViewAction() {
+        newMessageCheckAction =  new Runnable() {
+            @Override
+            public void run() {
+
+                PNoticeBoard.fetchNewMessages(mAdapter.getCount(),post,new MessagesResultCallback<GenericMessage>() {
+                    @Override
+                    public void done(List<GenericMessage> newMessages, Exception e) {
+                        if(e == null){
+                            LOGD(TAG, "fetchNewMessages size: " + newMessages.size());
+                            if(newMessages.size() > 0){
+                                mAdapter.addAll(newMessages);
+                                updateView();
+                            }
+                        }else
+                        {
+                            LOGD(TAG, "network error do not warn user e: " + e.getMessage());
+                        }
+                    }
+                });
+                mListView.postDelayed(this,  5000); // check for new message every 5 second if this frame is active
+            }
+        };
+        mListView.post(newMessageCheckAction);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if(newMessageCheckAction != null  && mListView != null)
+            mListView.removeCallbacks(newMessageCheckAction);
     }
 
     private TextView report;
@@ -284,7 +333,7 @@ public class NoticeBoardMessageDetailFragment extends BaseFragment implements No
     }
 
     private void feedTheAdapter() {
-        List<NoticeBoardMessage> messageList = post.getAllMessages();
+        List<GenericMessage> messageList = post.getAllMessages();
 
         if(mAdapter != null && messageList != null){
             mAdapter.clear();

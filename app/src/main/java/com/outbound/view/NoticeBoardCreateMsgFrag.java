@@ -135,7 +135,7 @@ public class NoticeBoardCreateMsgFrag extends BaseFragment {
     }
 
     private void createEvent() {
-        startProgress("Your post sending");
+        startProgress("Your notice is creating");
         //find geoLocation
         String[] arr = {selectedCountry,selectedCity,place};
         PUser currentUser = PUser.getCurrentUser();
@@ -175,7 +175,7 @@ public class NoticeBoardCreateMsgFrag extends BaseFragment {
                     public void done(ParseException e) {
                         stopProgress();
                         if(e == null){
-                            showToastMessage("Your board creating...");
+                            showToastMessage("Your notice was created.");
                             if(mCallbacks != null)
                                 mCallbacks.deployFragment(Constants.TAB_BAR_ITEM_NOTICEBOARD_FRAG_ID,null,null);
                         }else

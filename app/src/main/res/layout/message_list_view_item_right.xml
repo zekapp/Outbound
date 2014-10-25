@@ -2,6 +2,7 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,15 +13,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <com.parse.ParseImageView
+        <!--<com.parse.ParseImageView-->
+            <!--android:id="@+id/ma_user_photo"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/white_rounded_rectangle"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginLeft="17dp"-->
+            <!--android:layout_alignParentRight="true"/>-->
+
+        <com.outbound.ui.util.RoundedImageView
             android:id="@+id/ma_user_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/list_picture_width"
+            android:layout_height="@dimen/list_picture_height"
             android:background="@drawable/white_rounded_rectangle"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="17dp"
-            android:layout_alignParentRight="true"/>
+            android:scaleType="fitXY"
+            app:corner_radius="@dimen/list_picture_radius"
+            app:border_width="@dimen/list_picture_border_width"
+            app:oval="false"
+            app:border_color="@color/list_picture_border_color"
+            android:layout_alignParentRight="true"
+            />
 
         <ImageView
             android:id="@+id/triangle_layout"

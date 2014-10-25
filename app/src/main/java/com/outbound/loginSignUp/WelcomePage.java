@@ -84,9 +84,7 @@ public class WelcomePage extends Activity {
         fbLoginImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WelcomePage.this.progressDialog = ProgressDialog.show(
-                        WelcomePage.this, "", "Logging in...", true);
-
+                startProgress("Logging in...");
                 List<String> permissions = Arrays.asList("email", "public_profile", "user_friends", "user_about_me",
                         "user_relationships", "user_birthday", "user_location");
                 ParseFacebookUtils.logIn(permissions, WelcomePage.this, new LogInCallback() {
@@ -123,10 +121,15 @@ public class WelcomePage extends Activity {
             initilizeDatabase();
     }
 
+    private void startProgress(String message) {
+        WelcomePage.this.progressDialog = ProgressDialog.show(
+                WelcomePage.this, "", message, true);
+    }
+
     private void initilizeDatabase() {
         LOGD(TAG,"initilizeDatabase: first init");
-        WelcomePage.this.progressDialog = ProgressDialog.show(
-                WelcomePage.this, "", "Database initializing...", true);
+        startProgress("Database initializing...");
+
         db.addGenerateDbForCityCountryListener(new DBManager.DbInitListener() {
             @Override
             public void onDbInit(boolean res) {
@@ -156,8 +159,6 @@ public class WelcomePage extends Activity {
     }
 
     private void makeMeRequest() {
-
-
         Session session = ParseFacebookUtils.getSession();
         if (session != null && session.isOpened()) {
             Request request = Request.newMeRequest(

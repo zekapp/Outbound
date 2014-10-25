@@ -15,6 +15,7 @@ import com.outbound.R;
 import com.outbound.model.NoticeBoardMessage;
 import com.outbound.model.PUser;
 import com.outbound.ui.util.RoundedImageView;
+import com.outbound.util.GenericMessage;
 import com.outbound.util.ResultCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -26,7 +27,7 @@ import static com.outbound.util.LogUtils.*;
 /**
  * Created by zeki on 2/10/2014.
  */
-public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<NoticeBoardMessage> {
+public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<GenericMessage> {
     private static final String TAG = makeLogTag(NoticeBoardMessageDetailAdapter.class);
     private LayoutInflater inflater;
     private SimpleDateFormat formatter;
@@ -66,7 +67,7 @@ public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<NoticeBoardMes
             holder = (ViewHolder)view.getTag();
         }
 
-        final NoticeBoardMessage noticeBoardMessage = getItem(position);
+        final GenericMessage noticeBoardMessage = getItem(position);
 
         if(noticeBoardMessage != null){
             PUser.fetchTheSpesificUserFromId(noticeBoardMessage.getUserID(), new GetCallback<PUser>() {
@@ -93,7 +94,7 @@ public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<NoticeBoardMes
             holder.nameSurname.setText(noticeBoardMessage.getUserName());
 //            holder.timeStamp.setHint(formatter.format(noticeBoardMessage.getDate()));
 //            holder.timeStamp.setHint(noticeBoardMessage.getDate());
-            holder.message.setHint(noticeBoardMessage.getText());
+            holder.message.setHint(noticeBoardMessage.getMessage());
             holder.report.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,7 +120,7 @@ public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<NoticeBoardMes
         TextView report;
     }
 
-    private void openReportDialog(final NoticeBoardMessage message) {
+    private void openReportDialog(final GenericMessage message) {
         final AlertDialog.Builder ad = new AlertDialog.Builder(context);
         ad.setTitle("Do you want to report \""+ message.getUserName()+"\" ?");
         ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -137,7 +138,7 @@ public class NoticeBoardMessageDetailAdapter extends ArrayAdapter<NoticeBoardMes
         ad.show();
     }
 
-    private void openBlockDialog( final ViewHolder holder, final NoticeBoardMessage noticeBoardMessage) {
+    private void openBlockDialog( final ViewHolder holder, final GenericMessage noticeBoardMessage) {
         final AlertDialog.Builder ad = new AlertDialog.Builder(context);
         ad.setTitle("Do you want to block \""+ noticeBoardMessage.getUserName()+"\" ?");
         ad.setMessage("When you block this user, this user will never send you message and never join your events");

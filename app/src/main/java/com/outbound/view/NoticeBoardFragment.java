@@ -70,8 +70,8 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        invitedFriendCount = sp.getInt(INVITED_FACEBOOK_FRIEND_COUNT, 0);
+//        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        invitedFriendCount = sp.getInt(INVITED_FACEBOOK_FRIEND_COUNT, 0);
 
         int i;
         for (i = 0; i < 4; i++) {

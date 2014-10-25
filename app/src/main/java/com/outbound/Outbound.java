@@ -3,11 +3,13 @@ package com.outbound;
 import android.app.Application;
 import android.util.Log;
 
+import com.outbound.model.PChatActivity;
 import com.outbound.model.PEvent;
 import com.outbound.model.PFriendRequest;
 import com.outbound.model.PNoticeBoard;
 import com.outbound.model.PTrip;
 import com.outbound.model.PUser;
+import com.outbound.util.GenericMessage;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -32,6 +34,7 @@ public class Outbound extends Application {
         ParseObject.registerSubclass(PEvent.class);
         ParseObject.registerSubclass(PTrip.class);
         ParseObject.registerSubclass(PNoticeBoard.class);
+        ParseObject.registerSubclass(PChatActivity.class);
 //        PushService.setDefaultPushCallback(this, DispatchActivity.class);
 
         // Required - Initialize the Parse SDK

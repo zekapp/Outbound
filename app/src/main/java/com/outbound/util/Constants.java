@@ -37,6 +37,8 @@ public final class Constants  {
     public static final int SEARCH_PEOPLE_RESULT_FRAG_ID = 22;
     public static final int SEARCH_EVENTS_RESULT_FRAG_ID = 23;
     public static final int NOTICE_BOARD_POST_DETAIL_FRAG_ID = 24;
+    public static final int SEARCH_NOTICE_RESULT_FRAG_ID = 25;
+    public static final int CHAT_POST_DETAIL_FRAG_ID = 26;
     public static final int ITEM_INVALID = -1;
 
 
@@ -49,6 +51,5 @@ public final class Constants  {
     public static class Distance{
         public static final double EVENT_AROUND_PROXIMITY_IN_MILE = 124.274238; // 200 km
     }
-
 }
 

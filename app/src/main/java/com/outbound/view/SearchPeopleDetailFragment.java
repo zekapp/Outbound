@@ -261,7 +261,7 @@ public class SearchPeopleDetailFragment extends BaseFragment {
                 setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        countrySelectButton.setError(null);
+                        citySelectButton.setError(null);
                         citySelectButton.setHint("Select");
                         selectedCity = null;
                         if (selectedCountry == null) {

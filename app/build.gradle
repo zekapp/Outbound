@@ -13,6 +13,7 @@ dependencies {
     compile files('libs/opencsv-3.0.jar')
     compile files('libs/gson-2.2.2.jar')
     compile files('libs/Parse-1.7.1.jar')
+    compile files('libs/joda-time-2.5.jar')
 }
 
 

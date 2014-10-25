@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -144,7 +145,7 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[25];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[27];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -174,8 +175,9 @@ public class BaseActivity extends FragmentActivity implements
             new TripsResultFragment(),          //21
             new SearchPeopleFragment(),         //22
             new EventsFragment(),               //23
-            new NoticeBoardMessageDetailFragment()    //24
-
+            new NoticeBoardMessageDetailFragment(),    //24
+            new SearchResultNoticeFragment(),    //25
+            new ChatPostDetailFragment()        //26
     };
 
 //    /*
@@ -380,14 +382,21 @@ public class BaseActivity extends FragmentActivity implements
         softKeyboardStateHelper.addSoftKeyboardStateListener(new SoftKeyboardStateHelper.SoftKeyboardStateListener() {
             @Override
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-                if(mCurrentFragmentItemId != Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID)
-                hideTabbar();
+
+                if(mCurrentFragmentItemId == Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID ||
+                        mCurrentFragmentItemId == Constants.CHAT_POST_DETAIL_FRAG_ID ){
+                }else{
+                    hideTabbar();
+                }
             }
 
             @Override
             public void onSoftKeyboardClosed() {
-                if(mCurrentFragmentItemId != Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID)
-                showTabbar();
+                if(mCurrentFragmentItemId == Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID ||
+                        mCurrentFragmentItemId == Constants.CHAT_POST_DETAIL_FRAG_ID ){
+                }else{
+                    showTabbar();
+                }
             }
         });
     }
@@ -576,6 +585,8 @@ public class BaseActivity extends FragmentActivity implements
 
     @Override
     public void backIconClicked() {
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         //back
         onBackPressed();
     }

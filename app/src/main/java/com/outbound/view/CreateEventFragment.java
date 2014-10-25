@@ -217,6 +217,8 @@ public class CreateEventFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.create_event_fragment, container, false);
 
+        description = null;
+        eventName = null;
         selectedCountry = null;
         selectedCity = null;
         eventFromDate = null;

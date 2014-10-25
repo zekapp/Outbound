@@ -27,6 +27,7 @@ import com.outbound.model.PUser;
 import com.outbound.util.GeoCodeCallback;
 import com.parse.ParseGeoPoint;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -164,7 +165,7 @@ public final class LocationUtils {
         @Override
         protected void onPostExecute(ParseGeoPoint parseGeoPoint) {
             if(parseGeoPoint == null){
-                callback.done(null,null);
+                callback.done(null, new ParseException("no Location found for this place", 0));
             }else{
                 callback.done(parseGeoPoint,null);
             }

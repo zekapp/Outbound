@@ -2,12 +2,15 @@ package com.outbound.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
@@ -15,6 +18,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,6 +31,8 @@ import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
 import com.outbound.R;
+import com.outbound.model.ChatMessage;
+import com.outbound.model.PChatActivity;
 import com.outbound.model.PFriendRequest;
 import com.outbound.model.PUser;
 import com.outbound.ui.util.ParallaxParseImageView;
@@ -37,10 +44,13 @@ import com.outbound.ui.util.UIUtils;
 import com.outbound.ui.util.ZoomOutPageTransformer;
 import com.outbound.util.Constants;
 import com.outbound.util.FindAddressCallback;
+import com.outbound.util.GenericMessage;
+import com.outbound.util.MessagesResultCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
+import com.parse.SaveCallback;
 
 
 import java.util.ArrayList;
@@ -53,7 +63,8 @@ import static com.outbound.util.LogUtils.*;
 /**
  * Created by zeki on 2/09/2014.
  */
-public class ProfileFragment extends BaseFragment implements ProfilePictureFragment.Listener, ProfileAboutFragment.Listener {
+public class ProfileFragment extends BaseFragment implements ProfilePictureFragment.Listener,
+        ProfileAboutFragment.Listener, ProfileMessageListViewAdapter.OnChatActivityMsgItemClickedListener {
     private static final String TAG = makeLogTag(BaseFragment.class);
 
     private static final String ARG_PROFILE_INDEX
@@ -72,10 +83,12 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     private View dots[] = new View[2];
 
     private Runnable currentLocationAction;
-    private Runnable frinedBadgeAction;
+    private Runnable friendBadgeAction;
+    private Runnable newPostAction;
     private TextView currenLocText;
 
     private ParallaxParseImageView coverPicture;
+    private ProfileMessageListViewAdapter messageAdapter = null;
 
     @Override
     protected void setUp(Object param1, Object param2) {
@@ -118,6 +131,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     private String currentCity = "-";
     private String currentCountryName = "-";
     private String currentCountryCode = "-";
+    private static  boolean firstInitializeDone = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -139,8 +153,51 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
         registerForHideableViews(view);
 
+        setUpNewPostCheckThread();
+
 //        setUpTimer();
         return view;
+    }
+
+    private void setUpNewPostCheckThread() {
+
+        if(mListView != null){
+            newPostAction = new Runnable() {
+                @Override
+                public void run() {
+                    if(messageAdapter != null && firstInitializeDone){
+                        LOGD(TAG, "setUpNewMessageCheckThread called");
+                        List<PChatActivity> pChatActivityList = messageAdapter.getAllItem();
+                        PChatActivity.fetchedNewPostsThatIParticipated(pChatActivityList, new FindCallback<PChatActivity>() {
+                            @Override
+                            public void done(List<PChatActivity> pChatActivities, ParseException e) {
+                                if(e==null){
+                                    if(pChatActivities.size()>0){
+                                        // new post created.
+                                        messageAdapter.addAll(pChatActivities);
+                                        messageAdapter.orderItemsAccordingTimeOrder();
+                                        updateView();
+                                    }
+                                }else{
+                                    LOGD(TAG, "setUpNewMessageCheckThread e: " + e.getMessage());
+                                }
+                            }
+                        });
+
+
+//                        int count =  messageAdapter.getCount();
+//                        for(int i =0 ; i<count ; i++){
+//                            final PChatActivity post = messageAdapter.getItem(i);
+//                            List<GenericMessage> msg = post.getAllMessages();
+//                            GenericMessage finalMsg = msg.get(msg.size()-1);
+//                        }
+                    }
+                    mListView.postDelayed(this,5000);
+                }
+            };
+
+            mListView.post(newPostAction);
+        }
     }
 
     //    private void setUpTimer() {
@@ -160,9 +217,10 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
     private void setUpheaderFunction(View v) {
         friendBadge = (TextView)v.findViewById(R.id.friend_function_badge);
 
-        frinedBadgeAction = new Runnable() {
+        friendBadgeAction = new Runnable() {
             @Override
             public void run() {
+
                 PFriendRequest.findPendingUsersInBackground(currentUser, new FindCallback<PFriendRequest>() {
                     @Override
                     public void done(List<PFriendRequest> pFriendRequests, ParseException e) {
@@ -185,7 +243,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
             }
         };
 
-        friendBadge.post(frinedBadgeAction);
+        friendBadge.post(friendBadgeAction);
 //        updateFriendBadge();
     }
 //    private void updateFriendBadge() {
@@ -225,6 +283,8 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                 }
             });
         }
+
+        mSwipeRefreshLayout.setEnabled(false);
     }
 
     private void setUpViewPager(View view) {
@@ -259,22 +319,116 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
 
     private void setUpListView(View view, View header) {
         mListView = (ListView)view.findViewById(R.id.profile_message_list);
-        ArrayList<Object> test = new ArrayList<Object>();
-        for (int i=0;i<50;i++){
-            test.add(new Object());
+
+        if(messageAdapter == null) {
+            messageAdapter = new ProfileMessageListViewAdapter(getActivity());
+            messageAdapter.addOnNoticeBoardMsgItemClickedListener(this);
         }
-        ProfileMessageListViewAdapter adapter = new ProfileMessageListViewAdapter(getActivity(),test);
+
+        firstInitializeDone = false;
+        feedAdapter();
+
         mListView.addHeaderView(header, null, false);
-        mListView.setAdapter(adapter);
+        mListView.setAdapter(messageAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object messageObject = parent.getAdapter().getItem(position);
-                Intent intent = new Intent(getActivity(), MessageActivity.class);
-                startActivity(intent);
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.CHAT_POST_DETAIL_FRAG_ID, parent.getAdapter().getItem(position), null);
+//                Object messageObject = parent.getAdapter().getItem(position);
+//                Intent intent = new Intent(getActivity(), MessageActivity.class);
+//                startActivity(intent);
+            }
+        });
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                PChatActivity post = (PChatActivity)parent.getAdapter().getItem(position);
+                opendDeleteDialog(post,position);
+                return true;
 
             }
         });
+
+    }
+
+    private void opendDeleteDialog(final PChatActivity post, final int index) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Delete");
+        alertDialog.setMessage("Do you want to delete this conversation?");
+        alertDialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // remove the user from participiant list
+                // remove this conversation from adapter. do not forget to chec timestamp.
+                startProgress("Your Message deleting...");
+                post.putMeInLeftArray();
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        stopProgress();
+                        if(e == null){
+//                            startAnimation(post,index);
+                            messageAdapter.remove(post);
+                            updateView();
+                            showToastMessage("Your message deleted.");
+                        }else{
+                            showToastMessage("Network Error...");
+                            LOGD(TAG,"opendDeleteDialog-saveInBackground  e: " + e.getMessage() );
+                        }
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void startAnimation(final PChatActivity post, int index) {
+        Animation anim = AnimationUtils.loadAnimation(
+                getActivity(), android.R.anim.slide_out_right
+        );
+        anim.setDuration(500);
+        mListView.getChildAt(index).startAnimation(anim );
+
+        new Handler().postDelayed(new Runnable() {
+
+            public void run() {
+                messageAdapter.remove(post);
+                updateView();
+            }
+
+        }, anim.getDuration());
+    }
+
+    private void feedAdapter() {
+        PChatActivity.fetchedPostsThatIParticipated(new FindCallback<PChatActivity>() {
+            @Override
+            public void done(List<PChatActivity> pChatActivities, ParseException e) {
+                firstInitializeDone = true;
+                if(e == null){
+                    if(messageAdapter != null){
+                        messageAdapter.clear();
+                        messageAdapter.addAll(pChatActivities);
+                        messageAdapter.orderItemsAccordingTimeOrder();
+                        updateView();
+                    }
+                }else
+                {
+                    LOGD(TAG, "feedAdapter e: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void updateView() {
+        if(messageAdapter != null)
+            messageAdapter.notifyDataSetChanged();
     }
 
     private void setUpProfileFunctionLayout(View view) {
@@ -397,8 +551,11 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         super.onPause();
         if(currentLocationAction != null && currenLocText != null)
             currenLocText.removeCallbacks(currentLocationAction);
-        if(frinedBadgeAction != null && friendBadge != null)
-            friendBadge.removeCallbacks(frinedBadgeAction);
+        if(friendBadgeAction != null && friendBadge != null)
+            friendBadge.removeCallbacks(friendBadgeAction);
+
+        if(newPostAction != null && mListView != null)
+            mListView.removeCallbacks(newPostAction);
 
         coverPicture.unregisterSensorManager();
 
@@ -434,6 +591,13 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         coverPicture.loadInBackground();
 
     }
+
+    @Override
+    public void profilePictureClicked(PUser user) {
+        if(mCallbacks != null)
+            mCallbacks.deployFragment(Constants.PEOPLE_PROFILE_FRAG_ID, user, null);
+    }
+
     private class ScreenSlidePagerAdapter extends BaseFragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);

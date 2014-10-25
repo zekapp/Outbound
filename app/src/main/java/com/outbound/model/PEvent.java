@@ -168,6 +168,19 @@ public class PEvent extends ParseObject{
         });
     }
 
+    public static void findMyEvents(final FindCallback<PEvent> callback) {
+        ParseQuery<PEvent> query = ParseQuery.getQuery(PEvent.class);
+        query.whereContainedIn(outBoundersGoing,Arrays.asList(PUser.getCurrentUser()));
+        query.orderByAscending(startDate);
+        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        query.findInBackground(new FindCallback<PEvent>() {
+            @Override
+            public void done(List<PEvent> pEvents, ParseException e) {
+                callback.done(pEvents,e);
+            }
+        });
+    }
+
     public static void joinTheEvent(PEvent event, final SaveCallback callback) {
         event.add(PEvent.outBoundersGoing, PUser.getCurrentUser());
         event.saveInBackground(new SaveCallback() {
@@ -197,4 +210,6 @@ public class PEvent extends ParseObject{
             }
         });
     }
+
+
 }

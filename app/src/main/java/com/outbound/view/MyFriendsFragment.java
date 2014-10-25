@@ -98,26 +98,34 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
     }
 
     private void setUpFriendListAdapter() {
-        mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false, this);
-        mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true, this);
+        if(mMyFriendsAcceptedAdapter == null)
+            mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false, this);
+
+        if(mMyFriendsPendingAdapter == null)
+            mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true, this);
 
         updateFriendListAdapter();
-        updatePendingListAdaptter();
+        updatePendingListAdapter();
     }
 
-    private void updatePendingListAdaptter() {
+    private void updatePendingListAdapter() {
 
         PFriendRequest.findPendingFriends(currentUser, new FindCallback<PUser>() {
             @Override
             public void done(List<PUser> pUsers, ParseException e) {
                 if(e == null){
                     if(mMyFriendsPendingAdapter!=null){
-                        mMyFriendsPendingAdapter.clear();
-                        for (PUser user : pUsers){
-                            mMyFriendsPendingAdapter.add(user);
+                        if(pUsers.size() > mMyFriendsPendingAdapter.getCount()){
+                            LOGD(TAG,"mMyFriendsPendingAdapter: size: " + pUsers.size() );
+                            mMyFriendsPendingAdapter.clear();
+                            mMyFriendsPendingAdapter.addAll(pUsers);
+                            updateView(mMyFriendsPendingAdapter);
                         }
-                        updateView(mMyFriendsPendingAdapter);
+                    }else{
+                        LOGD(TAG,"mMyFriendsPendingAdapter is NULL");
                     }
+                }else{
+                    LOGD(TAG,"updatePendingListAdapter e: " + e.getMessage());
                 }
             }
         });
@@ -129,12 +137,18 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
             public void done(List<PUser> pUsers, ParseException e) {
                 if(e == null){
                     if(mMyFriendsAcceptedAdapter!=null){
-                        mMyFriendsAcceptedAdapter.clear();
-                        for (PUser user : pUsers){
-                            mMyFriendsAcceptedAdapter.add(user);
+                        if(pUsers.size() > mMyFriendsAcceptedAdapter.getCount()){
+                            LOGD(TAG,"updateFriendListAdapter: size: " + pUsers.size() );
+                            mMyFriendsAcceptedAdapter.clear();
+                            mMyFriendsAcceptedAdapter.addAll(pUsers);
+                            updateView(mMyFriendsAcceptedAdapter);
                         }
-                        updateView(mMyFriendsAcceptedAdapter);
+                    }else
+                    {
+                        LOGD(TAG,"mMyFriendsAcceptedAdapter is NULL");
                     }
+                }else {
+                    LOGD(TAG,"updateFriendListAdapter e: " + e.getMessage());
                 }
             }
         });
@@ -162,16 +176,6 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mViewPagerAdapter = new OurViewPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
-            @Override
-            public void onPageSelected(int position) {
-                LOGD(TAG, "onPageSelected: " + Integer.toString(position));
-                if(position == 0)
-                    updateFriendListAdapter();
-                else
-                    updatePendingListAdaptter();
-            }
-        });
     }
 
     private void setUpSlidingTabLayout(View view) {
@@ -184,6 +188,17 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.tab_selected_strip));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                LOGD(TAG, "onPageSelected: " + Integer.toString(position));
+                if(position == 0)
+                    updateFriendListAdapter();
+                else
+                    updatePendingListAdapter();
+            }
+        });
     }
     private void setSlidingTabLayoutContentDescriptions() {
 

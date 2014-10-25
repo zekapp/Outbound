@@ -16,6 +16,7 @@ import com.parse.ParseUser;
 import java.text.DecimalFormat;
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @ParseClassName("_User")
-public class PUser extends ParseUser{
+public class PUser extends ParseUser {
 
     public static final String strCurrentLocation = "currentLocation";
     public static final String strObjectId = "objectId";

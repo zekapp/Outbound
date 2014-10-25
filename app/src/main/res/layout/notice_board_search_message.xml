@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="COUNTRY"
+        android:textStyle="bold"
         android:paddingLeft="54dp"
         android:layout_marginTop="10dp"
         />
@@ -32,7 +33,8 @@
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
             android:paddingLeft="10dip"
-            android:text="Select"
+            android:hint="Select"
+            android:textSize="15sp"
             />
     </LinearLayout>
 
@@ -41,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="CITY"
+        android:textStyle="bold"
         android:paddingLeft="54dp"
         android:layout_marginTop="10dp"
 
@@ -65,7 +68,8 @@
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
             android:paddingLeft="11dip"
-            android:text="Select"
+            android:hint="Select"
+            android:textSize="15sp"
             />
     </LinearLayout>
     <LinearLayout
@@ -80,12 +84,13 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/icon_margin_left"/>
         <EditText
-            android:id="@+id/sm_user_name"
+            android:id="@+id/sm_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
+            android:textSize="15sp"
             android:hint="Place"/>
 
     </LinearLayout>
@@ -95,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="TRAVELLER TYPE"
+        android:textStyle="bold"
         android:paddingLeft="54dp"
         android:layout_marginTop="10dp"
         />
@@ -118,7 +124,10 @@
             android:layout_marginLeft="@dimen/text_left_margin"
             android:layout_marginRight="@dimen/text_right_margin"
             android:paddingLeft="11dip"
-            android:text="Select"
+            android:hint="Select"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
     </LinearLayout>
 

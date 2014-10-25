@@ -81,7 +81,7 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
             holder = (ViewHolder)view.getTag();
         }
 
-        PUser user = getItem(position);
+        final PUser user = getItem(position);
 
         holder.userName.setText(user.getUserName());
         Double distance = currentUser.getCurrentLocation().distanceInKilometersTo(user.getCurrentLocation());

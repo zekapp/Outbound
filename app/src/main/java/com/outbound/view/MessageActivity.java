@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.outbound.R;
-import com.outbound.ui.util.adapters.MessageListViewAdapter;
+import com.outbound.ui.util.adapters.ChatMessageListViewAdapter;
 import com.outbound.util.MessageDummyClass;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.Random;
  */
 public class MessageActivity extends FragmentActivity{
     private ListView mListView;
-    private MessageListViewAdapter mAdapter ;
+    private ChatMessageListViewAdapter mAdapter ;
 
     private ArrayList<MessageDummyClass> testMessages = new ArrayList<MessageDummyClass>();
     @Override
@@ -45,7 +45,7 @@ public class MessageActivity extends FragmentActivity{
                 MessageDummyClass cls = new MessageDummyClass();
                 cls.isOwnerMessage = true;
                 cls.message = messageEditText.getText().toString();
-                mAdapter.addItemRight(cls);
+//                mAdapter.addItemRight(cls);
                 mListView.smoothScrollToPosition(mAdapter.getCount() - 1);
                 messageEditText.setText("");
             }
@@ -56,16 +56,16 @@ public class MessageActivity extends FragmentActivity{
         for (int i = 0; i < 50; i++) {
             MessageDummyClass ms = new MessageDummyClass();
             ms.isOwnerMessage = new Random().nextBoolean();
-            if(ms.isOwnerMessage)
-                mAdapter.addItemRight(ms);
-            else
-               mAdapter.addItemleft(ms);
+//            if(ms.isOwnerMessage)
+//                mAdapter.addItemRight(ms);
+//            else
+//               mAdapter.addItemleft(ms);
         }
     }
     private void setUpListView() {
 
         mListView = (ListView)findViewById(R.id.message_list);
-        mAdapter = new MessageListViewAdapter(this,testMessages);
+//        mAdapter = new ChatMessageListViewAdapter(this,testMessages);
         mListView.setAdapter(mAdapter);
         generateTestData();
     }

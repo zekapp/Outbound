@@ -80,7 +80,7 @@ public class MyEventsFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.list_view_layout, container, false);
         setUpSwipeRefreshLayout(view);
-        setUpMyTravelHistoryListView(view);
+        setUpMyEventListView(view);
         return view;
     }
 
@@ -101,19 +101,23 @@ public class MyEventsFragment extends BaseFragment {
             });
         }
     }
-    private void setUpMyTravelHistoryListView(View v) {
-        mAdapter = new EventsAdapter(getActivity());
+    private void setUpMyEventListView(View v) {
+        if(mAdapter == null)
+            mAdapter = new EventsAdapter(getActivity());
 
-        PEvent.findEventsOfSpecificUser(PUser.getCurrentUser(),new FindCallback<PEvent>() {
+        PEvent.findMyEvents(new FindCallback<PEvent>() {
             @Override
             public void done(List<PEvent> pEvents, ParseException e) {
                 if(e == null){
-                    mAdapter.addAll(pEvents);
-                    updateView();
+                    if(pEvents.size() > mAdapter.getCount()){
+                        mAdapter.clear();
+                        mAdapter.addAll(pEvents);
+                        updateView();
+                    }
                 }else
                 {
                     if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
-                        showToastMessage("You don't have an Event ");
+                        showToastMessage("No event found ");
                     }else{
                         LOGD(TAG, "findEventsOfSpecificUser e:" +e.getMessage());
                         showToastMessage("Network Error. Check connection.");
@@ -121,6 +125,24 @@ public class MyEventsFragment extends BaseFragment {
                 }
             }
         });
+
+//        PEvent.findEventsOfSpecificUser(PUser.getCurrentUser(),new FindCallback<PEvent>() {
+//            @Override
+//            public void done(List<PEvent> pEvents, ParseException e) {
+//                if(e == null){
+//                    mAdapter.addAll(pEvents);
+//                    updateView();
+//                }else
+//                {
+//                    if(e.getCode() == ParseException.OBJECT_NOT_FOUND){
+//                        showToastMessage("You don't have an Event ");
+//                    }else{
+//                        LOGD(TAG, "findEventsOfSpecificUser e:" +e.getMessage());
+//                        showToastMessage("Network Error. Check connection.");
+//                    }
+//                }
+//            }
+//        });
 
         mListView = (ListView) v.findViewById(R.id.list_view);
         mListView.setAdapter(mAdapter);

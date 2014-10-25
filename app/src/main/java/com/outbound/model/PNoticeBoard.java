@@ -1,37 +1,40 @@
 package com.outbound.model;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.outbound.util.JsonUtils;
+import com.outbound.util.GenericMessage;
+import com.outbound.util.MessagesResultCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.outbound.util.JsonUtils.convertClassToJsonObject;
-import static com.outbound.util.JsonUtils.convertClassToJsonString;
+import static com.outbound.util.LogUtils.LOGD;
+import static com.outbound.util.LogUtils.makeLogTag;
 
 /**
  * Created by zeki on 17/10/2014.
  */
 @ParseClassName("NoticeBoard")
 public class PNoticeBoard extends ParseObject {
+
+    private static final String TAG = makeLogTag(PNoticeBoard.class);
+
     public final static String objectId = "objectId";
     public final static String createdBy = "createdBy";
     public final static String noticeboardTitle = "noticeBoardTitle";
@@ -110,24 +113,42 @@ public class PNoticeBoard extends ParseObject {
         put(travellerType, Arrays.asList(list));
     }
 
-    public List<NoticeBoardMessage> getAllMessages() {
-        Gson gson = new Gson();
-//        String jsonString = getString(messages);
-        JSONArray array = getJSONArray(messages);
-        if(array == null)
-            return  null;
+    public List<GenericMessage> getAllMessages() {
 
-        String str = array.toString();
-//        String str = getTempString();
+        List<GenericMessage> messageList = new ArrayList<GenericMessage>();
 
-        List<NoticeBoardMessage> boardMessageList =
-                gson.fromJson(str, new TypeToken<ArrayList<NoticeBoardMessage>>(){}.getType());
+        List<HashMap<String, Object>> hashMaps = getList(messages);
 
-//        reGenerateTheParseFile(boardMessageList, array);
-        if(boardMessageList!=null)
-            return boardMessageList;
-        else
+        if(hashMaps != null){
+            for(HashMap<String, Object> hashMap : hashMaps){
+                GenericMessage message = new GenericMessage();
+                message.generateFromHasMap(hashMap);
+                messageList.add(message);
+            }
+            return messageList;
+        }else
             return null;
+
+
+
+
+////        Gson gson = new Gson();
+////        String jsonString = getString(messages);
+//        JSONArray array = getJSONArray(messages);
+//        if(array == null)
+//            return  null;
+//
+//        String str = array.toString();
+////        String str = getTempString();
+//
+//        List<NoticeBoardMessage> boardMessageList =
+//                gson.fromJson(str, new TypeToken<ArrayList<NoticeBoardMessage>>(){}.getType());
+//
+////        reGenerateTheParseFile(boardMessageList, array);
+//        if(boardMessageList!=null)
+//            return boardMessageList;
+//        else
+//            return null;
     }
 
     private String getTempString() {
@@ -155,6 +176,7 @@ public class PNoticeBoard extends ParseObject {
                 msg.setProfilePicture((ParseFile)fetchedObjt);
             } catch (JSONException e) {
                 e.printStackTrace();
+                LOGD(TAG, "reGenerateTheParseFile e:" + e.getMessage());
             }
             i++;
 
@@ -167,13 +189,14 @@ public class PNoticeBoard extends ParseObject {
 //        ParseFile parseFile = new ParseFile("sda",);
 //    }
 
-    public void setMessages(NoticeBoardMessage message) throws JSONException {
+    public void setMessages(GenericMessage message) throws JSONException {
 //        List<JSONObject> res = JsonUtils.convertClassToJsonString(getAllMessages(), message);
 //        addIfThisUserIsNew(participants, PUser.getCurrentUser());
 //        put(messages, res);
 
         addIfThisUserIsNew(PUser.getCurrentUser());
-        add(messages, convertClassToJsonObject(message));
+//        add(messages, convertClassToJsonObject(message));
+        put(messages, message);
     }
 
     private void addIfThisUserIsNew(PUser currentUser) {
@@ -195,16 +218,16 @@ public class PNoticeBoard extends ParseObject {
             this.setParticipants(currentUser);
     }
 
-    public NoticeBoardMessage getMessageItem(int item){
-        List<NoticeBoardMessage> boardMessageList = getAllMessages();
-        if(boardMessageList != null)
+    public GenericMessage getMessageItem(int item){
+        List<GenericMessage> boardMessageList = getAllMessages();
+        if(boardMessageList != null && boardMessageList.size() >= item)
             return boardMessageList.get(item);
         else
             return null;
     }
 
     public int getMessagesCount(){
-        List<NoticeBoardMessage> boardMessageList = getAllMessages();
+        List<GenericMessage> boardMessageList = getAllMessages();
         if(boardMessageList != null)
             return boardMessageList.size();
         else
@@ -294,5 +317,51 @@ public class PNoticeBoard extends ParseObject {
                 callback.done(pNoticeBoards,e);
             }
         });
+    }
+
+
+    public static void findPostsWhitSearcRequest(ParseQuery<PNoticeBoard> query, final FindCallback<PNoticeBoard> callback) {
+        query.include(PNoticeBoard.createdBy);
+        query.findInBackground(new FindCallback<PNoticeBoard>() {
+            @Override
+            public void done(List<PNoticeBoard> pNoticeBoards, ParseException e) {
+                callback.done(pNoticeBoards,e);
+            }
+        });
+    }
+
+
+    public static void fetchNewMessages(final int adapterCurrentSize, PNoticeBoard post,final MessagesResultCallback<GenericMessage> callback) {
+        ParseQuery<PNoticeBoard> query = ParseQuery.getQuery(PNoticeBoard.class);
+        query.whereEqualTo(PNoticeBoard.objectId, post.getObjectId());
+
+        query.getFirstInBackground(new GetCallback<PNoticeBoard>() {
+            @Override
+            public void done(PNoticeBoard pNoticeBoard, ParseException e) {
+                if(e == null){
+                    List<GenericMessage> messageList = getLastMessages(pNoticeBoard.getAllMessages(), adapterCurrentSize);
+                    callback.done(messageList,e);
+                }else
+                    callback.done(null,e);
+
+            }
+        });
+    }
+
+    private static List<GenericMessage> getLastMessages(List<GenericMessage> allMessages, int adapterCurrentSize) {
+        List<GenericMessage> res = new ArrayList<GenericMessage>();
+        PUser currentUser = PUser.getCurrentUser();
+
+        if(allMessages == null)
+            return res;
+
+        for (int i= adapterCurrentSize ; i < allMessages.size(); i++){
+            GenericMessage msg = allMessages.get(i);
+
+            if(!msg.getUserID().equals(currentUser.getObjectId())){
+                res.add(msg);
+            }
+        }
+        return res;
     }
 }

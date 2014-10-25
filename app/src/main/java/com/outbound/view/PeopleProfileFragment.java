@@ -38,6 +38,7 @@ import com.outbound.util.CountryCodes;
 import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
@@ -97,9 +98,9 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Message Intent will be run
-                Intent intent = new Intent(getActivity(), MessageActivity.class);
-                startActivity(intent);
+                if(mCallbacks != null){
+                    mCallbacks.deployFragment(Constants.CHAT_POST_DETAIL_FRAG_ID, person, null);
+                }
             }
         });
 
@@ -158,7 +159,14 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         final TextView profile_home = (TextView)v.findViewById(R.id.profile_home);
 
         coverPicture.setParseFile(person.getCoverPicture());
-        coverPicture.loadInBackground();
+        coverPicture.loadInBackground(new GetDataCallback() {
+            @Override
+            public void done(byte[] bytes, ParseException e) {
+                if(e == null){
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
         profileName.setText(person.getUserName());
         age.setText(Integer.toString(person.getAge()));
         gender.setText(person.getGender());
@@ -189,6 +197,7 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(true);
         }
+        mSwipeRefreshLayout.setEnabled(false);
     }
 
     private void setUpProfileFunctionLayout(View view, final PUser user) {
@@ -332,7 +341,7 @@ public class PeopleProfileFragment extends BaseFragment implements ProfilePictur
         if(adapter !=null)
             adapter.notifyDataSetChanged();
 
-        mSwipeRefreshLayout.setRefreshing(false);
+//        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void setUpViewPager(View view) {
