@@ -21,12 +21,14 @@ import android.widget.TextView;
 import com.outbound.R;
 import com.outbound.model.PChatActivity;
 import com.outbound.model.PUser;
+import com.outbound.ui.util.FriendSelectDialog;
 import com.outbound.ui.util.adapters.ChatMessageListViewAdapter;
 import com.outbound.util.ConnectionDetector;
 import com.outbound.util.Constants;
 import com.outbound.util.GenericCallBack;
 import com.outbound.util.GenericMessage;
 import com.outbound.util.MessagesResultCallback;
+import com.outbound.util.ResultCallback;
 import com.outbound.util.TimeUtil;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -102,10 +104,19 @@ public class ChatPostDetailFragment extends BaseFragment {
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
         actionBarTitle = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
-        if(messageList != null)
-            actionBarTitle.setText(messageList.get(0).getUserName());
-        else if(user != null)
+        if(messageList != null && post != null){
+            if(post.getChatType().equals("single")){
+                PUser otherParticipiant = post.getParticipants().get(1);
+                if(otherParticipiant != null)
+                    actionBarTitle.setText(otherParticipiant.getUserName());
+                else
+                    actionBarTitle.setText("");
+            }else{
+                actionBarTitle.setText("Group");
+            }
+        }else if(user != null){
             actionBarTitle.setText(user.getUserName());
+        }
         ImageView icon = (ImageView)viewActionBar.findViewById(R.id.ab_icon_1);
         icon.setImageResource(R.drawable.action_add_user);
         ImageView backIcon = (ImageView)viewActionBar.findViewById(R.id.ab_back_icon);
@@ -125,9 +136,35 @@ public class ChatPostDetailFragment extends BaseFragment {
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //add friends
+                openFriendListDialog();
             }
         });
+    }
+
+    private void openFriendListDialog() {
+        FriendSelectDialog fsd = new FriendSelectDialog(getActivity());
+        fsd.addFriendSelectDialogListener(new FriendSelectDialog.FriendSelectDialogListener() {
+            @Override
+            public void onFriendSelected(final PUser selectedUser) {
+                PChatActivity.addUserToTheChatParticipantArray(selectedUser, post,new ResultCallback() {
+                    @Override
+                    public void done(boolean res, ParseException e) {
+                        if(e == null){
+                            if(res)
+                                showToastMessage(selectedUser.getUserName() + " added to conversation");
+                            else
+                                showToastMessage(selectedUser.getUserName() + " already in the chat");
+                        }else{
+                            LOGD(TAG, "onFriendSelected e: " + e.getMessage());
+                            showToastMessage("Network Error. Check your connection");
+                        }
+                    }
+                });
+            }
+        });
+        fsd.show();
+//        fsd.addFriendSelectDialogListener
     }
 
     @Override
@@ -372,7 +409,7 @@ public class ChatPostDetailFragment extends BaseFragment {
         if(messageList != null) {
             // if profile message clicked
             feedAdapterCorrectTypeOrder();
-            firstInitializeDone = false;
+            firstInitializeDone = true;
         }else{
             startProgress("Feching previous messages...");
             if(user==null)
@@ -382,7 +419,6 @@ public class ChatPostDetailFragment extends BaseFragment {
                 @Override
                 public void done(PChatActivity pChatActivity, ParseException e) {
                     stopProgress();
-                    firstInitializeDone = false;
                     if (e == null) {
                         //you have already one chat with this user. continue with it
                         post = pChatActivity; //must be initiliazed with messageList
@@ -398,6 +434,7 @@ public class ChatPostDetailFragment extends BaseFragment {
                             LOGD(TAG, "fetchedMessagesThatIParticipatedWhitThisUser e: " + e.getMessage());
                         }
                     }
+                    firstInitializeDone = true;
                 }
             });
         }

@@ -26,15 +26,14 @@ import android.widget.Toast;
 
 import com.outbound.R;
 import com.outbound.model.PUser;
-import com.outbound.ui.util.CityDialog;
-import com.outbound.ui.util.CountryDialog;
+import com.outbound.ui.util.CitySelectDialog;
+import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.DispatchActivity;
 import com.outbound.util.CountryCodes;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
@@ -43,7 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import static com.outbound.util.LogUtils.LOGD;
 import static com.outbound.util.LogUtils.makeLogTag;
@@ -156,8 +154,8 @@ public class SignUpWithEmail extends Activity{
                 });
     }
     private void openCityDialog(final View v) {
-        CityDialog cd = new CityDialog(this, selectedCountryCode);
-        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+        CitySelectDialog cd = new CitySelectDialog(this, selectedCountryCode);
+        cd.addCityDialogListener(new CitySelectDialog.CityDialogListener() {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setHint(cityName);
@@ -364,8 +362,8 @@ public class SignUpWithEmail extends Activity{
     }
 
     private void openCountryDialog(final View v) {
-        CountryDialog cd = new CountryDialog(this);
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(this);
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);
@@ -424,8 +422,8 @@ public class SignUpWithEmail extends Activity{
 
 
     private void showCountryPickerDialog(final View v){
-        CountryDialog cd = new CountryDialog(this);
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(this);
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);

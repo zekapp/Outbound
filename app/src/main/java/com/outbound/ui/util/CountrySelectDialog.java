@@ -24,7 +24,7 @@ import java.util.Locale;
 /**
  * Created by zeki on 6/10/2014.
  */
-public class CountryDialog extends Dialog {
+public class CountrySelectDialog extends Dialog {
 
     private CountryAdapter mAdapter;
     private SearchView search;
@@ -36,7 +36,7 @@ public class CountryDialog extends Dialog {
 
     private final List<CountryDialogListener> listeners = new LinkedList<CountryDialogListener>();
 
-    public CountryDialog(Context context) {
+    public CountrySelectDialog(Context context) {
         super(context);
     }
 

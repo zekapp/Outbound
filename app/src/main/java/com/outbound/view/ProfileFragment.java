@@ -410,7 +410,6 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         PChatActivity.fetchedPostsThatIParticipated(new FindCallback<PChatActivity>() {
             @Override
             public void done(List<PChatActivity> pChatActivities, ParseException e) {
-                firstInitializeDone = true;
                 if(e == null){
                     if(messageAdapter != null){
                         messageAdapter.clear();
@@ -422,6 +421,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
                 {
                     LOGD(TAG, "feedAdapter e: " + e.getMessage());
                 }
+                firstInitializeDone = true;
             }
         });
     }

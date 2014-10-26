@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PEvent;
-import com.outbound.ui.util.CityDialog;
-import com.outbound.ui.util.CountryDialog;
+import com.outbound.ui.util.CitySelectDialog;
+import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.util.Constants;
 import com.outbound.util.GeoCodeCallback;
 import com.outbound.util.location.LocationUtils;
@@ -26,12 +26,9 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
-import com.parse.codec.binary.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -303,8 +300,8 @@ public class EventSearchFragment extends BaseFragment {
     }
 
     private void openCityDialog(final View v) {
-        CityDialog cd = new CityDialog(getActivity(), selectedCountryCode);
-        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+        CitySelectDialog cd = new CitySelectDialog(getActivity(), selectedCountryCode);
+        cd.addCityDialogListener(new CitySelectDialog.CityDialogListener() {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setHint(cityName);
@@ -330,8 +327,8 @@ public class EventSearchFragment extends BaseFragment {
     }
 
     private void openCountryDialog(final View v) {
-        CountryDialog cd = new CountryDialog(getActivity());
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(getActivity());
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);

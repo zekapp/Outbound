@@ -24,8 +24,8 @@ import static com.outbound.util.LogUtils.*;
 /**
  * Created by zeki on 9/10/2014.
  */
-public class CityDialog extends Dialog{
-    private static final String TAG = makeLogTag(CityDialog.class);
+public class CitySelectDialog extends Dialog{
+    private static final String TAG = makeLogTag(CitySelectDialog.class);
 
     private CityAdapter mAdapter;
     private String countryCode;
@@ -42,7 +42,7 @@ public class CityDialog extends Dialog{
         listeners.add(listener);
     }
 
-    public CityDialog(Context context, String selectedCountryCode) {
+    public CitySelectDialog(Context context, String selectedCountryCode) {
         super(context);
         countryCode = selectedCountryCode;
     }
@@ -85,7 +85,7 @@ public class CityDialog extends Dialog{
     }
 
     private void setUpAdapter(final ListView ltv) {
-        CityDialog.this.progressDialog = ProgressDialog.show(
+        CitySelectDialog.this.progressDialog = ProgressDialog.show(
                 getContext(), "", "Fetching Cities...", true);
 
         DBManager db = new DBManager(getContext());
@@ -105,7 +105,7 @@ public class CityDialog extends Dialog{
     }
 
     private void dismissProgress() {
-        CityDialog.this.progressDialog.dismiss();
+        CitySelectDialog.this.progressDialog.dismiss();
     }
 
 //    private ArrayList<City> generateCityList() {

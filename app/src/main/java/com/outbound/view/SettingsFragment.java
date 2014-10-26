@@ -3,8 +3,6 @@ package com.outbound.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,23 +18,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PUser;
-import com.outbound.ui.util.CityDialog;
-import com.outbound.ui.util.CountryDialog;
+import com.outbound.ui.util.CitySelectDialog;
+import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.ui.util.RoundedImageView;
-import com.outbound.ui.util.TravellerTypeDialog;
 import com.outbound.util.ConnectionDetector;
 import com.outbound.util.Constants;
 import com.outbound.util.CountryCodes;
-import com.outbound.util.LogUtils;
 import com.parse.ParseException;
 import com.parse.ParseImageView;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -547,8 +541,8 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void openCityDialog(final View v) {
-        CityDialog cd = new CityDialog(getActivity(), selectedCountryCode);
-        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+        CitySelectDialog cd = new CitySelectDialog(getActivity(), selectedCountryCode);
+        cd.addCityDialogListener(new CitySelectDialog.CityDialogListener() {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setHint(cityName);
@@ -559,8 +553,8 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void openCountryDialog(final View v) {
-        CountryDialog cd = new CountryDialog(getActivity());
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(getActivity());
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);

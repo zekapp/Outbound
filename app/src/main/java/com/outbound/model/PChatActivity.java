@@ -4,6 +4,7 @@ import com.outbound.util.GenericCallBack;
 import com.outbound.util.GenericMessage;
 import com.outbound.util.JsonUtils;
 import com.outbound.util.MessagesResultCallback;
+import com.outbound.util.ResultCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
@@ -103,7 +104,7 @@ public class PChatActivity extends ParseObject {
         add(participants,user);
     }
 
-    private void addParticipants_(List<PUser> users) {
+    private void putParticipants(List<PUser> users) {
         put(participants, users);
     }
 
@@ -151,11 +152,12 @@ public class PChatActivity extends ParseObject {
     public static void fetchedPostsThatIParticipated(final FindCallback<PChatActivity> callback) {
         PUser currentUSer = PUser.getCurrentUser();
         ParseQuery<PChatActivity> query = ParseQuery.getQuery(PChatActivity.class);
-//        query.whereNotContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
-        query.whereContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
+        query.whereNotContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
+//        query.whereContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
         query.whereNotContainedIn(PChatActivity.usersLeft, Arrays.asList(currentUSer));
         query.orderByDescending(updatedAt);
         query.include(PChatActivity.usersLeft);
+        query.include(participants);
         query.findInBackground(new FindCallback<PChatActivity>() {
             @Override
             public void done(List<PChatActivity> pChatActivities, ParseException e) {
@@ -238,7 +240,7 @@ public class PChatActivity extends ParseObject {
         PUser currentUser = PUser.getCurrentUser();
         final PChatActivity chatActivity = new PChatActivity();
         chatActivity.addMessage(msg);
-        chatActivity.addParticipants_(Arrays.asList(currentUser,user));
+        chatActivity.putParticipants(Arrays.asList(currentUser, user));
         chatActivity.setChatType("single");
         chatActivity.saveInBackground(new SaveCallback() {
             @Override
@@ -270,12 +272,95 @@ public class PChatActivity extends ParseObject {
     }
 
     public static void fetchNewMessages(
-            GenericMessage finalMsg ,PChatActivity post, MessagesResultCallback<GenericMessage> messagesResultCallback) {
+            final GenericMessage finalMsg ,PChatActivity post, final MessagesResultCallback<GenericMessage> messagesResultCallback) {
+
+        post.fetchInBackground(new GetCallback<PChatActivity>() {
+            @Override
+            public void done(PChatActivity pChatActivity, ParseException e) {
+                if(e == null){
+                    List<GenericMessage> messageList = pChatActivity.getAllMessages();
+                    if(messageList.size() > 0){
+                        List<GenericMessage> newMessages = getNewMessagesFromList(finalMsg, messageList);
+                        messagesResultCallback.done(newMessages,e);
+                    }else{
+                        messagesResultCallback.done(messageList, e);
+                    }
+                }else{
+                    messagesResultCallback.done(null,e);
+                }
+            }
+        });
 
 
     }
 
+    private static List<GenericMessage> getNewMessagesFromList(GenericMessage finalMsg, List<GenericMessage> messageList) {
+        List<GenericMessage> res = new ArrayList<GenericMessage>();
 
+        for (GenericMessage message : messageList){
+            long lastMsgDate = finalMsg.getCreatedAt().getTime();
+            long newMsgDate = message.getCreatedAt().getTime();
+
+            if(newMsgDate > lastMsgDate)
+                res.add(message);
+        }
+
+        return res;
+    }
+
+    public static void addUserToTheChatParticipantArray(final PUser selectedUser, PChatActivity post, final ResultCallback callback) {
+        ParseQuery<PChatActivity> query = ParseQuery.getQuery(PChatActivity.class);
+        query.whereEqualTo(objectId, post.getObjectId());
+        query.getFirstInBackground(new GetCallback<PChatActivity>() {
+            @Override
+            public void done(PChatActivity pChatActivity, ParseException e) {
+                if(e == null){
+                    List<PUser> userList = pChatActivity.getParticipants();
+                    boolean isUserInParticipantArray =false;
+                    for(PUser pUser : userList){
+                        if(pUser.getObjectId().equals(selectedUser.getObjectId())){
+                            isUserInParticipantArray = true;
+                            break;
+                        }
+                    }
+
+                    List<PUser> leftUserList = pChatActivity.getUserleft();
+                    boolean isUserInLeftUserList = false;
+                    if(leftUserList != null){
+                        for (PUser u : leftUserList){
+                            if(u.getObjectId().equals(selectedUser.getObjectId())){
+                                leftUserList.remove(u);
+                                isUserInLeftUserList = true;
+                            }
+                        }
+                    }
+
+                    if(isUserInLeftUserList)
+                        pChatActivity.put(PChatActivity.usersLeft, leftUserList);
+
+                    if(!isUserInParticipantArray){
+                        pChatActivity.addParticipant(selectedUser);
+                        pChatActivity.setChatType("group");
+                    }
+
+                    if(isUserInLeftUserList || !isUserInParticipantArray){
+                        pChatActivity.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                callback.done(true,e);
+                            }
+                        });
+                    }else
+                        callback.done(false,e);
+
+                }else
+                {
+                    callback.done(false,e);
+                }
+
+            }
+        });
+    }
 
 
     //    public List<GenericMessage> __getAllMessages() {

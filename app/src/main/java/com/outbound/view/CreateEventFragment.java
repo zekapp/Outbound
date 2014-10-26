@@ -4,10 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -21,8 +19,8 @@ import android.widget.TimePicker;
 import com.outbound.R;
 import com.outbound.model.PEvent;
 import com.outbound.model.PUser;
-import com.outbound.ui.util.CityDialog;
-import com.outbound.ui.util.CountryDialog;
+import com.outbound.ui.util.CitySelectDialog;
+import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.util.Constants;
 import com.outbound.util.GeoCodeCallback;
 import com.outbound.util.location.LocationUtils;
@@ -30,8 +28,6 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
-import java.sql.Time;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -425,8 +421,8 @@ public class CreateEventFragment extends BaseFragment {
         });
     }
     private void openCityDialog(final View v) {
-        CityDialog cd = new CityDialog(getActivity(), selectedCountryCode);
-        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+        CitySelectDialog cd = new CitySelectDialog(getActivity(), selectedCountryCode);
+        cd.addCityDialogListener(new CitySelectDialog.CityDialogListener() {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setText(cityName);
@@ -436,8 +432,8 @@ public class CreateEventFragment extends BaseFragment {
         cd.show();
     }
     private void openCountryDialog(final View v) {
-        CountryDialog cd = new CountryDialog(getActivity());
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(getActivity());
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setText(countryName);

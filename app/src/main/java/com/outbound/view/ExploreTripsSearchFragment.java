@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,8 @@ import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PTrip;
-import com.outbound.ui.util.CityDialog;
-import com.outbound.ui.util.CountryDialog;
+import com.outbound.ui.util.CitySelectDialog;
+import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.util.Constants;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -229,8 +228,8 @@ public class ExploreTripsSearchFragment extends BaseFragment {
     }
 
     private void openCityDialog(final View v) {
-        CityDialog cd = new CityDialog(getActivity(), selectedCountryCode);
-        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+        CitySelectDialog cd = new CitySelectDialog(getActivity(), selectedCountryCode);
+        cd.addCityDialogListener(new CitySelectDialog.CityDialogListener() {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setText(cityName);
@@ -241,8 +240,8 @@ public class ExploreTripsSearchFragment extends BaseFragment {
     }
 
     private void openCountryDialog(final View v) {
-        CountryDialog cd = new CountryDialog(getActivity());
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(getActivity());
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setText(countryName);

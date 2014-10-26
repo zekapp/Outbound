@@ -33,8 +33,7 @@ import static com.outbound.util.LogUtils.*;
 /**
  * Created by zeki on 23/09/2014.
  */
-public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubFragment.Listener ,
-        MyFriendsAdapter.FriendAcceptenceCallbacks{
+public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubFragment.Listener{
     private static final String TAG = makeLogTag(MyFriendsFragment.class);
     private static final String ARG_FRIEND_STATUS_INDEX
             = "com.outbound.ARG_FRIEND_STATUS_INDEX";
@@ -99,10 +98,23 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
 
     private void setUpFriendListAdapter() {
         if(mMyFriendsAcceptedAdapter == null)
-            mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false, this);
+            mMyFriendsAcceptedAdapter = new MyFriendsAdapter(getActivity(), false);
 
         if(mMyFriendsPendingAdapter == null)
-            mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true, this);
+            mMyFriendsPendingAdapter = new MyFriendsAdapter(getActivity(), true);
+
+        mMyFriendsPendingAdapter.addFriendAcceptenceListener(new MyFriendsAdapter.FriendAcceptenceCallbacks() {
+            @Override
+            public void friendRequestAccepted() {
+                updateFriendListAdapter();
+                mViewPager.setCurrentItem(0);
+            }
+
+            @Override
+            public void friendRequestDeclined() {
+                updateFriendListAdapter();
+            }
+        });
 
         updateFriendListAdapter();
         updatePendingListAdapter();
@@ -161,16 +173,16 @@ public class MyFriendsFragment extends BaseFragment implements MyFriendsListSubF
         }
     }
 
-    @Override
-    public void friendRequestAccepted() {
-        updateFriendListAdapter();
-        mViewPager.setCurrentItem(0);
-    }
-
-    @Override
-    public void friendRequestDeclined() {
-        updateFriendListAdapter();
-    }
+//    @Override
+//    public void friendRequestAccepted() {
+//        updateFriendListAdapter();
+//        mViewPager.setCurrentItem(0);
+//    }
+//
+//    @Override
+//    public void friendRequestDeclined() {
+//        updateFriendListAdapter();
+//    }
 
     private void setUpViewPager(View view) {
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);

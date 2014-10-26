@@ -14,25 +14,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.outbound.R;
-import com.outbound.model.NoticeBoardMessage;
 import com.outbound.model.PNoticeBoard;
 import com.outbound.model.PUser;
-import com.outbound.ui.util.CityDialog;
-import com.outbound.ui.util.CountryDialog;
+import com.outbound.ui.util.CitySelectDialog;
+import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.util.Constants;
 import com.outbound.util.GeoCodeCallback;
-import com.outbound.util.JsonUtils;
 import com.outbound.util.location.LocationUtils;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.SaveCallback;
 
-import org.json.JSONException;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static com.outbound.util.LogUtils.*;
@@ -317,8 +312,8 @@ public class NoticeBoardCreateMsgFrag extends BaseFragment {
     }
 
     private void openCountryDialog(final View v) {
-        CountryDialog cd = new CountryDialog(getActivity());
-        cd.addCountryDialogListener(new CountryDialog.CountryDialogListener() {
+        CountrySelectDialog cd = new CountrySelectDialog(getActivity());
+        cd.addCountryDialogListener(new CountrySelectDialog.CountryDialogListener() {
             @Override
             public void onCountrySelected(String countryName, String countryCode) {
                 ((Button)v).setHint(countryName);
@@ -329,8 +324,8 @@ public class NoticeBoardCreateMsgFrag extends BaseFragment {
         cd.show();
     }
     private void openCityDialog(final View v) {
-        CityDialog cd = new CityDialog(getActivity(), selectedCountryCode);
-        cd.addCityDialogListener(new CityDialog.CityDialogListener() {
+        CitySelectDialog cd = new CitySelectDialog(getActivity(), selectedCountryCode);
+        cd.addCityDialogListener(new CitySelectDialog.CityDialogListener() {
             @Override
             public void onCitySelected(String countryName, String countryCode, String cityName) {
                 ((Button)v).setHint(cityName);

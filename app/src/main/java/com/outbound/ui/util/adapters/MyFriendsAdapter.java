@@ -38,7 +38,7 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
     private boolean isPending;
     private PUser currentUser = PUser.getCurrentUser();
     private LayoutInflater inflater;
-    private FriendAcceptenceCallbacks callbacks;
+    private FriendAcceptenceCallbacks listener;
     private Context context;
     private Dialog progress;
 
@@ -47,7 +47,11 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
         void friendRequestDeclined();
     }
 
-    public MyFriendsAdapter(Context contex, boolean isPendingFriends, Fragment fragment){
+    public void addFriendAcceptenceListener(FriendAcceptenceCallbacks callbacks){
+        listener = callbacks;
+    }
+
+    public MyFriendsAdapter(Context contex, boolean isPendingFriends){
         super(contex, R.layout.friends_list_item);
         isPending = isPendingFriends;
 
@@ -55,11 +59,11 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
                 Context.LAYOUT_INFLATER_SERVICE);
 
         this.context = contex;
-        try {
-            callbacks = (FriendAcceptenceCallbacks) fragment;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Fragment must implement FriendAcceptenceCallbacks.");
-        }
+//        try {
+//            callbacks = (FriendAcceptenceCallbacks) fragment;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException("Fragment must implement FriendAcceptenceCallbacks.");
+//        }
     }
 
 
@@ -107,8 +111,8 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
                         if(e == null){
                             remove(user);
                             notifyDataSetChanged();
-                            if(callbacks!=null)
-                                callbacks.friendRequestAccepted();
+                            if(listener!=null)
+                                listener.friendRequestAccepted();
                             showToasMessege("Friend request accepted!");
                         }else
                         {
@@ -132,8 +136,8 @@ public class MyFriendsAdapter extends ArrayAdapter<PUser> {
                         if(e == null){
                             remove(user);
                             notifyDataSetChanged();
-                            if(callbacks!=null)
-                                callbacks.friendRequestDeclined();
+                            if(listener!=null)
+                                listener.friendRequestDeclined();
                             showToasMessege("Friend request declined!");
                         }else
                         {
