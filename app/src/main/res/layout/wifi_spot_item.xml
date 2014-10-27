@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="@dimen/outbound_list_view_item_height_without_picture">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wifi"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"/>
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp">
+
+        <TextView
+            android:id="@+id/wifi_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appscore"
+            android:textSize="17sp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+        <TextView
+            android:id="@+id/wifi_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="132 Queen St, Melbourne, 3000"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/wifi_distance"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="0.3km"
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginLeft="7dp"
+        android:gravity="right"
+        />
+
+    <ImageView
+        android:id="@+id/wifi_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wifi_free"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"/>
+
+
+</LinearLayout>

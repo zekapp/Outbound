@@ -152,8 +152,8 @@ public class PChatActivity extends ParseObject {
     public static void fetchedPostsThatIParticipated(final FindCallback<PChatActivity> callback) {
         PUser currentUSer = PUser.getCurrentUser();
         ParseQuery<PChatActivity> query = ParseQuery.getQuery(PChatActivity.class);
-        query.whereNotContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
-//        query.whereContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
+//        query.whereNotContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
+        query.whereContainedIn(PNoticeBoard.participants, Arrays.asList(currentUSer));
         query.whereNotContainedIn(PChatActivity.usersLeft, Arrays.asList(currentUSer));
         query.orderByDescending(updatedAt);
         query.include(PChatActivity.usersLeft);

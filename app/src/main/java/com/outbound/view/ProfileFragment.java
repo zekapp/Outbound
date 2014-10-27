@@ -106,6 +106,7 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
         TextView title = (TextView)viewActionBar.findViewById(R.id.action_bar_title);
         title.setText(getResources().getString(R.string.profile_fragment_title));
         ImageView setIcon = (ImageView)viewActionBar.findViewById(R.id.ab_setting_icon);
+        ImageView wifiIcon = (ImageView)viewActionBar.findViewById(R.id.ab_wifi_icon);
         ActionBar actionBar = activity.getActionBar();
         if(actionBar!=null) {
             actionBar.setCustomView(viewActionBar);
@@ -116,6 +117,16 @@ public class ProfileFragment extends BaseFragment implements ProfilePictureFragm
             public void onClick(View v) {
                 if(mCallbacks != null)
                     mCallbacks.deployFragment(Constants.PROFILE_SETTINGS_FRAG_ID,null,null);
+            }
+        });
+
+        wifiIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCallbacks != null)
+                    mCallbacks.deployFragment(Constants.WIFI_SPOT_FRAG_ID, null, null);
+//                Intent intent = new Intent(getActivity(), WifiActivity.class);
+//                startActivity(intent);
             }
         });
     }

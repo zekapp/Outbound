@@ -9,6 +9,7 @@ import com.outbound.model.PFriendRequest;
 import com.outbound.model.PNoticeBoard;
 import com.outbound.model.PTrip;
 import com.outbound.model.PUser;
+import com.outbound.model.PWifiSpot;
 import com.outbound.util.GenericMessage;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
@@ -35,6 +36,7 @@ public class Outbound extends Application {
         ParseObject.registerSubclass(PTrip.class);
         ParseObject.registerSubclass(PNoticeBoard.class);
         ParseObject.registerSubclass(PChatActivity.class);
+        ParseObject.registerSubclass(PWifiSpot.class);
 //        PushService.setDefaultPushCallback(this, DispatchActivity.class);
 
         // Required - Initialize the Parse SDK

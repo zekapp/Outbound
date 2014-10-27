@@ -145,7 +145,7 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[27];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[28];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -176,8 +176,10 @@ public class BaseActivity extends FragmentActivity implements
             new SearchPeopleFragment(),         //22
             new EventsFragment(),               //23
             new NoticeBoardMessageDetailFragment(),    //24
-            new SearchResultNoticeFragment(),    //25
-            new ChatPostDetailFragment()        //26
+            new SearchResultNoticeFragment(),   //25
+            new ChatPostDetailFragment(),       //26
+            new WifiSpotFragment()              //27
+
     };
 
 //    /*
@@ -384,7 +386,8 @@ public class BaseActivity extends FragmentActivity implements
             public void onSoftKeyboardOpened(int keyboardHeightInPx) {
 
                 if(mCurrentFragmentItemId == Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID ||
-                        mCurrentFragmentItemId == Constants.CHAT_POST_DETAIL_FRAG_ID ){
+                        mCurrentFragmentItemId == Constants.CHAT_POST_DETAIL_FRAG_ID  ||
+                        mCurrentFragmentItemId == Constants.WIFI_SPOT_FRAG_ID){
                 }else{
                     hideTabbar();
                 }
@@ -393,7 +396,8 @@ public class BaseActivity extends FragmentActivity implements
             @Override
             public void onSoftKeyboardClosed() {
                 if(mCurrentFragmentItemId == Constants.NOTICE_BOARD_POST_DETAIL_FRAG_ID ||
-                        mCurrentFragmentItemId == Constants.CHAT_POST_DETAIL_FRAG_ID ){
+                        mCurrentFragmentItemId == Constants.CHAT_POST_DETAIL_FRAG_ID ||
+                        mCurrentFragmentItemId == Constants.WIFI_SPOT_FRAG_ID){
                 }else{
                     showTabbar();
                 }

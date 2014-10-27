@@ -112,5 +112,7 @@
     <string name="trips_fragment_title">Trips</string>
     <string name="action_bar_events_result_title">Search Result</string>
     <string name="search_result_noticeboard_fragment_title">Results</string>
+    <string name="title_wifi_activity">Wifi Spots</string>
+    <string name="wifi_activity_title">Add Wifi Spot</string>
 
 </resources>

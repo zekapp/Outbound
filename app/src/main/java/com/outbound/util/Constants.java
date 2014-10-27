@@ -39,6 +39,7 @@ public final class Constants  {
     public static final int NOTICE_BOARD_POST_DETAIL_FRAG_ID = 24;
     public static final int SEARCH_NOTICE_RESULT_FRAG_ID = 25;
     public static final int CHAT_POST_DETAIL_FRAG_ID = 26;
+    public static final int WIFI_SPOT_FRAG_ID = 27;
     public static final int ITEM_INVALID = -1;
 
 
@@ -50,6 +51,13 @@ public final class Constants  {
     }
     public static class Distance{
         public static final double EVENT_AROUND_PROXIMITY_IN_MILE = 124.274238; // 200 km
+    }
+
+    public static class WifiStatusTypes{
+        public static final int WIFI_TYPE_ALL = 0;
+        public static final int WIFI_TYPE_FREE = 1;
+        public static final int WIFI_TYPE_PAID = 2;
+        public static final int WIFI_TYPE_PURCHASE = 3;
     }
 }
 

@@ -308,7 +308,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                     updateView(3);
                 } else {
                     LOGD(TAG, "findPostsWhitinWorld e: " + e.getMessage());
-                    showToastMessage("Noetwork Error. Check connection");
+                    showToastMessage("Network Error. Check connection");
                 }
             }
         });
@@ -327,7 +327,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                     updateView(2);
                 } else {
                     LOGD(TAG, "findPostsWhitinCountry e: " + e.getMessage());
-                    showToastMessage("Noetwork Error. Check connection");
+                    showToastMessage("Network Error. Check connection");
                 }
             }
         });
@@ -347,7 +347,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                 }else
                 {
                     LOGD(TAG, "findPostsWhitinKm 100 e: " + e.getMessage());
-                    showToastMessage("Noetwork Error. Check connection");
+                    showToastMessage("Network Error. Check connection");
                 }
             }
         });
@@ -367,7 +367,7 @@ public class NoticeBoardFragment extends BaseFragment implements NoticeBoardSubL
                 }else
                 {
                     LOGD(TAG, "findPostsWhitinKm 20 e: " + e.getMessage());
-                    showToastMessage("Noetwork Error. Check connection");
+                    showToastMessage("Network Error. Check connection");
                 }
             }
         });
