@@ -11,16 +11,18 @@ import android.widget.TextView;
 import com.outbound.R;
 import com.outbound.model.PUser;
 import com.outbound.model.PWifiSpot;
+import com.outbound.model.WifiSpot;
 import com.outbound.ui.util.RoundedImageView;
 import com.outbound.util.Constants;
+import com.parse.ParseGeoPoint;
 
 /**
  * Created by zeki on 27/10/2014.
  */
-public class WifiSpotAdapter extends ArrayAdapter<PWifiSpot> {
+public class WifiSpotAdapter extends ArrayAdapter<WifiSpot> {
 
     private LayoutInflater inflater;
-    private PUser currentUser = PUser.getCurrentUser();
+    private ParseGeoPoint referenceGeoPoint = null;
 
     public WifiSpotAdapter(Context context) {
         super(context, 0);
@@ -45,12 +47,12 @@ public class WifiSpotAdapter extends ArrayAdapter<PWifiSpot> {
             holder = (ViewHolder) view.getTag();
         }
 
-        final PWifiSpot spot = getItem(position);
+        final WifiSpot spot = getItem(position);
 
 
         holder.wifiAddress.setText(spot.getWifiAddress());
         holder.wifiName.setText(spot.getWifiName());
-        Double distance = spot.getWifiLocation().distanceInKilometersTo(currentUser.getCurrentLocation());
+        Double distance = spot.getWifiLocation().distanceInKilometersTo(referenceGeoPoint);
         String str = String.format("%.2fkm", distance);
         holder.wifiDistance.setText(str);
 
@@ -65,8 +67,9 @@ public class WifiSpotAdapter extends ArrayAdapter<PWifiSpot> {
         return view;
     }
 
-    public void filterAccordingToTheSpotType() {
 
+    public void setReferenceGeoPoint(ParseGeoPoint ref){
+        this.referenceGeoPoint = ref;
     }
 
     private static class ViewHolder {

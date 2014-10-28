@@ -114,5 +114,6 @@
     <string name="search_result_noticeboard_fragment_title">Results</string>
     <string name="title_wifi_activity">Wifi Spots</string>
     <string name="wifi_activity_title">Add Wifi Spot</string>
+    <string name="preferences_key_wifi_spots">preferences_key_wifi_spots</string>
 
 </resources>

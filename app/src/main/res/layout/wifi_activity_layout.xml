@@ -36,6 +36,7 @@
         android:orientation="horizontal"
         android:background="@color/theme_primary">
         <ImageView
+            android:id="@+id/view_wifi_spots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/btn_view_saved"
@@ -52,6 +53,7 @@
             android:background="@color/white"
             android:layout_gravity="center_vertical"/>
         <ImageView
+            android:id="@+id/save_wifi_spots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/btn_save_list"

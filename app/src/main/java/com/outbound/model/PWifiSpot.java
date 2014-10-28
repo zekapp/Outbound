@@ -61,10 +61,13 @@ public class PWifiSpot extends ParseObject {
         return getBoolean(isUserCreated);
     }
 
-    public static void findPurchaseTypeWifi(final FindCallback<PWifiSpot> callback) {
+    public static void findPurchaseTypeWifi(ParseGeoPoint location,final FindCallback<PWifiSpot> callback) {
         ParseQuery<PWifiSpot> query = ParseQuery.getQuery(PWifiSpot.class);
         query.whereEqualTo(wifiType, "withPurchase");
-        query.orderByAscending(wifiLocation);
+        if(location != null)
+            query.whereWithinKilometers(wifiLocation,location,10); // search 10 km
+        else
+            query.whereWithinKilometers(wifiLocation,PUser.getCurrentUser().getCurrentLocation(),10); //search 10 km
         query.findInBackground(new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
@@ -73,10 +76,13 @@ public class PWifiSpot extends ParseObject {
         });
     }
 
-    public static void findPaidTypeWifi(final FindCallback<PWifiSpot> callback) {
+    public static void findPaidTypeWifi(ParseGeoPoint location,final FindCallback<PWifiSpot> callback) {
         ParseQuery<PWifiSpot> query = ParseQuery.getQuery(PWifiSpot.class);
         query.whereEqualTo(wifiType, "paid");
-        query.orderByAscending(wifiLocation);
+        if(location != null)
+            query.whereWithinKilometers(wifiLocation,location,10); // search 10 km
+        else
+            query.whereWithinKilometers(wifiLocation,PUser.getCurrentUser().getCurrentLocation(),10); //search 10 km
         query.findInBackground(new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
@@ -85,10 +91,13 @@ public class PWifiSpot extends ParseObject {
         });
     }
 
-    public static void findFreeTypeWifi(final FindCallback<PWifiSpot> callback) {
+    public static void findFreeTypeWifi(ParseGeoPoint location,final FindCallback<PWifiSpot> callback) {
         ParseQuery<PWifiSpot> query = ParseQuery.getQuery(PWifiSpot.class);
         query.whereEqualTo(wifiType, "free");
-        query.orderByAscending(wifiLocation);
+        if(location != null)
+            query.whereWithinKilometers(wifiLocation,location,10); // search 10 km
+        else
+            query.whereWithinKilometers(wifiLocation,PUser.getCurrentUser().getCurrentLocation(),10); //search 10 km
         query.findInBackground(new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
@@ -97,9 +106,13 @@ public class PWifiSpot extends ParseObject {
         });
     }
 
-    public static void findAllTypeWifi(final FindCallback<PWifiSpot> callback) {
+    public static void findAllTypeWifi(ParseGeoPoint location, final FindCallback<PWifiSpot> callback) {
         ParseQuery<PWifiSpot> query = ParseQuery.getQuery(PWifiSpot.class);
-        query.orderByAscending(wifiLocation);
+        if(location != null)
+            query.whereWithinKilometers(wifiLocation,location,10); // search 10 km
+        else
+            query.whereWithinKilometers(wifiLocation,PUser.getCurrentUser().getCurrentLocation(),10); //search 10 km
+//        query.orderByAscending(wifiLocation);
         query.findInBackground(new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {

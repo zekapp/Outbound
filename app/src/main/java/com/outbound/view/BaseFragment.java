@@ -156,7 +156,8 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void stopProgress() {
-        BaseFragment.this.progressDialog.dismiss();
+        if(BaseFragment.this.progressDialog != null)
+            BaseFragment.this.progressDialog.dismiss();
     }
 
     protected void startProgress(String message) {

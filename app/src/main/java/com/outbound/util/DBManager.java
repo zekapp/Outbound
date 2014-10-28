@@ -9,6 +9,9 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.outbound.R;
+import com.outbound.model.PWifiSpot;
+import com.outbound.model.WifiSpot;
+import com.outbound.ui.util.adapters.WifiSpotAdapter;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,6 +38,20 @@ public class DBManager {
     private DatabaseInitTask mInitTask = null;
 
     private DbInitListener dbInitListener;
+
+    public void saveWifiSpots(List<WifiSpot> list, int adapterIndex) {
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(context.getString(R.string.preferences_key_wifi_spots)+Integer.toString(adapterIndex),json);
+        editor.commit();
+    }
+
+    public List<WifiSpot> getWifiSpots(int adapterIndex) {
+        Gson gson = new Gson();
+        String json = preferences.getString(
+                context.getString(R.string.preferences_key_wifi_spots)+Integer.toString(adapterIndex),"");
+        return gson.fromJson(json, new TypeToken<List<WifiSpot>>(){}.getType());
+    }
 
     public interface  DbInitListener{
         void onDbInit(boolean res);

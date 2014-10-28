@@ -19,7 +19,10 @@ import android.widget.TextView;
 
 import com.outbound.R;
 import com.outbound.model.PChatActivity;
+import com.outbound.model.PUser;
 import com.outbound.model.PWifiSpot;
+import com.outbound.model.WifiSpot;
+import com.outbound.ui.util.GeoLocationFromPlaceDialog;
 import com.outbound.ui.util.SlidingTabLayout;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
@@ -27,9 +30,12 @@ import com.outbound.ui.util.adapters.NoticeBoardMessageAdapter;
 import com.outbound.ui.util.adapters.WifiSpotAdapter;
 import com.outbound.util.Constants;
 import com.outbound.util.Constants.WifiStatusTypes;
+import com.outbound.util.DBManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.outbound.util.LogUtils.LOGD;
@@ -49,10 +55,6 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
     private SlidingTabLayout mSlidingTabLayout = null;
 
     private WifiSpotAdapter[] adapter = new WifiSpotAdapter[4];
-    private WifiSpotAdapter wifiAdapterTypeAll_;
-    private WifiSpotAdapter wifiAdapterTypeFree_;
-    private WifiSpotAdapter wifiAdapterTypePaid_;
-    private WifiSpotAdapter wifiAdapterTypePurchase_;
 
     private void setUpActionBar(Activity activity) {
         View viewActionBar = activity.getLayoutInflater().inflate(R.layout.custom_ab_back_button, null);
@@ -77,6 +79,31 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
                 mCallbacks.backIconClicked();
             }
         });
+
+        iconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSearchPlaceDialog();
+            }
+        });
+    }
+
+    private void openSearchPlaceDialog() {
+        GeoLocationFromPlaceDialog gfp= new GeoLocationFromPlaceDialog(getActivity());
+        gfp.addGeoLocationDialogListener(new GeoLocationFromPlaceDialog.GeolocationDialogListener() {
+            @Override
+            public void onGeolocationOfSelectedItem(ParseGeoPoint location) {
+                for(int i=0; i<4; i++){
+                    adapter[i].setReferenceGeoPoint(location);
+                }
+
+                updateWifiAdapterTypeAll(location, null);
+                updateWifiAdapterTypeFree(location, null);
+                updateWifiAdapterTypePaid(location,null);
+                updateWifiAdapterTypePurchase(location,null);
+            }
+        });
+        gfp.show();
     }
 
     @Override
@@ -86,8 +113,10 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         for (i = 0; i < 4; i++) {
             if(adapter[i] == null){
                 adapter[i] = new WifiSpotAdapter(getActivity());
+                adapter[i].setReferenceGeoPoint(PUser.getCurrentUser().getCurrentLocation());
             }
         }
+
     }
 
     @Override
@@ -106,6 +135,8 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         }
     }
 
+    private ImageView mSaveWifiSpots;
+    private ImageView mViewWifiSpots;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -114,51 +145,83 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
 
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSaveWifiSpots = (ImageView)view.findViewById(R.id.save_wifi_spots);
+        mViewWifiSpots = (ImageView)view.findViewById(R.id.view_wifi_spots);
 
         setUpWifiSpotAdapter();
         setUpViewPager();
         setUpSlidingTabLayout();
+        setUpSaveWifiSpots();
+        setUpViewWifiSpots();
 
         return view;
     }
 
-    private void setUpWifiSpotAdapter() {
-
-        if(adapter[0].isEmpty())
-            updateWifiAdapterTypeAll(null);
-        if(adapter[1].isEmpty())
-            updateWifiAdapterTypeFree(null);
-        if(adapter[2].isEmpty())
-            updateWifiAdapterTypePaid(null);
-        if(adapter[3].isEmpty())
-            updateWifiAdapterTypePurchase(null);
-
-
-//        if(wifiAdapterTypeAll == null)
-//            wifiAdapterTypeAll = new WifiSpotAdapter(getActivity());
-//        if(wifiAdapterTypeFree == null)
-//            wifiAdapterTypeFree = new WifiSpotAdapter(getActivity());
-//        if(wifiAdapterTypePaid == null)
-//            wifiAdapterTypePaid = new WifiSpotAdapter(getActivity());
-//        if(wifiAdapterTypePurchase == null)
-//            wifiAdapterTypePurchase = new WifiSpotAdapter(getActivity());
-//
-//        updateWifiAdapterTypeAll();
-//        updateWifiAdapterTypeFree();
-//        updateWifiAdapterTypePaid();
-//        updateWifiAdapterTypePurchase();
+    private void setUpViewWifiSpots() {
+        mViewWifiSpots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getWifiSpots();
+            }
+        });
     }
 
-    private void updateWifiAdapterTypePurchase(final SwipeRefreshLayout swipeRefreshLayout) {
-        PWifiSpot.findPurchaseTypeWifi(new FindCallback<PWifiSpot>() {
+    private void setUpSaveWifiSpots() {
+        mSaveWifiSpots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveWifiSpots();
+            }
+        });
+    }
+    private void getWifiSpots() {
+        DBManager db =new DBManager(getActivity());
+        for(int i =0 ; i<4; i++){
+            List<WifiSpot> pWifiSpots = db.getWifiSpots(i);
+            adapter[i].clear();
+            adapter[i].addAll(pWifiSpots);
+            adapter[i].setReferenceGeoPoint(PUser.getCurrentUser().getCurrentLocation());
+            updateView(i);
+        }
+        showAlertDialog("Wifi Spots", "Saved wifi spots loaded",true);
+    }
+    private void saveWifiSpots() {
+        DBManager db = new DBManager(getActivity());
+        for(int i =0 ; i < 4 ; i++){
+            WifiSpotAdapter tmp = adapter[i];
+            List<WifiSpot> list = new ArrayList<WifiSpot>();
+            for(int j =0 ; j<tmp.getCount();j++){
+                list.add(tmp.getItem(j));
+            }
+            db.saveWifiSpots(list, i);
+        }
+        showAlertDialog("Wifi Spots", "Wifi spots saved.",true);
+    }
+
+    private void setUpWifiSpotAdapter() {
+
+
+        if(adapter[0].isEmpty())
+            updateWifiAdapterTypeAll(null,null);
+        if(adapter[1].isEmpty())
+            updateWifiAdapterTypeFree(null,null);
+        if(adapter[2].isEmpty())
+            updateWifiAdapterTypePaid(null,null);
+        if(adapter[3].isEmpty())
+            updateWifiAdapterTypePurchase(null,null);
+    }
+
+    private void updateWifiAdapterTypePurchase(ParseGeoPoint location, final SwipeRefreshLayout swipeRefreshLayout) {
+        PWifiSpot.findPurchaseTypeWifi(location, new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
                 if(swipeRefreshLayout != null)
                     swipeRefreshLayout.setRefreshing(false);
 
                 if(e == null){
+                    List<WifiSpot> list = initWifiSpotClass(pWifiSpots);
                     adapter[3].clear();
-                    adapter[3].addAll(pWifiSpots);
+                    adapter[3].addAll(list);
                     updateView(3);
                 }else{
                     LOGD(TAG, "updateWifiAdapterTypePurchase e: " + e.getMessage());
@@ -168,16 +231,17 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         });
     }
 
-    private void updateWifiAdapterTypePaid(final SwipeRefreshLayout swipeRefreshLayout) {
-        PWifiSpot.findPaidTypeWifi(new FindCallback<PWifiSpot>() {
+    private void updateWifiAdapterTypePaid(ParseGeoPoint location,final SwipeRefreshLayout swipeRefreshLayout) {
+        PWifiSpot.findPaidTypeWifi(location, new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
                 if(swipeRefreshLayout != null)
                     swipeRefreshLayout.setRefreshing(false);
 
                 if(e == null){
+                    List<WifiSpot> list = initWifiSpotClass(pWifiSpots);
                     adapter[2].clear();
-                    adapter[2].addAll(pWifiSpots);
+                    adapter[2].addAll(list);
                     updateView(2);
                 }else{
                     LOGD(TAG, "updateWifiAdapterTypePaid e: " + e.getMessage());
@@ -187,16 +251,17 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         });
     }
 
-    private void updateWifiAdapterTypeFree(final SwipeRefreshLayout swipeRefreshLayout) {
-        PWifiSpot.findFreeTypeWifi(new FindCallback<PWifiSpot>() {
+    private void updateWifiAdapterTypeFree(ParseGeoPoint location,final SwipeRefreshLayout swipeRefreshLayout) {
+        PWifiSpot.findFreeTypeWifi(location, new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
                 if(swipeRefreshLayout != null)
                     swipeRefreshLayout.setRefreshing(false);
 
                 if(e == null){
+                    List<WifiSpot> list = initWifiSpotClass(pWifiSpots);
                     adapter[1].clear();
-                    adapter[1].addAll(pWifiSpots);
+                    adapter[1].addAll(list);
                     updateView(1);
                 }else{
                     LOGD(TAG, "updateWifiAdapterTypeFree e: " + e.getMessage());
@@ -206,16 +271,17 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         });
     }
 
-    private void updateWifiAdapterTypeAll(final SwipeRefreshLayout swipeRefreshLayout) {
-        PWifiSpot.findAllTypeWifi(new FindCallback<PWifiSpot>() {
+    private void updateWifiAdapterTypeAll(ParseGeoPoint location, final SwipeRefreshLayout swipeRefreshLayout) {
+        PWifiSpot.findAllTypeWifi(location, new FindCallback<PWifiSpot>() {
             @Override
             public void done(List<PWifiSpot> pWifiSpots, ParseException e) {
                 if(swipeRefreshLayout != null)
                     swipeRefreshLayout.setRefreshing(false);
 
                 if(e == null){
+                    List<WifiSpot> list = initWifiSpotClass(pWifiSpots);
                     adapter[0].clear();
-                    adapter[0].addAll(pWifiSpots);
+                    adapter[0].addAll(list);
                     updateView(0);
                 }else{
                     LOGD(TAG, "updateWifiAdapterTypeAll e: " + e.getMessage());
@@ -223,6 +289,21 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
                 }
             }
         });
+    }
+
+    private List<WifiSpot> initWifiSpotClass(List<PWifiSpot> pWifiSpots) {
+        List<WifiSpot> wifiSpotList = new ArrayList<WifiSpot>();
+        for(PWifiSpot pWifiSpot : pWifiSpots){
+            WifiSpot wifiSpot = new WifiSpot();
+
+            wifiSpot.setWifiAddress(pWifiSpot.getWifiAddress());
+            wifiSpot.setWifiLocation(pWifiSpot.getWifiLocation());
+            wifiSpot.setWifiName(pWifiSpot.getWifiName());
+            wifiSpot.setWifiType(pWifiSpot.getWifiType());
+
+            wifiSpotList.add(wifiSpot);
+        }
+        return wifiSpotList;
     }
 
     private void updateView(int fragId) {
@@ -238,7 +319,7 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 LOGD(TAG, "onPageSelected: " + Integer.toString(position));
@@ -283,18 +364,22 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
     @Override
     public void onFragmentSwipeRefreshed(ListFragment fragment, SwipeRefreshLayout swipeRefreshLayout) {
         int fragIndex = fragment.getArguments().getInt(ARG_WIFI_STATUS_INDEX, 0);
+
+        for (int i = 0; i<4 ; i++)
+            adapter[i].setReferenceGeoPoint(PUser.getCurrentUser().getCurrentLocation());
+
         switch (fragIndex){
             case 0:
-                updateWifiAdapterTypeAll(swipeRefreshLayout);
+                updateWifiAdapterTypeAll(null,swipeRefreshLayout);
                 break;
             case 1:
-                updateWifiAdapterTypeFree(swipeRefreshLayout);
+                updateWifiAdapterTypeFree(null,swipeRefreshLayout);
                 break;
             case 2:
-                updateWifiAdapterTypePaid(swipeRefreshLayout);
+                updateWifiAdapterTypePaid(null,swipeRefreshLayout);
                 break;
             case 3:
-                updateWifiAdapterTypePurchase(swipeRefreshLayout);
+                updateWifiAdapterTypePurchase(null,swipeRefreshLayout);
                 break;
         }
     }
@@ -306,8 +391,8 @@ public class WifiSpotFragment extends BaseFragment implements WifiListSubFragmen
         openAlertDialog(adpt.getItem(position));
     }
 
-    private void openAlertDialog(PWifiSpot item) {
-        showAlertDialog(item.getWifiName(),item.getWifiAddress(),true);
+    private void openAlertDialog(WifiSpot item) {
+        showAlertDialog(item.getWifiName(), item.getWifiAddress(), true);
     }
 
     //--------------------------------------------------------------------
