@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -45,7 +44,7 @@ import com.outbound.model.PUser;
 import com.outbound.ui.util.SoftKeyboardStateHelper;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.util.Constants;
-import com.outbound.util.location.LocationUtils;
+import com.outbound.util.LocationUtils;
 import com.parse.ParseGeoPoint;
 
 import java.util.ArrayList;
@@ -145,7 +144,7 @@ public class BaseActivity extends FragmentActivity implements
     }
 
     /*increment one this array for each fragment*/
-    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[28];
+    private final static FragmentContainer[] FRAGMENTS = new FragmentContainer[30];
 
     /*
     *       Indices must correspond to array {@link #Constants} items.
@@ -178,8 +177,9 @@ public class BaseActivity extends FragmentActivity implements
             new NoticeBoardMessageDetailFragment(),    //24
             new SearchResultNoticeFragment(),   //25
             new ChatPostDetailFragment(),       //26
-            new WifiSpotFragment()              //27
-
+            new WifiSpotFragment(),             //27
+            new WifiSpotsFoursquareFragment(),  //28
+            new WifiSpotAddFragment()
     };
 
 //    /*

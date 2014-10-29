@@ -2,13 +2,10 @@ package com.outbound.ui.util.adapters;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.location.Location;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,15 +15,8 @@ import com.outbound.R;
 import com.outbound.model.PFriendRequest;
 import com.outbound.model.PUser;
 import com.outbound.ui.util.RoundedImageView;
-import com.outbound.util.ResultCallback;
-import com.outbound.util.location.LocationUtils;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseImageView;
 import com.parse.SaveCallback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.outbound.util.LogUtils.*;
 

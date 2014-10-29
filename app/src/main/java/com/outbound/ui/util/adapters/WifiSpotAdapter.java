@@ -23,12 +23,14 @@ public class WifiSpotAdapter extends ArrayAdapter<WifiSpot> {
 
     private LayoutInflater inflater;
     private ParseGeoPoint referenceGeoPoint = null;
-
-    public WifiSpotAdapter(Context context) {
+    private boolean isWifiTypeVisible;
+    public WifiSpotAdapter(Context context, boolean isWifiTypeVisible) {
         super(context, 0);
 
         inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
+
+        this.isWifiTypeVisible = isWifiTypeVisible;
     }
 
     @Override
@@ -41,6 +43,7 @@ public class WifiSpotAdapter extends ArrayAdapter<WifiSpot> {
             holder.wifiAddress = (TextView)view.findViewById(R.id.wifi_address);
             holder.wifiDistance = (TextView)view.findViewById(R.id.wifi_distance);
             holder.wifiType = (ImageView)view.findViewById(R.id.wifi_type);
+            holder.wifiType.setVisibility(isWifiTypeVisible?View.VISIBLE:View.GONE);
             view.setTag(holder);
         }else
         {

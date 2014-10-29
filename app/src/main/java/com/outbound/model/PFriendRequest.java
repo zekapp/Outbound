@@ -1,7 +1,7 @@
 package com.outbound.model;
 
 import com.outbound.util.ResultCallback;
-import com.outbound.util.location.LocationUtils;
+import com.outbound.util.LocationUtils;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;

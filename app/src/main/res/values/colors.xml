@@ -5,8 +5,11 @@
     <color name="theme_primary">#0072BC</color>
     <color name="theme_primary_light">#00AEEF</color>
     <color name="theme_primary_dark">#303f9f</color>
-    <color name="theme_primary_grey_bg">#f2f2f2</color>
     <color name="theme_primary_grey">#ebebeb</color>
+    <color name="theme_primary_grey_bg">#f2f2f2</color>
+    <color name="theme_primary_grey_bg_ext1">#D5D5D5</color>
+    <color name="theme_primary_grey_bg_ext2">#C8C7C7</color>
+    <color name="theme_primary_grey_bg_ext3">#BDBDBD</color>
 
     <color name="theme_accent_1">#00b0ff</color>
     <color name="theme_accent_1_light">#8ad4fa</color>

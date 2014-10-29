@@ -77,8 +77,12 @@ public class GeoLocationFromPlaceDialog extends Dialog{
 
         @Override
         protected void onPostExecute(Place place) {
-            if(listener!=null)
-                listener.onGeolocationOfSelectedItem(place.getLocation());
+            if(listener!=null) {
+                if(place != null)
+                    listener.onGeolocationOfSelectedItem(place.getLocation());
+                else
+                    listener.onGeolocationOfSelectedItem(null);
+            }
         }
     }
 }

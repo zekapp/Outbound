@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.outbound.util.location;
+package com.outbound.util;
 
 import android.content.Context;
 import android.location.Address;
@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.outbound.model.PUser;
+import com.outbound.model.WifiSpot;
 import com.outbound.util.GeoCodeCallback;
 import com.parse.ParseGeoPoint;
 
@@ -103,6 +104,31 @@ public final class LocationUtils {
         });
         return pUsers;
     }
+
+    public static List<WifiSpot> orderWifiSpotsAccordingDistance(List<WifiSpot> wifiSpots) {
+        final PUser currentUser = PUser.getCurrentUser();
+        Collections.sort(wifiSpots, new Comparator<WifiSpot>() {
+            @Override
+            public int compare(WifiSpot lhs, WifiSpot rhs) {
+                ParseGeoPoint lhsCurrentLoc = lhs.getWifiLocation();
+                if(lhsCurrentLoc == null)
+                    lhsCurrentLoc = new ParseGeoPoint(0,0);
+                ParseGeoPoint rhsCurrentLoc = rhs.getWifiLocation();
+                if(rhsCurrentLoc == null)
+                    rhsCurrentLoc = new ParseGeoPoint(0,0);
+
+                if(currentUser.getCurrentLocation() == null)
+                    return 0;
+                else{
+                    Double dist1 = lhsCurrentLoc.distanceInKilometersTo(currentUser.getCurrentLocation());
+                    Double dist2 = rhsCurrentLoc.distanceInKilometersTo(currentUser.getCurrentLocation());
+                    return dist1.compareTo(dist2);
+                }
+            }
+        });
+        return wifiSpots;
+    }
+
 
     public static void findGeoLocationFromAddress(String[] addr, Context context, GeoCodeCallback callback ){
         GeoLocationTask geoLocationTask = new GeoLocationTask(context,callback);

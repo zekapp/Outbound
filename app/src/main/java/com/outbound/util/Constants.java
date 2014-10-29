@@ -40,7 +40,10 @@ public final class Constants  {
     public static final int SEARCH_NOTICE_RESULT_FRAG_ID = 25;
     public static final int CHAT_POST_DETAIL_FRAG_ID = 26;
     public static final int WIFI_SPOT_FRAG_ID = 27;
+    public static final int WIFI_SPOTS_FOURSQUARE_FRAG_ID = 28;
+    public static final int WIFI_SPOT_ADD_FRAG_ID = 29;
     public static final int ITEM_INVALID = -1;
+
 
 
     public static class AppInitialStates{

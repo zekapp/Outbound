@@ -115,5 +115,7 @@
     <string name="title_wifi_activity">Wifi Spots</string>
     <string name="wifi_activity_title">Add Wifi Spot</string>
     <string name="preferences_key_wifi_spots">preferences_key_wifi_spots</string>
+    <string name="wifi_foursquare_fragment_title">Select Wifi Spot</string>
+    <string name="wifi_spot_add_fragment_title">Add Wifi Spot</string>
 
 </resources>

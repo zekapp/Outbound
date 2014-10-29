@@ -20,7 +20,7 @@ import com.outbound.ui.util.AgeRangeDialog;
 import com.outbound.ui.util.CitySelectDialog;
 import com.outbound.ui.util.CountrySelectDialog;
 import com.outbound.util.Constants;
-import com.outbound.util.location.LocationUtils;
+import com.outbound.util.LocationUtils;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
