@@ -2,8 +2,6 @@ package com.outbound.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.outbound.R;
-import com.outbound.model.PChatActivity;
 import com.outbound.model.PUser;
 import com.outbound.model.PWifiSpot;
 import com.outbound.model.WifiSpot;
@@ -26,10 +23,8 @@ import com.outbound.ui.util.GeoLocationFromPlaceDialog;
 import com.outbound.ui.util.SlidingTabLayout;
 import com.outbound.ui.util.SwipeRefreshLayout;
 import com.outbound.ui.util.adapters.BaseFragmentStatePagerAdapter;
-import com.outbound.ui.util.adapters.NoticeBoardMessageAdapter;
 import com.outbound.ui.util.adapters.WifiSpotAdapter;
 import com.outbound.util.Constants;
-import com.outbound.util.Constants.WifiStatusTypes;
 import com.outbound.util.DBManager;
 import com.parse.FindCallback;
 import com.parse.ParseException;

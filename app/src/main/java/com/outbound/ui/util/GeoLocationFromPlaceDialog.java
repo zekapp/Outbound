@@ -7,8 +7,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 
 import com.outbound.R;
 import com.outbound.model.Place;
@@ -45,6 +47,10 @@ public class GeoLocationFromPlaceDialog extends Dialog{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.geolocation_dialog);
+
+        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+
 
         mAdapter = new PlacesAutoCompleteAdapter(context, R.layout.list_item);
         autoCompView = (AutoCompleteTextView)findViewById(R.id.auto_complete_text);

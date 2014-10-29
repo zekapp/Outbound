@@ -6,7 +6,7 @@
 
     <AutoCompleteTextView
         android:id="@+id/auto_complete_text"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search Wifi Spot"
         android:drawableLeft="@drawable/action_search"/>
